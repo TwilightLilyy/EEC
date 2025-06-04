@@ -1,0 +1,66 @@
+/* === FFXIV Grand Prix: Table Styles === */
+
+tr.class-hypercar td {
+    background: linear-gradient(90deg, #174fa3 60%, #1f3262 100%);
+    color: #fff;
+}
+
+tr.class-p2 td {
+    background: linear-gradient(90deg, #24c080 60%, #135c41 100%);
+    color: #fff;
+}
+
+tr.class-gt3 td {
+    background: linear-gradient(90deg, #f3c46a 60%, #917737 100%);
+    color: #232323;
+}
+
+tr.leader td {
+    font-weight: bold;
+    border: 2px solid gold;
+    box-shadow: 0 0 10px 2px gold;
+}
+
+tr.class-hypercar.leader td {
+    box-shadow: 0 0 8px #60a3fa;
+}
+
+tr.class-p2.leader td {
+    box-shadow: 0 0 8px #24c080;
+}
+
+tr.class-gt3.leader td {
+    box-shadow: 0 0 8px #e8bc47;
+}
+
+#standingsTable {
+    border-collapse: collapse;
+    width: 100%;
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    font-size: 1.08em;
+    box-shadow: 0 6px 36px 0 rgba(18, 25, 42, 0.28);
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+#standingsTable th,
+#standingsTable td {
+    border: 1px solid #23272e;
+    padding: 0.4em 0.8em;
+    text-align: center;
+}
+
+#standingsTable th {
+    background: linear-gradient(90deg, #2b3249 60%, #24273c 100%);
+    color: #e7e7ff;
+    letter-spacing: 1px;
+    font-size: 1.1em;
+    border-bottom: 3px solid #444b65;
+}
+
+/* Icon style */
+.class-icon {
+    margin-right: 0.5em;
+    font-size: 1.23em;
+    vertical-align: middle;
+}
