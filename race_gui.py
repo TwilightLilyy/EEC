@@ -290,7 +290,10 @@ class RaceLoggerGUI:
                         break
             if not path.exists():
                 return
-            with open(path, newline="", encoding="utf-8") as f:
+            # Some log files may contain characters that are not valid UTF-8.
+            # Using errors="replace" avoids a crash when decoding such files by
+            # substituting invalid bytes with the Unicode replacement character.
+            with open(path, newline="", encoding="utf-8", errors="replace") as f:
                 reader = csv.DictReader(f)
                 if not reader.fieldnames:
                     return
@@ -384,7 +387,7 @@ class RaceLoggerGUI:
         def load():
             tree.delete(*tree.get_children())
             try:
-                with csv_path.open("r", newline="", encoding="utf-8") as f:
+                with csv_path.open("r", newline="", encoding="utf-8", errors="replace") as f:
                     rows = list(csv.DictReader(f))
                 rows = filter_rows(rows)
                 rows.sort(
@@ -452,7 +455,7 @@ class RaceLoggerGUI:
         def load():
             tree.delete(*tree.get_children())
             try:
-                with csv_path.open("r", newline="", encoding="utf-8") as f:
+                with csv_path.open("r", newline="", encoding="utf-8", errors="replace") as f:
                     rows = list(csv.DictReader(f))
                 for r in rows:
                     tree.insert(
