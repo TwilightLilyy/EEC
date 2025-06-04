@@ -1,190 +1,371 @@
 Time,CarIdx,TeamName,UserName,CarClassID,Position,ClassPosition,Lap,BestLapTime,LastLapTime,OnPitRoad,PitCount
-2025-06-04T00:10:07,0,Side Ting Racing,Lachy R Brett,4083,1,1,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:07,1,USRA Red,Chris Schultz2,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:07,2,Team Mike Bowen3,Mike Bowen3,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:07,3,Stephen Hawking s Pit Crew,Andrew Hess2,4083,0,0,3,-1.0,-1.0,False,0
-2025-06-04T00:10:07,4,Team John McDonald V,John McDonald V,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:07,5,Faded Line,Mack McGuire,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:07,6,GDX Racing,Gustavo Diniz,4083,0,0,3,-1.0,-1.0,False,0
-2025-06-04T00:10:07,7,SGrey,Simple Grey,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:07,8,Team Julián Toro,Julián Toro,4084,3,1,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:07,9,ATR Argentos MP Maro Plumbing,Diego A Armendariz,4083,0,0,2,-1.0,-1.0,False,0
-2025-06-04T00:10:07,10,Team Krishen Sharma,Krishen Sharma,4083,2,2,2,520.764892578125,520.764892578125,False,0
-2025-06-04T00:10:07,11,Team James Pyper,James Pyper,4083,0,0,1,-1.0,-1.0,True,1
-2025-06-04T00:10:07,12,Amateur Hour Racing,Joshua Yu,4083,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:07,13,Valkyrie Racing Team,Ian Knox2,4083,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:07,14,Team SoggyFrenchFries,James Allen,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:07,15,Team Yuxuan Cai,Yuxuan Cai,4083,0,0,0,-1.0,-1.0,False,0
-2025-06-04T00:10:07,16,LMRT,Eduardo Chongkan,4083,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:07,17,"Friendly, Don t Shoot ",Stephen Mcilwaine,4084,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:07,18,HyPrix SimRaceCity Aurora,Eddie Gomez,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:07,19,FROG LEAP JUICD RACING GREEN,Braden Oloughlin,4083,0,0,0,-1.0,-1.0,False,0
-2025-06-04T00:10:07,20,Motus Tardus Racing,Kirill Bratchenko,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:07,21,Drag-On Racing 934,Hongjun Xu,4083,0,0,0,-1.0,-1.0,False,0
-2025-06-04T00:10:07,22,Full Force Gremlins 002,Rune Clutch Johansen,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:07,23,Team Matt Hewett2,Matt Hewett2,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:07,24,Dogs Watch Racing Team,Jarrod Collins,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:07,25,Don t Kill the Messenger,Hugh Messenger,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:07,63,Lily Bowling,Lily Bowling,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:12,0,Side Ting Racing,Lachy R Brett,4083,1,1,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:12,1,USRA Red,Chris Schultz2,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:12,2,Team Mike Bowen3,Mike Bowen3,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:12,3,Stephen Hawking s Pit Crew,Andrew Hess2,4083,0,0,3,-1.0,-1.0,False,0
-2025-06-04T00:10:12,4,Team John McDonald V,John McDonald V,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:12,5,Faded Line,Mack McGuire,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:12,6,GDX Racing,Gustavo Diniz,4083,0,0,3,-1.0,-1.0,False,0
-2025-06-04T00:10:12,7,SGrey,Simple Grey,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:12,8,Team Julián Toro,Julián Toro,4084,3,1,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:12,9,ATR Argentos MP Maro Plumbing,Diego A Armendariz,4083,0,0,2,-1.0,-1.0,False,0
-2025-06-04T00:10:12,10,Team Krishen Sharma,Krishen Sharma,4083,2,2,2,520.764892578125,520.764892578125,False,0
-2025-06-04T00:10:12,11,Team James Pyper,James Pyper,4083,0,0,1,-1.0,-1.0,True,1
-2025-06-04T00:10:12,12,Amateur Hour Racing,Joshua Yu,4083,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:12,13,Valkyrie Racing Team,Ian Knox2,4083,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:12,14,Team SoggyFrenchFries,James Allen,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:12,15,Team Yuxuan Cai,Yuxuan Cai,4083,0,0,0,-1.0,-1.0,False,0
-2025-06-04T00:10:12,16,LMRT,Eduardo Chongkan,4083,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:12,17,"Friendly, Don t Shoot ",Stephen Mcilwaine,4084,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:12,18,HyPrix SimRaceCity Aurora,Eddie Gomez,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:12,19,FROG LEAP JUICD RACING GREEN,Braden Oloughlin,4083,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:12,20,Motus Tardus Racing,Kirill Bratchenko,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:12,21,Drag-On Racing 934,Hongjun Xu,4083,0,0,0,-1.0,-1.0,False,0
-2025-06-04T00:10:12,22,Full Force Gremlins 002,Rune Clutch Johansen,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:12,23,Team Matt Hewett2,Matt Hewett2,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:12,24,Dogs Watch Racing Team,Jarrod Collins,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:12,25,Don t Kill the Messenger,Hugh Messenger,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:12,63,Lily Bowling,Lily Bowling,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:17,0,Side Ting Racing,Lachy R Brett,4083,1,1,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:17,1,USRA Red,Chris Schultz2,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:17,2,Team Mike Bowen3,Mike Bowen3,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:17,3,Stephen Hawking s Pit Crew,Andrew Hess2,4083,0,0,3,-1.0,-1.0,False,0
-2025-06-04T00:10:17,4,Team John McDonald V,John McDonald V,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:17,5,Faded Line,Mack McGuire,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:17,6,GDX Racing,Gustavo Diniz,4083,0,0,3,-1.0,-1.0,False,0
-2025-06-04T00:10:17,7,SGrey,Simple Grey,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:17,8,Team Julián Toro,Julián Toro,4084,3,1,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:17,9,ATR Argentos MP Maro Plumbing,Diego A Armendariz,4083,0,0,2,-1.0,-1.0,False,0
-2025-06-04T00:10:17,10,Team Krishen Sharma,Krishen Sharma,4083,2,2,2,520.764892578125,520.764892578125,False,0
-2025-06-04T00:10:17,11,Team James Pyper,James Pyper,4083,0,0,1,-1.0,-1.0,True,1
-2025-06-04T00:10:17,12,Amateur Hour Racing,Joshua Yu,4083,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:17,13,Valkyrie Racing Team,Ian Knox2,4083,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:17,14,Team SoggyFrenchFries,James Allen,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:17,15,Team Yuxuan Cai,Yuxuan Cai,4083,0,0,0,-1.0,-1.0,False,0
-2025-06-04T00:10:17,16,LMRT,Eduardo Chongkan,4083,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:17,17,"Friendly, Don t Shoot ",Stephen Mcilwaine,4084,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:17,18,HyPrix SimRaceCity Aurora,Eddie Gomez,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:17,19,FROG LEAP JUICD RACING GREEN,Braden Oloughlin,4083,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:17,20,Motus Tardus Racing,Kirill Bratchenko,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:17,21,Drag-On Racing 934,Hongjun Xu,4083,0,0,0,-1.0,-1.0,False,0
-2025-06-04T00:10:17,22,Full Force Gremlins 002,Rune Clutch Johansen,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:17,23,Team Matt Hewett2,Matt Hewett2,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:17,24,Dogs Watch Racing Team,Jarrod Collins,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:17,25,Don t Kill the Messenger,Hugh Messenger,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:17,63,Lily Bowling,Lily Bowling,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:22,0,Side Ting Racing,Lachy R Brett,4083,1,1,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:22,1,USRA Red,Chris Schultz2,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:22,2,Team Mike Bowen3,Mike Bowen3,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:22,3,Stephen Hawking s Pit Crew,Andrew Hess2,4083,0,0,3,-1.0,-1.0,False,0
-2025-06-04T00:10:22,4,Team John McDonald V,John McDonald V,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:22,5,Faded Line,Mack McGuire,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:22,6,GDX Racing,Gustavo Diniz,4083,0,0,3,-1.0,-1.0,False,0
-2025-06-04T00:10:22,7,SGrey,Simple Grey,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:22,8,Team Julián Toro,Julián Toro,4084,3,1,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:22,9,ATR Argentos MP Maro Plumbing,Diego A Armendariz,4083,0,0,2,-1.0,-1.0,False,0
-2025-06-04T00:10:22,10,Team Krishen Sharma,Krishen Sharma,4083,2,2,2,520.764892578125,520.764892578125,False,0
-2025-06-04T00:10:22,11,Team James Pyper,James Pyper,4083,0,0,1,-1.0,-1.0,True,1
-2025-06-04T00:10:22,12,Amateur Hour Racing,Joshua Yu,4083,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:22,13,Valkyrie Racing Team,Ian Knox2,4083,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:22,14,Team SoggyFrenchFries,James Allen,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:22,15,Team Yuxuan Cai,Yuxuan Cai,4083,0,0,0,-1.0,-1.0,False,0
-2025-06-04T00:10:22,16,LMRT,Eduardo Chongkan,4083,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:22,17,"Friendly, Don t Shoot ",Stephen Mcilwaine,4084,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:22,18,HyPrix SimRaceCity Aurora,Eddie Gomez,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:22,19,FROG LEAP JUICD RACING GREEN,Braden Oloughlin,4083,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:22,20,Motus Tardus Racing,Kirill Bratchenko,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:22,21,Drag-On Racing 934,Hongjun Xu,4083,0,0,0,-1.0,-1.0,False,0
-2025-06-04T00:10:22,22,Full Force Gremlins 002,Rune Clutch Johansen,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:22,23,Team Matt Hewett2,Matt Hewett2,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:22,24,Dogs Watch Racing Team,Jarrod Collins,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:22,25,Don t Kill the Messenger,Hugh Messenger,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:22,63,Lily Bowling,Lily Bowling,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:27,0,Side Ting Racing,Lachy R Brett,4083,1,1,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:27,1,USRA Red,Chris Schultz2,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:27,2,Team Mike Bowen3,Mike Bowen3,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:27,3,Stephen Hawking s Pit Crew,Andrew Hess2,4083,0,0,3,-1.0,-1.0,False,0
-2025-06-04T00:10:27,4,Team John McDonald V,John McDonald V,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:27,5,Faded Line,Mack McGuire,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:27,6,GDX Racing,Gustavo Diniz,4083,0,0,3,-1.0,-1.0,False,0
-2025-06-04T00:10:27,7,SGrey,Simple Grey,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:27,8,Team Julián Toro,Julián Toro,4084,3,1,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:27,9,ATR Argentos MP Maro Plumbing,Diego A Armendariz,4083,0,0,2,-1.0,-1.0,False,0
-2025-06-04T00:10:27,10,Team Krishen Sharma,Krishen Sharma,4083,2,2,2,520.764892578125,520.764892578125,False,0
-2025-06-04T00:10:27,11,Team James Pyper,James Pyper,4083,0,0,1,-1.0,-1.0,True,1
-2025-06-04T00:10:27,12,Amateur Hour Racing,Joshua Yu,4083,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:27,13,Valkyrie Racing Team,Ian Knox2,4083,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:27,14,Team SoggyFrenchFries,James Allen,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:27,15,Team Yuxuan Cai,Yuxuan Cai,4083,0,0,0,-1.0,-1.0,False,0
-2025-06-04T00:10:27,16,LMRT,Eduardo Chongkan,4083,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:27,17,"Friendly, Don t Shoot ",Stephen Mcilwaine,4084,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:27,18,HyPrix SimRaceCity Aurora,Eddie Gomez,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:27,19,FROG LEAP JUICD RACING GREEN,Braden Oloughlin,4083,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:27,20,Motus Tardus Racing,Kirill Bratchenko,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:27,21,Drag-On Racing 934,Hongjun Xu,4083,0,0,0,-1.0,-1.0,False,0
-2025-06-04T00:10:27,22,Full Force Gremlins 002,Rune Clutch Johansen,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:27,23,Team Matt Hewett2,Matt Hewett2,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:27,24,Dogs Watch Racing Team,Jarrod Collins,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:27,25,Don t Kill the Messenger,Hugh Messenger,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:27,63,Lily Bowling,Lily Bowling,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:32,0,Side Ting Racing,Lachy R Brett,4083,1,1,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:32,1,USRA Red,Chris Schultz2,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:32,2,Team Mike Bowen3,Mike Bowen3,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:32,3,Stephen Hawking s Pit Crew,Andrew Hess2,4083,0,0,3,-1.0,-1.0,False,0
-2025-06-04T00:10:32,4,Team John McDonald V,John McDonald V,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:32,5,Faded Line,Mack McGuire,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:32,6,GDX Racing,Gustavo Diniz,4083,0,0,3,-1.0,-1.0,False,0
-2025-06-04T00:10:32,7,SGrey,Simple Grey,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:32,8,Team Julián Toro,Julián Toro,4084,3,1,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:32,9,ATR Argentos MP Maro Plumbing,Diego A Armendariz,4083,0,0,2,-1.0,-1.0,False,0
-2025-06-04T00:10:32,10,Team Krishen Sharma,Krishen Sharma,4083,2,2,2,520.764892578125,520.764892578125,False,0
-2025-06-04T00:10:32,11,Team James Pyper,James Pyper,4083,0,0,1,-1.0,-1.0,True,1
-2025-06-04T00:10:32,12,Amateur Hour Racing,Joshua Yu,4083,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:32,13,Valkyrie Racing Team,Ian Knox2,4083,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:32,14,Team SoggyFrenchFries,James Allen,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:32,15,Team Yuxuan Cai,Yuxuan Cai,4083,0,0,0,-1.0,-1.0,False,0
-2025-06-04T00:10:32,16,LMRT,Eduardo Chongkan,4083,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:32,17,"Friendly, Don t Shoot ",Stephen Mcilwaine,4084,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:32,18,HyPrix SimRaceCity Aurora,Eddie Gomez,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:32,19,FROG LEAP JUICD RACING GREEN,Braden Oloughlin,4083,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:32,20,Motus Tardus Racing,Kirill Bratchenko,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:32,21,Drag-On Racing 934,Hongjun Xu,4083,0,0,0,-1.0,-1.0,False,0
-2025-06-04T00:10:32,22,Full Force Gremlins 002,Rune Clutch Johansen,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:32,23,Team Matt Hewett2,Matt Hewett2,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:32,24,Dogs Watch Racing Team,Jarrod Collins,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:32,25,Don t Kill the Messenger,Hugh Messenger,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:32,63,Lily Bowling,Lily Bowling,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:37,0,Side Ting Racing,Lachy R Brett,4083,1,1,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:37,1,USRA Red,Chris Schultz2,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:37,2,Team Mike Bowen3,Mike Bowen3,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:37,3,Stephen Hawking s Pit Crew,Andrew Hess2,4083,0,0,3,-1.0,-1.0,False,0
-2025-06-04T00:10:37,4,Team John McDonald V,John McDonald V,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:37,5,Faded Line,Mack McGuire,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:37,6,GDX Racing,Gustavo Diniz,4083,0,0,3,-1.0,-1.0,False,0
-2025-06-04T00:10:37,7,SGrey,Simple Grey,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:37,8,Team Julián Toro,Julián Toro,4084,3,1,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:37,9,ATR Argentos MP Maro Plumbing,Diego A Armendariz,4083,0,0,2,-1.0,-1.0,False,0
-2025-06-04T00:10:37,10,Team Krishen Sharma,Krishen Sharma,4083,2,2,2,520.764892578125,520.764892578125,False,0
-2025-06-04T00:10:37,11,Team James Pyper,James Pyper,4083,0,0,1,-1.0,-1.0,True,1
-2025-06-04T00:10:37,12,Amateur Hour Racing,Joshua Yu,4083,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:37,13,Valkyrie Racing Team,Ian Knox2,4083,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:37,14,Team SoggyFrenchFries,James Allen,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:37,15,Team Yuxuan Cai,Yuxuan Cai,4083,0,0,0,-1.0,-1.0,False,0
-2025-06-04T00:10:37,16,LMRT,Eduardo Chongkan,4083,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:37,17,"Friendly, Don t Shoot ",Stephen Mcilwaine,4084,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:37,18,HyPrix SimRaceCity Aurora,Eddie Gomez,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:37,19,FROG LEAP JUICD RACING GREEN,Braden Oloughlin,4083,0,0,1,-1.0,-1.0,False,0
-2025-06-04T00:10:37,20,Motus Tardus Racing,Kirill Bratchenko,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:37,21,Drag-On Racing 934,Hongjun Xu,4083,0,0,0,-1.0,-1.0,False,0
-2025-06-04T00:10:37,22,Full Force Gremlins 002,Rune Clutch Johansen,4083,0,0,0,-1.0,-1.0,True,1
-2025-06-04T00:10:37,23,Team Matt Hewett2,Matt Hewett2,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:37,24,Dogs Watch Racing Team,Jarrod Collins,4083,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:37,25,Don t Kill the Messenger,Hugh Messenger,4084,0,0,-1,-1.0,-1.0,False,0
-2025-06-04T00:10:37,63,Lily Bowling,Lily Bowling,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:33:56,0,Side Ting Racing,Lachy R Brett,4083,10,10,-1,-1.0,-1.0,False,0
+2025-06-04T00:33:56,1,USRA Red,Chris Schultz2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:33:56,2,Team Mike Bowen3,Mike Bowen3,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:33:56,3,Stephen Hawking s Pit Crew,Andrew Hess2,4083,0,0,3,-1.0,-1.0,True,1
+2025-06-04T00:33:56,4,Team John McDonald V,John McDonald V,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:33:56,5,Faded Line,Mack McGuire,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:33:56,6,GDX Racing,Gustavo Diniz,4083,1,1,6,500.2002868652344,-1.0,False,0
+2025-06-04T00:33:56,7,SGrey,Simple Grey,4083,8,8,-1,-1.0,-1.0,False,0
+2025-06-04T00:33:56,8,Team Julián Toro,Julián Toro,4084,14,2,-1,-1.0,-1.0,False,0
+2025-06-04T00:33:56,9,ATR Argentos MP Maro Plumbing,Diego A Armendariz,4083,6,6,3,507.92181396484375,507.92181396484375,True,1
+2025-06-04T00:33:56,10,Team Krishen Sharma,Krishen Sharma,4083,11,11,4,520.764892578125,529.0432739257812,False,0
+2025-06-04T00:33:56,11,Team James Pyper,James Pyper,4083,0,0,1,-1.0,-1.0,True,1
+2025-06-04T00:33:56,12,Amateur Hour Racing,Joshua Yu,4083,2,2,-1,-1.0,-1.0,False,0
+2025-06-04T00:33:56,13,Valkyrie Racing Team,Ian Knox2,4083,3,3,4,502.2051086425781,-1.0,False,0
+2025-06-04T00:33:56,14,Team SoggyFrenchFries,James Allen,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:33:56,15,Team Yuxuan Cai,Yuxuan Cai,4083,4,4,3,504.92919921875,504.92919921875,False,0
+2025-06-04T00:33:56,16,LMRT,Eduardo Chongkan,4083,5,5,4,507.5487976074219,-1.0,False,0
+2025-06-04T00:33:56,17,"Friendly, Don t Shoot ",Stephen Mcilwaine,4084,13,1,4,532.2470703125,-1.0,False,0
+2025-06-04T00:33:56,18,HyPrix SimRaceCity Aurora,Eddie Gomez,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:33:56,19,FROG LEAP JUICD RACING GREEN,Braden Oloughlin,4083,7,7,3,511.7742004394531,-1.0,False,0
+2025-06-04T00:33:56,20,Motus Tardus Racing,Kirill Bratchenko,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:33:56,21,Drag-On Racing 934,Hongjun Xu,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:33:56,22,Full Force Gremlins 002,Rune Clutch Johansen,4083,12,12,2,521.17529296875,521.17529296875,False,0
+2025-06-04T00:33:56,23,Team Matt Hewett2,Matt Hewett2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:33:56,24,Dogs Watch Racing Team,Jarrod Collins,4083,9,9,2,512.497314453125,512.497314453125,False,0
+2025-06-04T00:33:56,25,Don t Kill the Messenger,Hugh Messenger,4084,15,3,2,541.3839111328125,541.3839111328125,False,0
+2025-06-04T00:33:56,26,Savage Sim Alpha Mini,Jordan Strandt,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:33:56,27,VRC Phantom,Sergio Xharal Avila,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:33:56,28,Almost Enduro Racers,Alisdair Macleod,3104,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:33:56,29,AW Racing Team Black,Javier Martinez12,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:33:56,30,ZRT MOMO TIRES ARG  77,Victor de la Valle,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:33:56,31,TECH1 - Brashies,Dale Jeffreys,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:33:56,32,HH,Tobias Matheson,4084,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:33:56,33,Australia Wide Racing Yellow,Cam Culverwell,4084,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:33:56,34,Team Michael Cummings9,Michael Cummings9,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:33:56,35,The Remarkable Maggots,Shaun Devantier,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:33:56,63,Lily Bowling,Lily Bowling,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:01,0,Side Ting Racing,Lachy R Brett,4083,10,10,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:01,1,USRA Red,Chris Schultz2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:01,2,Team Mike Bowen3,Mike Bowen3,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:01,3,Stephen Hawking s Pit Crew,Andrew Hess2,4083,0,0,3,-1.0,-1.0,True,1
+2025-06-04T00:34:01,4,Team John McDonald V,John McDonald V,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:01,5,Faded Line,Mack McGuire,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:01,6,GDX Racing,Gustavo Diniz,4083,1,1,6,500.2002868652344,-1.0,False,0
+2025-06-04T00:34:01,7,SGrey,Simple Grey,4083,8,8,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:01,8,Team Julián Toro,Julián Toro,4084,14,2,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:01,9,ATR Argentos MP Maro Plumbing,Diego A Armendariz,4083,6,6,3,507.92181396484375,507.92181396484375,True,1
+2025-06-04T00:34:01,10,Team Krishen Sharma,Krishen Sharma,4083,11,11,4,520.764892578125,529.0432739257812,False,0
+2025-06-04T00:34:01,11,Team James Pyper,James Pyper,4083,0,0,1,-1.0,-1.0,True,1
+2025-06-04T00:34:01,12,Amateur Hour Racing,Joshua Yu,4083,2,2,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:01,13,Valkyrie Racing Team,Ian Knox2,4083,3,3,4,502.2051086425781,-1.0,False,0
+2025-06-04T00:34:01,14,Team SoggyFrenchFries,James Allen,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:01,15,Team Yuxuan Cai,Yuxuan Cai,4083,4,4,3,504.92919921875,504.92919921875,False,0
+2025-06-04T00:34:01,16,LMRT,Eduardo Chongkan,4083,5,5,4,507.5487976074219,-1.0,False,0
+2025-06-04T00:34:01,17,"Friendly, Don t Shoot ",Stephen Mcilwaine,4084,13,1,4,532.2470703125,-1.0,False,0
+2025-06-04T00:34:01,18,HyPrix SimRaceCity Aurora,Eddie Gomez,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:01,19,FROG LEAP JUICD RACING GREEN,Braden Oloughlin,4083,7,7,3,511.7742004394531,-1.0,False,0
+2025-06-04T00:34:01,20,Motus Tardus Racing,Kirill Bratchenko,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:01,21,Drag-On Racing 934,Hongjun Xu,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:01,22,Full Force Gremlins 002,Rune Clutch Johansen,4083,12,12,2,521.17529296875,521.17529296875,False,0
+2025-06-04T00:34:01,23,Team Matt Hewett2,Matt Hewett2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:01,24,Dogs Watch Racing Team,Jarrod Collins,4083,9,9,2,512.497314453125,512.497314453125,False,0
+2025-06-04T00:34:01,25,Don t Kill the Messenger,Hugh Messenger,4084,15,3,2,541.3839111328125,541.3839111328125,False,0
+2025-06-04T00:34:01,26,Savage Sim Alpha Mini,Jordan Strandt,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:01,27,VRC Phantom,Sergio Xharal Avila,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:01,28,Almost Enduro Racers,Alisdair Macleod,3104,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:01,29,AW Racing Team Black,Javier Martinez12,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:34:01,30,ZRT MOMO TIRES ARG  77,Victor de la Valle,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:01,31,TECH1 - Brashies,Dale Jeffreys,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:01,32,HH,Tobias Matheson,4084,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:34:01,33,Australia Wide Racing Yellow,Cam Culverwell,4084,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:01,34,Team Michael Cummings9,Michael Cummings9,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:01,35,The Remarkable Maggots,Shaun Devantier,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:34:01,63,Lily Bowling,Lily Bowling,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:06,0,Side Ting Racing,Lachy R Brett,4083,10,10,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:06,1,USRA Red,Chris Schultz2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:06,2,Team Mike Bowen3,Mike Bowen3,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:06,3,Stephen Hawking s Pit Crew,Andrew Hess2,4083,0,0,3,-1.0,-1.0,True,1
+2025-06-04T00:34:06,4,Team John McDonald V,John McDonald V,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:06,5,Faded Line,Mack McGuire,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:06,6,GDX Racing,Gustavo Diniz,4083,1,1,6,500.2002868652344,-1.0,False,0
+2025-06-04T00:34:06,7,SGrey,Simple Grey,4083,8,8,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:06,8,Team Julián Toro,Julián Toro,4084,14,2,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:06,9,ATR Argentos MP Maro Plumbing,Diego A Armendariz,4083,6,6,3,507.92181396484375,507.92181396484375,True,1
+2025-06-04T00:34:06,10,Team Krishen Sharma,Krishen Sharma,4083,11,11,4,520.764892578125,529.0432739257812,False,0
+2025-06-04T00:34:06,11,Team James Pyper,James Pyper,4083,0,0,1,-1.0,-1.0,True,1
+2025-06-04T00:34:06,12,Amateur Hour Racing,Joshua Yu,4083,2,2,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:06,13,Valkyrie Racing Team,Ian Knox2,4083,3,3,4,502.2051086425781,-1.0,False,0
+2025-06-04T00:34:06,14,Team SoggyFrenchFries,James Allen,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:06,15,Team Yuxuan Cai,Yuxuan Cai,4083,4,4,3,504.92919921875,504.92919921875,False,0
+2025-06-04T00:34:06,16,LMRT,Eduardo Chongkan,4083,5,5,4,507.5487976074219,-1.0,False,0
+2025-06-04T00:34:06,17,"Friendly, Don t Shoot ",Stephen Mcilwaine,4084,13,1,4,532.2470703125,-1.0,False,0
+2025-06-04T00:34:06,18,HyPrix SimRaceCity Aurora,Eddie Gomez,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:06,19,FROG LEAP JUICD RACING GREEN,Braden Oloughlin,4083,7,7,3,511.7742004394531,-1.0,False,0
+2025-06-04T00:34:06,20,Motus Tardus Racing,Kirill Bratchenko,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:06,21,Drag-On Racing 934,Hongjun Xu,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:06,22,Full Force Gremlins 002,Rune Clutch Johansen,4083,12,12,2,521.17529296875,521.17529296875,False,0
+2025-06-04T00:34:06,23,Team Matt Hewett2,Matt Hewett2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:06,24,Dogs Watch Racing Team,Jarrod Collins,4083,9,9,2,512.497314453125,512.497314453125,False,0
+2025-06-04T00:34:06,25,Don t Kill the Messenger,Hugh Messenger,4084,15,3,2,541.3839111328125,541.3839111328125,False,0
+2025-06-04T00:34:06,26,Savage Sim Alpha Mini,Jordan Strandt,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:06,27,VRC Phantom,Sergio Xharal Avila,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:06,28,Almost Enduro Racers,Alisdair Macleod,3104,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:06,29,AW Racing Team Black,Javier Martinez12,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:34:06,30,ZRT MOMO TIRES ARG  77,Victor de la Valle,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:06,31,TECH1 - Brashies,Dale Jeffreys,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:06,32,HH,Tobias Matheson,4084,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:34:06,33,Australia Wide Racing Yellow,Cam Culverwell,4084,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:06,34,Team Michael Cummings9,Michael Cummings9,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:06,35,The Remarkable Maggots,Shaun Devantier,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:34:06,63,Lily Bowling,Lily Bowling,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:11,0,Side Ting Racing,Lachy R Brett,4083,10,10,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:11,1,USRA Red,Chris Schultz2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:11,2,Team Mike Bowen3,Mike Bowen3,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:11,3,Stephen Hawking s Pit Crew,Andrew Hess2,4083,0,0,3,-1.0,-1.0,False,1
+2025-06-04T00:34:11,4,Team John McDonald V,John McDonald V,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:11,5,Faded Line,Mack McGuire,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:11,6,GDX Racing,Gustavo Diniz,4083,1,1,6,500.2002868652344,-1.0,False,0
+2025-06-04T00:34:11,7,SGrey,Simple Grey,4083,8,8,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:11,8,Team Julián Toro,Julián Toro,4084,14,2,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:11,9,ATR Argentos MP Maro Plumbing,Diego A Armendariz,4083,6,6,3,507.92181396484375,507.92181396484375,True,1
+2025-06-04T00:34:11,10,Team Krishen Sharma,Krishen Sharma,4083,11,11,4,520.764892578125,529.0432739257812,False,0
+2025-06-04T00:34:11,11,Team James Pyper,James Pyper,4083,0,0,1,-1.0,-1.0,True,1
+2025-06-04T00:34:11,12,Amateur Hour Racing,Joshua Yu,4083,2,2,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:11,13,Valkyrie Racing Team,Ian Knox2,4083,3,3,4,502.2051086425781,-1.0,False,0
+2025-06-04T00:34:11,14,Team SoggyFrenchFries,James Allen,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:11,15,Team Yuxuan Cai,Yuxuan Cai,4083,4,4,3,504.92919921875,504.92919921875,False,0
+2025-06-04T00:34:11,16,LMRT,Eduardo Chongkan,4083,5,5,4,507.5487976074219,-1.0,False,0
+2025-06-04T00:34:11,17,"Friendly, Don t Shoot ",Stephen Mcilwaine,4084,13,1,4,532.2470703125,-1.0,False,0
+2025-06-04T00:34:11,18,HyPrix SimRaceCity Aurora,Eddie Gomez,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:11,19,FROG LEAP JUICD RACING GREEN,Braden Oloughlin,4083,7,7,3,511.7742004394531,-1.0,False,0
+2025-06-04T00:34:11,20,Motus Tardus Racing,Kirill Bratchenko,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:11,21,Drag-On Racing 934,Hongjun Xu,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:11,22,Full Force Gremlins 002,Rune Clutch Johansen,4083,12,12,2,521.17529296875,521.17529296875,False,0
+2025-06-04T00:34:11,23,Team Matt Hewett2,Matt Hewett2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:11,24,Dogs Watch Racing Team,Jarrod Collins,4083,9,9,2,512.497314453125,512.497314453125,False,0
+2025-06-04T00:34:11,25,Don t Kill the Messenger,Hugh Messenger,4084,15,3,2,541.3839111328125,541.3839111328125,False,0
+2025-06-04T00:34:11,26,Savage Sim Alpha Mini,Jordan Strandt,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:11,27,VRC Phantom,Sergio Xharal Avila,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:11,28,Almost Enduro Racers,Alisdair Macleod,3104,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:11,29,AW Racing Team Black,Javier Martinez12,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:34:11,30,ZRT MOMO TIRES ARG  77,Victor de la Valle,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:11,31,TECH1 - Brashies,Dale Jeffreys,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:11,32,HH,Tobias Matheson,4084,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:34:11,33,Australia Wide Racing Yellow,Cam Culverwell,4084,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:11,34,Team Michael Cummings9,Michael Cummings9,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:11,35,The Remarkable Maggots,Shaun Devantier,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:34:11,63,Lily Bowling,Lily Bowling,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:16,0,Side Ting Racing,Lachy R Brett,4083,10,10,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:16,1,USRA Red,Chris Schultz2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:16,2,Team Mike Bowen3,Mike Bowen3,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:16,3,Stephen Hawking s Pit Crew,Andrew Hess2,4083,0,0,3,-1.0,-1.0,False,1
+2025-06-04T00:34:16,4,Team John McDonald V,John McDonald V,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:16,5,Faded Line,Mack McGuire,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:16,6,GDX Racing,Gustavo Diniz,4083,1,1,6,500.2002868652344,-1.0,False,0
+2025-06-04T00:34:16,7,SGrey,Simple Grey,4083,8,8,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:16,8,Team Julián Toro,Julián Toro,4084,14,2,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:16,9,ATR Argentos MP Maro Plumbing,Diego A Armendariz,4083,6,6,3,507.92181396484375,507.92181396484375,True,1
+2025-06-04T00:34:16,10,Team Krishen Sharma,Krishen Sharma,4083,11,11,4,520.764892578125,529.0432739257812,False,0
+2025-06-04T00:34:16,11,Team James Pyper,James Pyper,4083,0,0,1,-1.0,-1.0,True,1
+2025-06-04T00:34:16,12,Amateur Hour Racing,Joshua Yu,4083,2,2,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:16,13,Valkyrie Racing Team,Ian Knox2,4083,3,3,4,502.2051086425781,-1.0,False,0
+2025-06-04T00:34:16,14,Team SoggyFrenchFries,James Allen,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:16,15,Team Yuxuan Cai,Yuxuan Cai,4083,4,4,3,504.92919921875,504.92919921875,False,0
+2025-06-04T00:34:16,16,LMRT,Eduardo Chongkan,4083,5,5,4,507.5487976074219,-1.0,False,0
+2025-06-04T00:34:16,17,"Friendly, Don t Shoot ",Stephen Mcilwaine,4084,13,1,4,532.2470703125,-1.0,False,0
+2025-06-04T00:34:16,18,HyPrix SimRaceCity Aurora,Eddie Gomez,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:16,19,FROG LEAP JUICD RACING GREEN,Braden Oloughlin,4083,7,7,3,511.7742004394531,-1.0,False,0
+2025-06-04T00:34:16,20,Motus Tardus Racing,Kirill Bratchenko,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:16,21,Drag-On Racing 934,Hongjun Xu,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:16,22,Full Force Gremlins 002,Rune Clutch Johansen,4083,12,12,2,521.17529296875,521.17529296875,False,0
+2025-06-04T00:34:16,23,Team Matt Hewett2,Matt Hewett2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:16,24,Dogs Watch Racing Team,Jarrod Collins,4083,9,9,2,512.497314453125,512.497314453125,False,0
+2025-06-04T00:34:16,25,Don t Kill the Messenger,Hugh Messenger,4084,15,3,2,541.3839111328125,541.3839111328125,False,0
+2025-06-04T00:34:16,26,Savage Sim Alpha Mini,Jordan Strandt,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:16,27,VRC Phantom,Sergio Xharal Avila,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:16,28,Almost Enduro Racers,Alisdair Macleod,3104,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:16,29,AW Racing Team Black,Javier Martinez12,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:34:16,30,ZRT MOMO TIRES ARG  77,Victor de la Valle,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:16,31,TECH1 - Brashies,Dale Jeffreys,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:16,32,HH,Tobias Matheson,4084,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:34:16,33,Australia Wide Racing Yellow,Cam Culverwell,4084,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:16,34,Team Michael Cummings9,Michael Cummings9,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:16,35,The Remarkable Maggots,Shaun Devantier,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:34:16,63,Lily Bowling,Lily Bowling,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:21,0,Side Ting Racing,Lachy R Brett,4083,10,10,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:21,1,USRA Red,Chris Schultz2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:21,2,Team Mike Bowen3,Mike Bowen3,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:21,3,Stephen Hawking s Pit Crew,Andrew Hess2,4083,0,0,3,-1.0,-1.0,False,1
+2025-06-04T00:34:21,4,Team John McDonald V,John McDonald V,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:21,5,Faded Line,Mack McGuire,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:21,6,GDX Racing,Gustavo Diniz,4083,1,1,6,500.2002868652344,-1.0,False,0
+2025-06-04T00:34:21,7,SGrey,Simple Grey,4083,8,8,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:21,8,Team Julián Toro,Julián Toro,4084,14,2,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:21,9,ATR Argentos MP Maro Plumbing,Diego A Armendariz,4083,6,6,3,507.92181396484375,507.92181396484375,True,1
+2025-06-04T00:34:21,10,Team Krishen Sharma,Krishen Sharma,4083,11,11,4,520.764892578125,529.0432739257812,False,0
+2025-06-04T00:34:21,11,Team James Pyper,James Pyper,4083,0,0,1,-1.0,-1.0,True,1
+2025-06-04T00:34:21,12,Amateur Hour Racing,Joshua Yu,4083,2,2,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:21,13,Valkyrie Racing Team,Ian Knox2,4083,3,3,4,502.2051086425781,-1.0,False,0
+2025-06-04T00:34:21,14,Team SoggyFrenchFries,James Allen,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:21,15,Team Yuxuan Cai,Yuxuan Cai,4083,4,4,3,504.92919921875,504.92919921875,False,0
+2025-06-04T00:34:21,16,LMRT,Eduardo Chongkan,4083,5,5,4,507.5487976074219,-1.0,False,0
+2025-06-04T00:34:21,17,"Friendly, Don t Shoot ",Stephen Mcilwaine,4084,13,1,4,532.2470703125,-1.0,False,0
+2025-06-04T00:34:21,18,HyPrix SimRaceCity Aurora,Eddie Gomez,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:21,19,FROG LEAP JUICD RACING GREEN,Braden Oloughlin,4083,7,7,3,511.7742004394531,-1.0,False,0
+2025-06-04T00:34:21,20,Motus Tardus Racing,Kirill Bratchenko,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:21,21,Drag-On Racing 934,Hongjun Xu,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:21,22,Full Force Gremlins 002,Rune Clutch Johansen,4083,12,12,2,521.17529296875,521.17529296875,False,0
+2025-06-04T00:34:21,23,Team Matt Hewett2,Matt Hewett2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:21,24,Dogs Watch Racing Team,Jarrod Collins,4083,9,9,2,512.497314453125,512.497314453125,False,0
+2025-06-04T00:34:21,25,Don t Kill the Messenger,Hugh Messenger,4084,15,3,2,541.3839111328125,541.3839111328125,False,0
+2025-06-04T00:34:21,26,Savage Sim Alpha Mini,Jordan Strandt,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:21,27,VRC Phantom,Sergio Xharal Avila,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:21,28,Almost Enduro Racers,Alisdair Macleod,3104,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:21,29,AW Racing Team Black,Javier Martinez12,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:34:21,30,ZRT MOMO TIRES ARG  77,Victor de la Valle,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:21,31,TECH1 - Brashies,Dale Jeffreys,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:21,32,HH,Tobias Matheson,4084,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:34:21,33,Australia Wide Racing Yellow,Cam Culverwell,4084,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:21,34,Team Michael Cummings9,Michael Cummings9,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:21,35,The Remarkable Maggots,Shaun Devantier,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:34:21,63,Lily Bowling,Lily Bowling,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:26,0,Side Ting Racing,Lachy R Brett,4083,10,10,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:26,1,USRA Red,Chris Schultz2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:26,2,Team Mike Bowen3,Mike Bowen3,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:26,3,Stephen Hawking s Pit Crew,Andrew Hess2,4083,0,0,3,-1.0,-1.0,False,1
+2025-06-04T00:34:26,4,Team John McDonald V,John McDonald V,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:26,5,Faded Line,Mack McGuire,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:26,6,GDX Racing,Gustavo Diniz,4083,1,1,6,500.2002868652344,-1.0,False,0
+2025-06-04T00:34:26,7,SGrey,Simple Grey,4083,8,8,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:26,8,Team Julián Toro,Julián Toro,4084,14,2,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:26,9,ATR Argentos MP Maro Plumbing,Diego A Armendariz,4083,6,6,3,507.92181396484375,507.92181396484375,True,1
+2025-06-04T00:34:26,10,Team Krishen Sharma,Krishen Sharma,4083,11,11,4,520.764892578125,529.0432739257812,False,0
+2025-06-04T00:34:26,11,Team James Pyper,James Pyper,4083,0,0,1,-1.0,-1.0,True,1
+2025-06-04T00:34:26,12,Amateur Hour Racing,Joshua Yu,4083,2,2,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:26,13,Valkyrie Racing Team,Ian Knox2,4083,3,3,4,502.2051086425781,-1.0,False,0
+2025-06-04T00:34:26,14,Team SoggyFrenchFries,James Allen,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:26,15,Team Yuxuan Cai,Yuxuan Cai,4083,4,4,3,504.92919921875,504.92919921875,False,0
+2025-06-04T00:34:26,16,LMRT,Eduardo Chongkan,4083,5,5,4,507.5487976074219,-1.0,False,0
+2025-06-04T00:34:26,17,"Friendly, Don t Shoot ",Stephen Mcilwaine,4084,13,1,5,530.4276123046875,530.4276123046875,False,0
+2025-06-04T00:34:26,18,HyPrix SimRaceCity Aurora,Eddie Gomez,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:26,19,FROG LEAP JUICD RACING GREEN,Braden Oloughlin,4083,7,7,3,511.7742004394531,-1.0,False,0
+2025-06-04T00:34:26,20,Motus Tardus Racing,Kirill Bratchenko,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:26,21,Drag-On Racing 934,Hongjun Xu,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:26,22,Full Force Gremlins 002,Rune Clutch Johansen,4083,12,12,2,521.17529296875,521.17529296875,False,0
+2025-06-04T00:34:26,23,Team Matt Hewett2,Matt Hewett2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:26,24,Dogs Watch Racing Team,Jarrod Collins,4083,9,9,2,512.497314453125,512.497314453125,False,0
+2025-06-04T00:34:26,25,Don t Kill the Messenger,Hugh Messenger,4084,15,3,2,541.3839111328125,541.3839111328125,False,0
+2025-06-04T00:34:26,26,Savage Sim Alpha Mini,Jordan Strandt,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:26,27,VRC Phantom,Sergio Xharal Avila,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:26,28,Almost Enduro Racers,Alisdair Macleod,3104,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:26,29,AW Racing Team Black,Javier Martinez12,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:34:26,30,ZRT MOMO TIRES ARG  77,Victor de la Valle,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:26,31,TECH1 - Brashies,Dale Jeffreys,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:26,32,HH,Tobias Matheson,4084,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:34:26,33,Australia Wide Racing Yellow,Cam Culverwell,4084,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:26,34,Team Michael Cummings9,Michael Cummings9,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:26,35,The Remarkable Maggots,Shaun Devantier,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:34:26,63,Lily Bowling,Lily Bowling,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:31,0,Side Ting Racing,Lachy R Brett,4083,10,10,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:31,1,USRA Red,Chris Schultz2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:31,2,Team Mike Bowen3,Mike Bowen3,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:31,3,Stephen Hawking s Pit Crew,Andrew Hess2,4083,0,0,3,-1.0,-1.0,False,1
+2025-06-04T00:34:31,4,Team John McDonald V,John McDonald V,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:31,5,Faded Line,Mack McGuire,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:31,6,GDX Racing,Gustavo Diniz,4083,1,1,6,500.2002868652344,-1.0,False,0
+2025-06-04T00:34:31,7,SGrey,Simple Grey,4083,8,8,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:31,8,Team Julián Toro,Julián Toro,4084,14,2,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:31,9,ATR Argentos MP Maro Plumbing,Diego A Armendariz,4083,6,6,3,507.92181396484375,507.92181396484375,True,1
+2025-06-04T00:34:31,10,Team Krishen Sharma,Krishen Sharma,4083,11,11,4,520.764892578125,529.0432739257812,False,0
+2025-06-04T00:34:31,11,Team James Pyper,James Pyper,4083,0,0,1,-1.0,-1.0,True,1
+2025-06-04T00:34:31,12,Amateur Hour Racing,Joshua Yu,4083,2,2,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:31,13,Valkyrie Racing Team,Ian Knox2,4083,3,3,4,502.2051086425781,-1.0,False,0
+2025-06-04T00:34:31,14,Team SoggyFrenchFries,James Allen,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:31,15,Team Yuxuan Cai,Yuxuan Cai,4083,4,4,3,504.92919921875,504.92919921875,False,0
+2025-06-04T00:34:31,16,LMRT,Eduardo Chongkan,4083,5,5,4,507.5487976074219,-1.0,False,0
+2025-06-04T00:34:31,17,"Friendly, Don t Shoot ",Stephen Mcilwaine,4084,13,1,5,530.4276123046875,530.4276123046875,False,0
+2025-06-04T00:34:31,18,HyPrix SimRaceCity Aurora,Eddie Gomez,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:31,19,FROG LEAP JUICD RACING GREEN,Braden Oloughlin,4083,7,7,3,511.7742004394531,-1.0,False,0
+2025-06-04T00:34:31,20,Motus Tardus Racing,Kirill Bratchenko,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:31,21,Drag-On Racing 934,Hongjun Xu,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:31,22,Full Force Gremlins 002,Rune Clutch Johansen,4083,12,12,2,521.17529296875,521.17529296875,False,0
+2025-06-04T00:34:31,23,Team Matt Hewett2,Matt Hewett2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:31,24,Dogs Watch Racing Team,Jarrod Collins,4083,9,9,2,512.497314453125,512.497314453125,False,0
+2025-06-04T00:34:31,25,Don t Kill the Messenger,Hugh Messenger,4084,15,3,2,541.3839111328125,541.3839111328125,False,0
+2025-06-04T00:34:31,26,Savage Sim Alpha Mini,Jordan Strandt,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:31,27,VRC Phantom,Sergio Xharal Avila,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:31,28,Almost Enduro Racers,Alisdair Macleod,3104,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:31,29,AW Racing Team Black,Javier Martinez12,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:34:31,30,ZRT MOMO TIRES ARG  77,Victor de la Valle,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:31,31,TECH1 - Brashies,Dale Jeffreys,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:31,32,HH,Tobias Matheson,4084,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:34:31,33,Australia Wide Racing Yellow,Cam Culverwell,4084,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:31,34,Team Michael Cummings9,Michael Cummings9,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:31,35,The Remarkable Maggots,Shaun Devantier,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:34:31,63,Lily Bowling,Lily Bowling,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:36,0,Side Ting Racing,Lachy R Brett,4083,10,10,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:36,1,USRA Red,Chris Schultz2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:36,2,Team Mike Bowen3,Mike Bowen3,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:36,3,Stephen Hawking s Pit Crew,Andrew Hess2,4083,0,0,3,-1.0,-1.0,False,1
+2025-06-04T00:34:36,4,Team John McDonald V,John McDonald V,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:36,5,Faded Line,Mack McGuire,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:36,6,GDX Racing,Gustavo Diniz,4083,1,1,6,500.2002868652344,-1.0,False,0
+2025-06-04T00:34:36,7,SGrey,Simple Grey,4083,7,7,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:36,8,Team Julián Toro,Julián Toro,4084,14,2,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:36,9,ATR Argentos MP Maro Plumbing,Diego A Armendariz,4083,6,6,3,507.92181396484375,507.92181396484375,True,1
+2025-06-04T00:34:36,10,Team Krishen Sharma,Krishen Sharma,4083,11,11,4,520.764892578125,529.0432739257812,False,0
+2025-06-04T00:34:36,11,Team James Pyper,James Pyper,4083,0,0,1,-1.0,-1.0,True,1
+2025-06-04T00:34:36,12,Amateur Hour Racing,Joshua Yu,4083,2,2,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:36,13,Valkyrie Racing Team,Ian Knox2,4083,3,3,4,502.2051086425781,-1.0,False,0
+2025-06-04T00:34:36,14,Team SoggyFrenchFries,James Allen,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:36,15,Team Yuxuan Cai,Yuxuan Cai,4083,4,4,3,504.92919921875,504.92919921875,False,0
+2025-06-04T00:34:36,16,LMRT,Eduardo Chongkan,4083,5,5,5,507.5487976074219,508.0649108886719,False,0
+2025-06-04T00:34:36,17,"Friendly, Don t Shoot ",Stephen Mcilwaine,4084,13,1,5,530.4276123046875,530.4276123046875,False,0
+2025-06-04T00:34:36,18,HyPrix SimRaceCity Aurora,Eddie Gomez,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:36,19,FROG LEAP JUICD RACING GREEN,Braden Oloughlin,4083,8,8,3,511.7742004394531,-1.0,False,0
+2025-06-04T00:34:36,20,Motus Tardus Racing,Kirill Bratchenko,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:36,21,Drag-On Racing 934,Hongjun Xu,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:36,22,Full Force Gremlins 002,Rune Clutch Johansen,4083,12,12,2,521.17529296875,521.17529296875,False,0
+2025-06-04T00:34:36,23,Team Matt Hewett2,Matt Hewett2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:36,24,Dogs Watch Racing Team,Jarrod Collins,4083,9,9,2,512.497314453125,512.497314453125,False,0
+2025-06-04T00:34:36,25,Don t Kill the Messenger,Hugh Messenger,4084,15,3,2,541.3839111328125,541.3839111328125,False,0
+2025-06-04T00:34:36,26,Savage Sim Alpha Mini,Jordan Strandt,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:36,27,VRC Phantom,Sergio Xharal Avila,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:36,28,Almost Enduro Racers,Alisdair Macleod,3104,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:36,29,AW Racing Team Black,Javier Martinez12,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:34:36,30,ZRT MOMO TIRES ARG  77,Victor de la Valle,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:36,31,TECH1 - Brashies,Dale Jeffreys,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:36,32,HH,Tobias Matheson,4084,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:34:36,33,Australia Wide Racing Yellow,Cam Culverwell,4084,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:36,34,Team Michael Cummings9,Michael Cummings9,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:36,35,The Remarkable Maggots,Shaun Devantier,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:34:36,63,Lily Bowling,Lily Bowling,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:41,0,Side Ting Racing,Lachy R Brett,4083,10,10,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:41,1,USRA Red,Chris Schultz2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:41,2,Team Mike Bowen3,Mike Bowen3,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:41,3,Stephen Hawking s Pit Crew,Andrew Hess2,4083,0,0,3,-1.0,-1.0,False,1
+2025-06-04T00:34:41,4,Team John McDonald V,John McDonald V,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:41,5,Faded Line,Mack McGuire,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:41,6,GDX Racing,Gustavo Diniz,4083,1,1,6,500.2002868652344,-1.0,False,0
+2025-06-04T00:34:41,7,SGrey,Simple Grey,4083,7,7,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:41,8,Team Julián Toro,Julián Toro,4084,14,2,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:41,9,ATR Argentos MP Maro Plumbing,Diego A Armendariz,4083,6,6,3,507.92181396484375,507.92181396484375,True,1
+2025-06-04T00:34:41,10,Team Krishen Sharma,Krishen Sharma,4083,11,11,4,520.764892578125,529.0432739257812,False,0
+2025-06-04T00:34:41,11,Team James Pyper,James Pyper,4083,0,0,1,-1.0,-1.0,True,1
+2025-06-04T00:34:41,12,Amateur Hour Racing,Joshua Yu,4083,2,2,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:41,13,Valkyrie Racing Team,Ian Knox2,4083,3,3,4,502.2051086425781,-1.0,False,0
+2025-06-04T00:34:41,14,Team SoggyFrenchFries,James Allen,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:41,15,Team Yuxuan Cai,Yuxuan Cai,4083,4,4,3,504.92919921875,504.92919921875,False,0
+2025-06-04T00:34:41,16,LMRT,Eduardo Chongkan,4083,5,5,5,507.5487976074219,508.0649108886719,False,0
+2025-06-04T00:34:41,17,"Friendly, Don t Shoot ",Stephen Mcilwaine,4084,13,1,5,530.4276123046875,530.4276123046875,False,0
+2025-06-04T00:34:41,18,HyPrix SimRaceCity Aurora,Eddie Gomez,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:41,19,FROG LEAP JUICD RACING GREEN,Braden Oloughlin,4083,8,8,3,511.7742004394531,-1.0,False,0
+2025-06-04T00:34:41,20,Motus Tardus Racing,Kirill Bratchenko,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:41,21,Drag-On Racing 934,Hongjun Xu,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:41,22,Full Force Gremlins 002,Rune Clutch Johansen,4083,12,12,2,521.17529296875,521.17529296875,False,0
+2025-06-04T00:34:41,23,Team Matt Hewett2,Matt Hewett2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:41,24,Dogs Watch Racing Team,Jarrod Collins,4083,9,9,2,512.497314453125,512.497314453125,False,0
+2025-06-04T00:34:41,25,Don t Kill the Messenger,Hugh Messenger,4084,15,3,2,541.3839111328125,541.3839111328125,False,0
+2025-06-04T00:34:41,26,Savage Sim Alpha Mini,Jordan Strandt,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:41,27,VRC Phantom,Sergio Xharal Avila,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:41,28,Almost Enduro Racers,Alisdair Macleod,3104,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:41,29,AW Racing Team Black,Javier Martinez12,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:34:41,30,ZRT MOMO TIRES ARG  77,Victor de la Valle,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:41,31,TECH1 - Brashies,Dale Jeffreys,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:41,32,HH,Tobias Matheson,4084,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:34:41,33,Australia Wide Racing Yellow,Cam Culverwell,4084,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:34:41,34,Team Michael Cummings9,Michael Cummings9,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:34:41,35,The Remarkable Maggots,Shaun Devantier,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:34:41,63,Lily Bowling,Lily Bowling,4084,0,0,-1,-1.0,-1.0,False,0

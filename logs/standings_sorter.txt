@@ -1,0 +1,16 @@
+Standings sorter running. Ctrl-C to stop.
+[ERR] 'charmap' codec can't encode character '\u2192' in position 23: character maps to <undefined>
+[ERR] 'charmap' codec can't encode character '\u2192' in position 23: character maps to <undefined>
+[ERR] 'charmap' codec can't encode character '\u2192' in position 23: character maps to <undefined>
+[ERR] 'charmap' codec can't encode character '\u2192' in position 23: character maps to <undefined>
+[ERR] 'charmap' codec can't encode character '\u2192' in position 23: character maps to <undefined>
+[ERR] 'charmap' codec can't encode character '\u2192' in position 23: character maps to <undefined>
+[ERR] 'charmap' codec can't encode character '\u2192' in position 23: character maps to <undefined>
+[ERR] 'charmap' codec can't encode character '\u2192' in position 23: character maps to <undefined>
+[ERR] 'charmap' codec can't encode character '\u2192' in position 23: character maps to <undefined>
+[ERR] 'charmap' codec can't encode character '\u2192' in position 23: character maps to <undefined>
+Traceback (most recent call last):
+  File "C:\Users\Redux\Documents\EEC\standings_sorter.py", line 67, in <module>
+    time.sleep(5)
+    ~~~~~~~~~~^^^
+KeyboardInterrupt
