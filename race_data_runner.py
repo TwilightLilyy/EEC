@@ -3,6 +3,10 @@ import subprocess, signal, sys, time, os, threading, shutil
 import csv, itertools
 from pathlib import Path
 from datetime import datetime
+
+# Ensure all relative paths resolve to the directory this file lives in
+BASE_DIR = Path(__file__).resolve().parent
+os.chdir(BASE_DIR)
 try:
     from colorama import init as _init, Fore, Style
     try:
