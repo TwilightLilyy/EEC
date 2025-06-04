@@ -6,6 +6,7 @@ import threading
 import time
 import os
 import shutil
+from pathlib import Path
 from queue import Queue, Empty
 try:
     import irsdk
@@ -43,7 +44,8 @@ class RaceLoggerGUI:
 
         ttk.Button(frm, text="Reset Logs", command=self.reset_logs).grid(column=0, row=2, pady=5, sticky="ew")
         ttk.Button(frm, text="Save Logs…", command=self.save_logs).grid(column=1, row=2, pady=5, sticky="ew")
-        ttk.Button(frm, text="Export to ChatGPT", command=self.export_logs).grid(column=0, row=3, columnspan=2, pady=5, sticky="ew")
+        ttk.Button(frm, text="View Logs…", command=self.view_logs).grid(column=0, row=3, columnspan=2, pady=5, sticky="ew")
+        ttk.Button(frm, text="Export to ChatGPT", command=self.export_logs).grid(column=0, row=4, columnspan=2, pady=5, sticky="ew")
 
         self.log_box = ScrolledText(frm, width=80, height=20, state="disabled")
         self.log_box.grid(column=0, row=4, columnspan=2, pady=5)
@@ -120,6 +122,38 @@ class RaceLoggerGUI:
             if os.path.exists(f):
                 shutil.copy(f, target)
         messagebox.showinfo("Saved", f"Logs copied to {target}")
+
+    def view_logs(self):
+        log_dir = Path("logs")
+        files = [f.name for f in log_dir.glob("*.txt")]
+        if not files:
+            messagebox.showinfo("Logs", "No log files found")
+            return
+
+        win = tk.Toplevel(self.root)
+        win.title("View Logs")
+
+        sel = tk.StringVar(value=files[0])
+        combo = ttk.Combobox(win, textvariable=sel, values=files, state="readonly")
+        combo.pack(fill="x", padx=5, pady=5)
+
+        txt = tk.Text(win, wrap="none")
+        txt.pack(fill="both", expand=True, padx=5, pady=5)
+
+        def load(event=None):
+            path = log_dir / sel.get()
+            try:
+                with open(path, "r", encoding="utf-8", errors="ignore") as fh:
+                    content = fh.read()
+            except Exception as e:
+                content = f"Error reading {path}: {e}"
+            txt.delete("1.0", tk.END)
+            txt.insert(tk.END, content)
+            txt.see(tk.END)
+
+        ttk.Button(win, text="Refresh", command=load).pack(pady=5)
+        combo.bind("<<ComboboxSelected>>", load)
+        load()
 
     # ── ChatGPT export ──────────────────────────────────────────
     def export_logs(self):
