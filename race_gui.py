@@ -387,8 +387,24 @@ class RaceLoggerGUI:
                 with csv_path.open("r", newline="", encoding="utf-8") as f:
                     rows = list(csv.DictReader(f))
                 rows = filter_rows(rows)
+                # determine order of classes based on their best overall position
+                class_leaders = {}
+                for r in rows:
+                    try:
+                        pos = int(r.get("Pos", 0))
+                    except Exception:
+                        pos = 0
+                    cls = r.get("Class", "")
+                    if cls not in class_leaders or pos < class_leaders[cls]:
+                        class_leaders[cls] = pos
+                order = {
+                    c: i for i, c in enumerate(sorted(class_leaders, key=class_leaders.get))
+                }
                 rows.sort(
-                    key=lambda r: (r.get("Class", ""), int(r.get("Class Pos", 0)))
+                    key=lambda r: (
+                        order.get(r.get("Class", ""), len(order)),
+                        int(r.get("Pos", 0)),
+                    )
                 )
 
                 def fmt(val: str) -> str:
