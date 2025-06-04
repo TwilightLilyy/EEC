@@ -1,0 +1,13 @@
+Waiting for iRacing session…
+Not connected… waiting.
+Not connected… waiting.
+Not connected… waiting.
+Not connected… waiting.
+Not connected… waiting.
+Not connected… waiting.
+Not connected… waiting.
+Traceback (most recent call last):
+  File "C:\Users\Redux\Documents\EEC\ai_standings_logger.py", line 22, in <module>
+    time.sleep(2)
+    ~~~~~~~~~~^^^
+KeyboardInterrupt
