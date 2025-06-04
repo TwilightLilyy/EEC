@@ -1,4 +1,8 @@
-import irsdk, csv, time, pandas as pd
+import irsdk, csv, time
+try:
+    import pandas as pd
+except Exception:
+    pd = None
 from datetime import datetime
 
 CSV_FILE     = "pitstop_log.csv"
@@ -21,6 +25,8 @@ def minsec(sec):
     return f"{m}:{s:02d}"
 
 def write_overlay(csv_path, html_path=OVERLAY_FILE):
+    if pd is None:
+        return
     df = pd.read_csv(csv_path)
     latest = (df.sort_values("Stint End Timestamp", ascending=False)
                 .drop_duplicates("CarIdx")
@@ -101,7 +107,8 @@ while True:
                         print(f"[{iso_now()}] STINT END – "
                             f"{team} / {drv}: {row[-1]} laps, {row[-2]}.")
 
-                        write_overlay(CSV_FILE)
+                        if pd is not None:
+                            write_overlay(CSV_FILE)
                         stint[idx] = {"on_pit": True}     # wait for exit
 
                     # pit exit → new stint
