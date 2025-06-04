@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 from queue import Queue, Empty
 import csv
+import re
 try:
     import irsdk
 except ImportError:
@@ -25,6 +26,18 @@ LOG_FILES = [
     "sorted_standings.csv",
     "driver_swaps.csv",
 ]
+
+# Map ANSI colour codes (foreground) to Tkinter tag names
+ANSI_COLOUR_MAP = {
+    "30": "black", "90": "black",
+    "31": "red",   "91": "red",
+    "32": "green", "92": "green",
+    "33": "yellow","93": "yellow",
+    "34": "blue",  "94": "blue",
+    "35": "magenta","95": "magenta",
+    "36": "cyan",  "96": "cyan",
+    "37": "white", "97": "white",
+}
 
 class RaceLoggerGUI:
     def __init__(self, root: tk.Tk):
@@ -58,6 +71,23 @@ class RaceLoggerGUI:
 
         self.log_box = ScrolledText(frm, width=80, height=20, state="disabled")
         self.log_box.grid(column=0, row=6, columnspan=2, pady=5)
+
+        # ── ANSI colour setup for log output ────────────────────
+        self._ansi_re = re.compile(r"\x1b\[([0-9;]+)m")
+        self._current_tags: list[str] = []
+        _colours = {
+            "black": "black",
+            "red": "red",
+            "green": "green",
+            "yellow": "#cccc00",
+            "blue": "blue",
+            "magenta": "magenta",
+            "cyan": "cyan",
+            "white": "white",
+        }
+        for name, colour in _colours.items():
+            self.log_box.tag_config(f"fg-{name}", foreground=colour)
+        self.log_box.tag_config("bold", font=("TkDefaultFont", 9, "bold"))
 
         self.update_thread = threading.Thread(target=self.update_status_loop, daemon=True)
         self.update_thread.start()
@@ -246,12 +276,35 @@ class RaceLoggerGUI:
             for line in self.proc.stdout:
                 self.log_queue.put(line)
 
+    def _apply_ansi_codes(self, codes: list[str]) -> None:
+        for c in codes:
+            if c == "0":
+                self._current_tags.clear()
+            elif c == "1":
+                if "bold" not in self._current_tags:
+                    self._current_tags.append("bold")
+            else:
+                colour = ANSI_COLOUR_MAP.get(c)
+                if colour:
+                    self._current_tags = [t for t in self._current_tags if not t.startswith("fg-")]
+                    self._current_tags.append(f"fg-{colour}")
+
+    def insert_with_ansi(self, text: str) -> None:
+        pos = 0
+        for m in self._ansi_re.finditer(text):
+            if m.start() > pos:
+                self.log_box.insert("end", text[pos:m.start()], tuple(self._current_tags))
+            self._apply_ansi_codes(m.group(1).split(";"))
+            pos = m.end()
+        if pos < len(text):
+            self.log_box.insert("end", text[pos:], tuple(self._current_tags))
+
     def update_log_box(self):
         try:
             while True:
                 line = self.log_queue.get_nowait()
                 self.log_box.configure(state="normal")
-                self.log_box.insert("end", line)
+                self.insert_with_ansi(line)
                 self.log_box.see("end")
                 self.log_box.configure(state="disabled")
         except Empty:
