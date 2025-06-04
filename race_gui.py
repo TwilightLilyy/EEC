@@ -33,6 +33,12 @@ class RaceLoggerGUI:
         self.log_queue: Queue[str] = Queue()
         self.output_thread = None
 
+        menubar = tk.Menu(root)
+        file_menu = tk.Menu(menubar, tearoff=0)
+        file_menu.add_command(label="Quit", command=self.on_close)
+        menubar.add_cascade(label="File", menu=file_menu)
+        root.config(menu=menubar)
+
         frm = ttk.Frame(root, padding=10)
         frm.grid()
 
