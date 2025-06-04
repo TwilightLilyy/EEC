@@ -12,6 +12,7 @@ from pathlib import Path
 from queue import Queue, Empty
 import csv
 import re
+
 try:
     import irsdk
 except ImportError:
@@ -31,14 +32,22 @@ LOG_FILES = [
 
 # Map ANSI colour codes (foreground) to Tkinter tag names
 ANSI_COLOUR_MAP = {
-    "30": "black", "90": "black",
-    "31": "red",   "91": "red",
-    "32": "green", "92": "green",
-    "33": "yellow","93": "yellow",
-    "34": "blue",  "94": "blue",
-    "35": "magenta","95": "magenta",
-    "36": "cyan",  "96": "cyan",
-    "37": "white", "97": "white",
+    "30": "black",
+    "90": "black",
+    "31": "red",
+    "91": "red",
+    "32": "green",
+    "92": "green",
+    "33": "yellow",
+    "93": "yellow",
+    "34": "blue",
+    "94": "blue",
+    "35": "magenta",
+    "95": "magenta",
+    "36": "cyan",
+    "96": "cyan",
+    "37": "white",
+    "97": "white",
 }
 
 
@@ -61,6 +70,7 @@ def filter_rows(rows):
             continue
         filtered.append(r)
     return filtered
+
 
 class RaceLoggerGUI:
     def __init__(self, root: tk.Tk):
@@ -92,20 +102,39 @@ class RaceLoggerGUI:
 
         self.status_lbl = ttk.Label(frm, text="iRacing: ?")
         self.status_lbl.grid(column=0, row=0, sticky="w")
-        self.start_btn = ttk.Button(frm, text="Start Logging", command=self.start_logging)
+        self.start_btn = ttk.Button(
+            frm, text="Start Logging", command=self.start_logging
+        )
         self.start_btn.grid(column=0, row=1, pady=5, sticky="ew")
-        self.stop_btn = ttk.Button(frm, text="Stop Logging", command=self.stop_logging, state="disabled")
+        self.stop_btn = ttk.Button(
+            frm, text="Stop Logging", command=self.stop_logging, state="disabled"
+        )
         self.stop_btn.grid(column=1, row=1, pady=5, sticky="ew")
 
-        ttk.Button(frm, text="Reset Logs", command=self.reset_logs).grid(column=0, row=2, pady=5, sticky="ew")
-        ttk.Button(frm, text="Save Logs…", command=self.save_logs).grid(column=1, row=2, pady=5, sticky="ew")
-        ttk.Button(frm, text="View Standings…", command=self.view_standings).grid(column=0, row=4, columnspan=2, pady=5, sticky="ew")
-        ttk.Button(frm, text="View Drive Times…", command=self.view_driver_times).grid(column=0, row=5, columnspan=2, pady=5, sticky="ew")
-        ttk.Button(frm, text="Export to ChatGPT", command=self.export_logs).grid(column=0, row=6, columnspan=2, pady=5, sticky="ew")
+        ttk.Button(frm, text="Reset Logs", command=self.reset_logs).grid(
+            column=0, row=2, pady=5, sticky="ew"
+        )
+        ttk.Button(frm, text="Save Logs…", command=self.save_logs).grid(
+            column=1, row=2, pady=5, sticky="ew"
+        )
+        ttk.Button(frm, text="View Standings…", command=self.view_standings).grid(
+            column=0, row=4, columnspan=2, pady=5, sticky="ew"
+        )
+        ttk.Button(frm, text="View Drive Times…", command=self.view_driver_times).grid(
+            column=0, row=5, columnspan=2, pady=5, sticky="ew"
+        )
+        ttk.Button(frm, text="Export to ChatGPT", command=self.export_logs).grid(
+            column=0, row=6, columnspan=2, pady=5, sticky="ew"
+        )
 
         self.log_box = ScrolledText(
-            frm, width=80, height=20, state="disabled",
-            background=self.log_box_bg, foreground=self.fg, insertbackground="white"
+            frm,
+            width=80,
+            height=20,
+            state="disabled",
+            background=self.log_box_bg,
+            foreground=self.fg,
+            insertbackground="white",
         )
         self.log_box.grid(column=0, row=7, columnspan=2, pady=5)
 
@@ -131,7 +160,9 @@ class RaceLoggerGUI:
             self.log_box.tag_config(f"fg-{name}", foreground=colour)
         self.log_box.tag_config("bold", font=("TkDefaultFont", 9, "bold"))
 
-        self.update_thread = threading.Thread(target=self.update_status_loop, daemon=True)
+        self.update_thread = threading.Thread(
+            target=self.update_status_loop, daemon=True
+        )
         self.update_thread.start()
         self.root.after(100, self.update_log_box)
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
@@ -153,9 +184,12 @@ class RaceLoggerGUI:
         style.configure("TButton", background="#2b3249", foreground=self.fg, padding=6)
         style.map("TButton", background=[("active", accent)])
         style.configure("TNotebook", background=self.bg)
-        style.configure("TNotebook.Tab", background="#2b3249", foreground=self.fg, padding=(10, 4))
+        style.configure(
+            "TNotebook.Tab", background="#2b3249", foreground=self.fg, padding=(10, 4)
+        )
         style.map("TNotebook.Tab", background=[("selected", accent)])
         self.log_box_bg = "#111111"
+
     # ── logging subprocess management ────────────────────────────
     def start_logging(self):
         if self.proc:
@@ -247,9 +281,16 @@ class RaceLoggerGUI:
 
         def load() -> None:
             tree.delete(*tree.get_children())
-            if not os.path.exists(csv_path):
+            path = Path(csv_path)
+            if not path.exists():
+                base = Path(sys.argv[0]).resolve().parent
+                for p in (Path.cwd() / csv_path, base / csv_path, base.parent / csv_path):
+                    if p.exists():
+                        path = p
+                        break
+            if not path.exists():
                 return
-            with open(csv_path, newline="", encoding="utf-8") as f:
+            with open(path, newline="", encoding="utf-8") as f:
                 reader = csv.DictReader(f)
                 if not reader.fieldnames:
                     return
@@ -258,9 +299,13 @@ class RaceLoggerGUI:
                     tree.heading(c, text=c)
                     tree.column(c, anchor="center")
                 for row in reader:
-                    tree.insert("", "end", values=[row.get(c, "") for c in reader.fieldnames])
+                    tree.insert(
+                        "", "end", values=[row.get(c, "") for c in reader.fieldnames]
+                    )
 
-        ttk.Button(frame, text="Refresh", command=load).grid(row=1, column=0, columnspan=2, pady=5)
+        ttk.Button(frame, text="Refresh", command=load).grid(
+            row=1, column=0, columnspan=2, pady=5
+        )
         load()
 
     def view_logs(self):
@@ -312,8 +357,19 @@ class RaceLoggerGUI:
 
         win = tk.Toplevel(self.root)
         win.title("Standings")
-        cols = ["Team", "Driver", "Class", "Pos", "Class Pos", "Laps",
-                "Pits", "Avg Lap", "Best Lap", "Last Lap", "In Pit"]
+        cols = [
+            "Team",
+            "Driver",
+            "Class",
+            "Pos",
+            "Class Pos",
+            "Laps",
+            "Pits",
+            "Avg Lap",
+            "Best Lap",
+            "Last Lap",
+            "In Pit",
+        ]
         tree = ttk.Treeview(win, columns=cols, show="headings")
         for c in cols:
             tree.heading(c, text=c)
@@ -331,18 +387,40 @@ class RaceLoggerGUI:
                 with csv_path.open("r", newline="", encoding="utf-8") as f:
                     rows = list(csv.DictReader(f))
                 rows = filter_rows(rows)
-                rows.sort(key=lambda r: (r.get("Class", ""),
-                                         int(r.get("Class Pos", 0))))
+                rows.sort(
+                    key=lambda r: (r.get("Class", ""), int(r.get("Class Pos", 0)))
+                )
+
+                def fmt(val: str) -> str:
+                    try:
+                        num = float(val)
+                    except Exception:
+                        return val
+                    return f"{num:.3f}".rstrip("0").rstrip(".")
+
                 for r in rows:
-                    tree.insert("", "end", values=[r.get(c, "") for c in cols])
+                    vals = []
+                    for c in cols:
+                        v = r.get(c, "")
+                        if c in {"Best Lap", "Last Lap"}:
+                            v = fmt(v)
+                        vals.append(v)
+                    tree.insert("", "end", values=vals)
             except Exception as e:
                 messagebox.showerror("Standings", f"Error reading {csv_path}: {e}")
 
-        ttk.Button(win, text="Refresh", command=load).grid(row=1, column=0, columnspan=2, pady=5)
+        ttk.Button(win, text="Refresh", command=load).grid(
+            row=1, column=0, columnspan=2, pady=5
+        )
         load()
 
     def view_driver_times(self):
-        csv_path = Path("driver_times.csv")
+        base = Path(sys.argv[0]).resolve().parent
+        csv_path = base / "driver_times.csv"
+        if not csv_path.exists():
+            csv_path = base.parent / "driver_times.csv"
+        if not csv_path.exists():
+            csv_path = Path("driver_times.csv")
         if not csv_path.exists():
             messagebox.showinfo("Driver Times", "No driver time file found")
             return
@@ -377,15 +455,22 @@ class RaceLoggerGUI:
                 with csv_path.open("r", newline="", encoding="utf-8") as f:
                     rows = list(csv.DictReader(f))
                 for r in rows:
-                    tree.insert("", "end", values=[
-                        r.get("TeamName", r.get("Team", "")),
-                        r.get("DriverName", r.get("Driver", "")),
-                        r.get("Total Time (h:m:s)") or fmt(r.get("Total Time (sec)", ""))
-                    ])
+                    tree.insert(
+                        "",
+                        "end",
+                        values=[
+                            r.get("TeamName", r.get("Team", "")),
+                            r.get("DriverName", r.get("Driver", "")),
+                            r.get("Total Time (h:m:s)")
+                            or fmt(r.get("Total Time (sec)", "")),
+                        ],
+                    )
             except Exception as e:
                 messagebox.showerror("Driver Times", f"Error reading {csv_path}: {e}")
 
-        ttk.Button(win, text="Refresh", command=load).grid(row=1, column=0, columnspan=2, pady=5)
+        ttk.Button(win, text="Refresh", command=load).grid(
+            row=1, column=0, columnspan=2, pady=5
+        )
         load()
 
     # ── ChatGPT export ──────────────────────────────────────────
@@ -411,7 +496,9 @@ class RaceLoggerGUI:
                 max_tokens=300,
             )
             res_text = resp["choices"][0]["message"]["content"]
-            info = filedialog.asksaveasfilename(title="Save analysis", defaultextension=".txt")
+            info = filedialog.asksaveasfilename(
+                title="Save analysis", defaultextension=".txt"
+            )
             if info:
                 with open(info, "w", encoding="utf-8") as out:
                     out.write(res_text)
@@ -435,14 +522,18 @@ class RaceLoggerGUI:
             else:
                 colour = ANSI_COLOUR_MAP.get(c)
                 if colour:
-                    self._current_tags = [t for t in self._current_tags if not t.startswith("fg-")]
+                    self._current_tags = [
+                        t for t in self._current_tags if not t.startswith("fg-")
+                    ]
                     self._current_tags.append(f"fg-{colour}")
 
     def insert_with_ansi(self, text: str) -> None:
         pos = 0
         for m in self._ansi_re.finditer(text):
             if m.start() > pos:
-                self.log_box.insert("end", text[pos:m.start()], tuple(self._current_tags))
+                self.log_box.insert(
+                    "end", text[pos : m.start()], tuple(self._current_tags)
+                )
             self._apply_ansi_codes(m.group(1).split(";"))
             pos = m.end()
         if pos < len(text):
@@ -473,6 +564,7 @@ def main():
     root = tk.Tk()
     RaceLoggerGUI(root)
     root.mainloop()
+
 
 if __name__ == "__main__":
     main()

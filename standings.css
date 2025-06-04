@@ -52,6 +52,29 @@ tr.class-gt3.leader td {
     box-shadow: 0 0 8px #e8bc47;
 }
 
+/* Group header rows per class */
+tr.group-header td {
+    font-weight: bold;
+    text-align: left;
+    padding-top: 0.6em;
+    font-size: 1.2em;
+}
+
+tr.class-hypercar.group-header td {
+    background: linear-gradient(90deg, #174fa3 60%, #1f3262 100%);
+    color: #fff;
+}
+
+tr.class-p2.group-header td {
+    background: linear-gradient(90deg, #24c080 60%, #135c41 100%);
+    color: #fff;
+}
+
+tr.class-gt3.group-header td {
+    background: linear-gradient(90deg, #f3c46a 60%, #917737 100%);
+    color: #232323;
+}
+
 #standingsTable {
     border-collapse: collapse;
     width: 100%;

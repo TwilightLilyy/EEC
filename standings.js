@@ -115,22 +115,55 @@ function renderStandings() {
             return sortAsc ? res : -res;
         });
     }
+ // Now render in sorted order, substituting the display class name and color
+ // Class icons as emoji placeholders (swap for SVGs if you wish)
+const CLASS_ICON = {
+    "Hypercar": "🟥",
+    "P2":       "🟦",
+    "GT3":      "🟩"
+};
 
-    const CLASS_ICON = {
-        "Hypercar": "🟥",
-        "P2":       "🟦",
-        "GT3":      "🟩"
-    };
+let lastClass = null;
+for (const row of dataRows) {
+    const tr = document.createElement('tr');
+    const rawClass = row[colIdx.class];
+    let classKey = '';
+    let classDisplay = rawClass;
+    if (CLASS_MAP[rawClass]) {
+        classKey = CLASS_MAP[rawClass].display.toLowerCase();
+        classDisplay = CLASS_MAP[rawClass].display;
+    }
 
-    for (const row of rows) {
-        const tr = document.createElement('tr');
-        const rawClass = row[colIdx.class];
-        let classKey = '';
-        let classDisplay = rawClass;
-        if (CLASS_MAP[rawClass]) {
-            classKey = CLASS_MAP[rawClass].display.toLowerCase();
-            classDisplay = CLASS_MAP[rawClass].display;
-            tr.classList.add(`class-${classKey}`);
+    if (classKey !== lastClass) {
+        lastClass = classKey;
+        const headerTr = document.createElement('tr');
+        headerTr.classList.add(`class-${classKey}`, 'group-header');
+        const headerTd = document.createElement('td');
+        headerTd.colSpan = headers.length;
+        headerTd.textContent = classDisplay;
+        headerTr.appendChild(headerTd);
+        tbody.appendChild(headerTr);
+    }
+
+    tr.classList.add(`class-${classKey}`);
+    if (row[colIdx.classPos] === "1") tr.classList.add('leader');
+
+    [
+        colIdx.driver,
+        null,
+        colIdx.pos, colIdx.classPos,
+        colIdx.laps, colIdx.pits, colIdx.avgLap,
+        colIdx.bestLap, colIdx.lastLap, colIdx.inPit
+    ].forEach((idx, i) => {
+        const td = document.createElement('td');
+        if (i === 1) {
+            let icon = '';
+            if (CLASS_ICON[classDisplay]) icon = `<span class="class-icon">${CLASS_ICON[classDisplay]}</span>`;
+            td.innerHTML = icon + classDisplay;
+        } else if (idx !== null) {
+            const val = row[idx];
+            const num = parseFloat(val);
+            td.textContent = isNaN(num) ? val : formatNumber(val);
         }
         if (row[colIdx.classPos] === "1") tr.classList.add("leader");
 
