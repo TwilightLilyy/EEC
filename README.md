@@ -49,3 +49,10 @@ pyinstaller --onefile race_gui.py
 ```
 
 The resulting `dist/race_gui.exe` will include all scripts and can be run without Python installed.
+
+### Running the executable
+
+Once `pyinstaller` has finished you will find the built program in the `dist/` folder.
+On Windows the file will be `race_gui.exe` while on Linux it will simply be `race_gui`.
+Launch it from a terminal or double–click the file to start the GUI.  No additional
+Python installation is required.
