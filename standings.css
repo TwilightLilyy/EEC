@@ -1,5 +1,24 @@
 /* === FFXIV Grand Prix: Table Styles === */
 
+body {
+    background: radial-gradient(circle at top left, #20232a, #0e0f14);
+    color: #e7e7ff;
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    padding: 1em;
+}
+
+.ffxiv-header {
+    font-size: 1.4em;
+    text-align: center;
+    margin: 0 0 1em 0;
+    font-weight: bold;
+}
+
+.aether-logo {
+    color: #f6cf63;
+    margin: 0 0.2em;
+}
+
 tr.class-hypercar td {
     background: linear-gradient(90deg, #174fa3 60%, #1f3262 100%);
     color: #fff;

@@ -45,6 +45,14 @@ class RaceLoggerGUI:
     def __init__(self, root: tk.Tk):
         self.root = root
         self.root.title("EEC Logger")
+
+        self.setup_style()
+        icon_path = Path(__file__).resolve().parent / "Logos" / "App" / "EECApp.png"
+        if icon_path.exists():
+            try:
+                self.root.iconphoto(True, tk.PhotoImage(file=icon_path))
+            except Exception:
+                pass
         self.proc = None
         self.log_queue: Queue[str] = Queue()
         self.output_thread = None
@@ -74,7 +82,10 @@ class RaceLoggerGUI:
         ttk.Button(frm, text="View Drive Times…", command=self.view_driver_times).grid(column=0, row=5, columnspan=2, pady=5, sticky="ew")
         ttk.Button(frm, text="Export to ChatGPT", command=self.export_logs).grid(column=0, row=6, columnspan=2, pady=5, sticky="ew")
 
-        self.log_box = ScrolledText(frm, width=80, height=20, state="disabled")
+        self.log_box = ScrolledText(
+            frm, width=80, height=20, state="disabled",
+            background=self.log_box_bg, foreground=self.fg, insertbackground="white"
+        )
         self.log_box.grid(column=0, row=7, columnspan=2, pady=5)
 
         # Additional tabs for CSV logs
@@ -104,6 +115,25 @@ class RaceLoggerGUI:
         self.root.after(100, self.update_log_box)
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
 
+    def setup_style(self) -> None:
+        style = ttk.Style(self.root)
+        try:
+            style.theme_use("clam")
+        except Exception:
+            pass
+        self.bg = "#23272e"
+        self.fg = "#e7e7ff"
+        accent = "#3c445c"
+        self.root.configure(bg=self.bg)
+        self.root.option_add("*Font", "Segoe UI 10")
+        style.configure("TFrame", background=self.bg)
+        style.configure("TLabel", background=self.bg, foreground=self.fg)
+        style.configure("TButton", background="#2b3249", foreground=self.fg, padding=6)
+        style.map("TButton", background=[("active", accent)])
+        style.configure("TNotebook", background=self.bg)
+        style.configure("TNotebook.Tab", background="#2b3249", foreground=self.fg, padding=(10, 4))
+        style.map("TNotebook.Tab", background=[("selected", accent)])
+        self.log_box_bg = "#111111"
     # ── logging subprocess management ────────────────────────────
     def start_logging(self):
         if self.proc:
