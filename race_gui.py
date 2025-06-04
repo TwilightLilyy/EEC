@@ -70,6 +70,8 @@ class RaceLoggerGUI:
             stderr=subprocess.STDOUT,
             text=True,
             bufsize=1,
+            encoding="utf-8",
+            errors="replace",
         )
         self.output_thread = threading.Thread(target=self.read_output, daemon=True)
         self.output_thread.start()
