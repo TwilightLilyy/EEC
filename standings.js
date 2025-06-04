@@ -1,3 +1,13 @@
+function formatNumber(value) {
+    const num = parseFloat(value);
+    if (isNaN(num)) return value;
+    let str = num.toFixed(3);
+    if (str.includes('.')) {
+        str = str.replace(/0+$/, '').replace(/\.$/, '');
+    }
+    return str;
+}
+
 async function fetchAndRenderStandings() {
     try {
         const response = await fetch('sorted_standings.csv?_=' + new Date().getTime());
@@ -43,6 +53,10 @@ async function fetchAndRenderStandings() {
             // Filter: skip if Driver is Lily Bowling or Pace Car
             const driverName = row[colIdx.driver];
             if (driverName === "Lily Bowling" || driverName === "Pace Car") continue;
+            // Hide entries with position 0 or non-positive lap count
+            const pos = parseInt(row[colIdx.pos], 10);
+            const laps = parseFloat(row[colIdx.laps]);
+            if (pos === 0 || laps <= 0) continue;
 
             dataRows.push(row);
         }
@@ -93,12 +107,10 @@ for (const row of dataRows) {
             if (CLASS_ICON[classDisplay]) icon = `<span class="class-icon">${CLASS_ICON[classDisplay]}</span>`;
             td.innerHTML = icon + classDisplay;
         }
-        else if ([colIdx.avgLap, colIdx.bestLap, colIdx.lastLap].includes(idx)) {
-            const val = parseFloat(row[idx]);
-            td.textContent = (!isNaN(val) && val > 0) ? val.toFixed(3) : row[idx];
-        }
         else if (idx !== null) {
-            td.textContent = row[idx];
+            const val = row[idx];
+            const num = parseFloat(val);
+            td.textContent = isNaN(num) ? val : formatNumber(val);
         }
         tr.appendChild(td);
     });
