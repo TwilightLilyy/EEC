@@ -1,0 +1,5 @@
+# Ignore log files generated at runtime
+logs/*.txt
+dist/logs/*.txt
+__pycache__/
+*.pyc

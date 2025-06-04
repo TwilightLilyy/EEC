@@ -38,7 +38,13 @@ Run the race data runner which spawns the loggers and sorter:
 python race_data_runner.py
 ```
 
-This creates CSV log files in the repository directory and writes console output to the `logs/` folder. The `standings.html` file reads `sorted_standings.csv` and together with `standings.js` and `standings.css` provides a live overlay you can open in a browser or streaming tool.
+This creates CSV log files in the repository directory and writes console
+output to the `logs/` folder.  Each logger has a matching text file in this
+directory &ndash; for example `ai_logger.txt` holds the console output from
+`ai_standings_logger.py`.  These log files are created on the fly and are safe
+to delete.  The `standings.html` file reads `sorted_standings.csv` and together
+with `standings.js` and `standings.css` provides a live overlay you can open in
+a browser or streaming tool.
 
 Logos and spec maps under `Logos/` and `SpecMaps/` contain the Final Fantasy XIV themed assets used for the championship.
 
