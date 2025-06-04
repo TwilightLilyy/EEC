@@ -6,6 +6,7 @@ import threading
 import time
 import os
 import shutil
+import sys
 from pathlib import Path
 from queue import Queue, Empty
 try:
@@ -60,8 +61,11 @@ class RaceLoggerGUI:
         if self.proc:
             messagebox.showinfo("Logger", "Already running")
             return
+        runner = Path(sys.argv[0]).resolve().parent / "race_data_runner.py"
+        if not runner.exists():
+            runner = Path(sys.argv[0]).resolve().parent.parent / "race_data_runner.py"
         self.proc = subprocess.Popen(
-            ["python", "race_data_runner.py"],
+            ["python", str(runner)],
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,
