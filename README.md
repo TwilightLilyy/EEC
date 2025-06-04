@@ -47,6 +47,7 @@ Logos and spec maps under `Logos/` and `SpecMaps/` contain the Final Fantasy XIV
 ## GUI
 
 A basic Tkinter interface is provided in `race_gui.py`.  It lets you start and stop the logging utilities, shows the current iRacing connection status and has buttons to reset or save the log files.  A "View Logs…" button opens the latest text logs right inside the program.  If the optional `openai` package is installed and an `OPENAI_API_KEY` environment variable is set, the GUI can send the logs to ChatGPT and store the resulting analysis in a text file.
+The window also provides a simple *File* menu with a *Quit* action to close the application.
 
 Run it with:
 
