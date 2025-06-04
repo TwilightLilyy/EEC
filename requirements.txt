@@ -1,0 +1,4 @@
+pandas
+colorama
+irsdk
+# openai  # optional for ChatGPT export via race_gui.py

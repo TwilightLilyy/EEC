@@ -3,11 +3,20 @@ import subprocess, signal, sys, time, os, threading, shutil
 import csv, itertools
 from pathlib import Path
 from datetime import datetime
+
+# Ensure all relative paths resolve to the directory this file lives in
+BASE_DIR = Path(__file__).resolve().parent
+os.chdir(BASE_DIR)
 try:
     from colorama import init as _init, Fore, Style
     try:
         from colorama import just_fix_windows_console
         just_fix_windows_console()
+    except Exception:
+        pass
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+        sys.stderr.reconfigure(encoding="utf-8")
     except Exception:
         pass
     _init(autoreset=True)
