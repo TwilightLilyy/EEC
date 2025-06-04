@@ -32,7 +32,7 @@ async function fetchAndRenderStandings() {
             inPit: headers.indexOf("In Pit")
         };
 
-        // Map your internal class labels to display and sort order
+        // Map internal class labels to display name and order (1 = fastest)
         const CLASS_MAP = {
             "Hypercar":   { display: "Hypercar", order: 1 },
             "P2":         { display: "P2",       order: 2 },
@@ -79,21 +79,21 @@ const CLASS_ICON = {
     "GT3":      "🟩"
 };
 
-let lastClass = null;
+let lastClassOrder = null;
 for (const row of dataRows) {
     const tr = document.createElement('tr');
     const rawClass = row[colIdx.class];
-    let classKey = '';
+    let classOrder = 99;
     let classDisplay = rawClass;
     if (CLASS_MAP[rawClass]) {
-        classKey = CLASS_MAP[rawClass].display.toLowerCase();
+        classOrder = CLASS_MAP[rawClass].order;
         classDisplay = CLASS_MAP[rawClass].display;
     }
 
-    if (classKey !== lastClass) {
-        lastClass = classKey;
+    if (classOrder !== lastClassOrder) {
+        lastClassOrder = classOrder;
         const headerTr = document.createElement('tr');
-        headerTr.classList.add(`class-${classKey}`, 'group-header');
+        headerTr.classList.add(`class-${classOrder}`, 'group-header');
         const headerTd = document.createElement('td');
         headerTd.colSpan = headers.length;
         headerTd.textContent = classDisplay;
@@ -101,7 +101,7 @@ for (const row of dataRows) {
         tbody.appendChild(headerTr);
     }
 
-    tr.classList.add(`class-${classKey}`);
+    tr.classList.add(`class-${classOrder}`);
     if (row[colIdx.classPos] === "1") tr.classList.add('leader');
 
     [
