@@ -54,8 +54,11 @@ class RaceLoggerGUI:
         menubar.add_cascade(label="File", menu=file_menu)
         root.config(menu=menubar)
 
-        frm = ttk.Frame(root, padding=10)
-        frm.grid()
+        self.notebook = ttk.Notebook(root)
+        self.notebook.pack(fill="both", expand=True)
+
+        frm = ttk.Frame(self.notebook, padding=10)
+        self.notebook.add(frm, text="Logger")
 
         self.status_lbl = ttk.Label(frm, text="iRacing: ?")
         self.status_lbl.grid(column=0, row=0, sticky="w")
@@ -66,12 +69,16 @@ class RaceLoggerGUI:
 
         ttk.Button(frm, text="Reset Logs", command=self.reset_logs).grid(column=0, row=2, pady=5, sticky="ew")
         ttk.Button(frm, text="Save Logs…", command=self.save_logs).grid(column=1, row=2, pady=5, sticky="ew")
-        ttk.Button(frm, text="View Logs…", command=self.view_logs).grid(column=0, row=3, columnspan=2, pady=5, sticky="ew")
-        ttk.Button(frm, text="View Standings…", command=self.view_standings).grid(column=0, row=4, columnspan=2, pady=5, sticky="ew")
-        ttk.Button(frm, text="Export to ChatGPT", command=self.export_logs).grid(column=0, row=5, columnspan=2, pady=5, sticky="ew")
+        ttk.Button(frm, text="View Standings…", command=self.view_standings).grid(column=0, row=3, columnspan=2, pady=5, sticky="ew")
+        ttk.Button(frm, text="Export to ChatGPT", command=self.export_logs).grid(column=0, row=4, columnspan=2, pady=5, sticky="ew")
 
         self.log_box = ScrolledText(frm, width=80, height=20, state="disabled")
-        self.log_box.grid(column=0, row=6, columnspan=2, pady=5)
+        self.log_box.grid(column=0, row=5, columnspan=2, pady=5)
+
+        # Additional tabs for CSV logs
+        self.create_csv_tab("pitstop_log.csv", "Pit Stops")
+        self.create_csv_tab("driver_swaps.csv", "Driver Swaps")
+        self.create_csv_tab("standings_log.csv", "Standings Log")
 
         # ── ANSI colour setup for log output ────────────────────
         self._ansi_re = re.compile(r"\x1b\[([0-9;]+)m")
@@ -172,6 +179,35 @@ class RaceLoggerGUI:
             if os.path.exists(f):
                 shutil.copy(f, target)
         messagebox.showinfo("Saved", f"Logs copied to {target}")
+
+    def create_csv_tab(self, csv_path: str, title: str) -> None:
+        frame = ttk.Frame(self.notebook, padding=10)
+        self.notebook.add(frame, text=title)
+        tree = ttk.Treeview(frame, show="headings")
+        vsb = ttk.Scrollbar(frame, orient="vertical", command=tree.yview)
+        tree.configure(yscrollcommand=vsb.set)
+        tree.grid(row=0, column=0, sticky="nsew")
+        vsb.grid(row=0, column=1, sticky="ns")
+        frame.rowconfigure(0, weight=1)
+        frame.columnconfigure(0, weight=1)
+
+        def load() -> None:
+            tree.delete(*tree.get_children())
+            if not os.path.exists(csv_path):
+                return
+            with open(csv_path, newline="", encoding="utf-8") as f:
+                reader = csv.DictReader(f)
+                if not reader.fieldnames:
+                    return
+                tree["columns"] = reader.fieldnames
+                for c in reader.fieldnames:
+                    tree.heading(c, text=c)
+                    tree.column(c, anchor="center")
+                for row in reader:
+                    tree.insert("", "end", values=[row.get(c, "") for c in reader.fieldnames])
+
+        ttk.Button(frame, text="Refresh", command=load).grid(row=1, column=0, columnspan=2, pady=5)
+        load()
 
     def view_logs(self):
         log_dir = Path("logs")
