@@ -146,7 +146,8 @@ class RaceLoggerGUI:
         self.fg = "#e7e7ff"
         accent = "#3c445c"
         self.root.configure(bg=self.bg)
-        self.root.option_add("*Font", "Segoe UI 10")
+        # Escaped font family to avoid TclError when family name has spaces
+        self.root.option_add("*Font", "{Segoe UI} 10")
         style.configure("TFrame", background=self.bg)
         style.configure("TLabel", background=self.bg, foreground=self.fg)
         style.configure("TButton", background="#2b3249", foreground=self.fg, padding=6)
