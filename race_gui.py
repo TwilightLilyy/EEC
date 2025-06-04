@@ -174,7 +174,12 @@ class RaceLoggerGUI:
         load()
 
     def view_standings(self):
-        csv_path = Path("sorted_standings.csv")
+        base = Path(sys.argv[0]).resolve().parent
+        csv_path = base / "sorted_standings.csv"
+        if not csv_path.exists():
+            csv_path = base.parent / "sorted_standings.csv"
+        if not csv_path.exists():
+            csv_path = Path("sorted_standings.csv")
         if not csv_path.exists():
             messagebox.showinfo("Standings", "No standings file found")
             return
