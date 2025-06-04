@@ -1,3 +1,0 @@
-Enhanced pit-stop logger running… Ctrl-C to stop.
-
-Logger stopped.
