@@ -40,7 +40,7 @@ SCRIPTS = [
 
 LOG_DIR = Path("logs"); LOG_DIR.mkdir(exist_ok=True)
 
-def stamp():
+def iso_stamp() -> str:
     """Return current local time in ISO-8601 to-the-second."""
     return datetime.now().isoformat(timespec="seconds")
 
@@ -51,7 +51,7 @@ def launch(name, cmd):
     )
 
 procs = {name: launch(name, cmd) for name, cmd in SCRIPTS}
-print(f"[{stamp()}] 🚀  Started {len(procs)} child processes.")
+print(f"[{iso_stamp()}] 🚀  Started {len(procs)} child processes.")
 
 def stamp(): return datetime.now().strftime("%H:%M:%S")
 
