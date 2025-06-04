@@ -5,6 +5,11 @@ from pathlib import Path
 from datetime import datetime
 try:
     from colorama import init as _init, Fore, Style
+    try:
+        from colorama import just_fix_windows_console
+        just_fix_windows_console()
+    except Exception:
+        pass
     _init(autoreset=True)
 except Exception:  # colorama not installed
     class _Dummy:
