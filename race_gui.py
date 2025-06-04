@@ -34,6 +34,12 @@ class RaceLoggerGUI:
         self.log_queue: Queue[str] = Queue()
         self.output_thread = None
 
+        menubar = tk.Menu(root)
+        file_menu = tk.Menu(menubar, tearoff=0)
+        file_menu.add_command(label="Quit", command=self.on_close)
+        menubar.add_cascade(label="File", menu=file_menu)
+        root.config(menu=menubar)
+
         frm = ttk.Frame(root, padding=10)
         frm.grid()
 
@@ -72,6 +78,8 @@ class RaceLoggerGUI:
             stderr=subprocess.STDOUT,
             text=True,
             bufsize=1,
+            encoding="utf-8",
+            errors="replace",
         )
         self.output_thread = threading.Thread(target=self.read_output, daemon=True)
         self.output_thread.start()
@@ -131,7 +139,11 @@ class RaceLoggerGUI:
 
     def view_logs(self):
         log_dir = Path("logs")
-        files = [f.name for f in log_dir.glob("*.txt")]
+        file_map = {f.name: f for f in log_dir.glob("*.txt")}
+        swap_file = Path("driver_swaps.csv")
+        if swap_file.exists():
+            file_map[swap_file.name] = swap_file
+        files = list(file_map.keys())
         if not files:
             messagebox.showinfo("Logs", "No log files found")
             return
@@ -147,7 +159,7 @@ class RaceLoggerGUI:
         txt.pack(fill="both", expand=True, padx=5, pady=5)
 
         def load(event=None):
-            path = log_dir / sel.get()
+            path = file_map[sel.get()]
             try:
                 with open(path, "r", encoding="utf-8", errors="ignore") as fh:
                     content = fh.read()

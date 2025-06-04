@@ -4,7 +4,9 @@ A collection of utilities for logging and displaying data from iRacing AI races.
 
 ## Features
 
-- **ai_standings_logger.py** – periodically records session standings to `standings_log.csv`.
+- **ai_standings_logger.py** – periodically records session standings to
+  a CSV file (default `standings_log.csv`).  Use `--output` and `--interval`
+  arguments to configure the file path and polling delay.
 - **pitstop_logger_enhanced.py** – tracks stints and pit stops, writing results to `pitstop_log.csv` and updating `live_standings_overlay.html`.
 - **standings_sorter.py** – produces `sorted_standings.csv` so the overlay can show the latest order per class.
 - **race_data_runner.py** – helper script that launches all of the above and restarts them if they stop.
@@ -43,8 +45,8 @@ This creates CSV log files in the repository directory and writes console output
 Logos and spec maps under `Logos/` and `SpecMaps/` contain the Final Fantasy XIV themed assets used for the championship.
 
 ## GUI
-
-A basic Tkinter interface is provided in `race_gui.py`.  It lets you start and stop the logging utilities, shows the current iRacing connection status and has buttons to reset or save the log files.  A "View Logs…" button opens the latest text logs right inside the program and "View Standings…" displays the current order from `sorted_standings.csv`.  If the optional `openai` package is installed and an `OPENAI_API_KEY` environment variable is set, the GUI can send the logs to ChatGPT and store the resulting analysis in a text file.
+A basic Tkinter interface is provided in `race_gui.py`.  It lets you start and stop the logging utilities, shows the current iRacing connection status and has buttons to reset or save the log files.  A "View Logs…" button opens the latest text logs right inside the program.  If the optional `openai` package is installed and an `OPENAI_API_KEY` environment variable is set, the GUI can send the logs to ChatGPT and store the resulting analysis in a text file.
+The window also provides a simple *File* menu with a *Quit* action to close the application.
 
 Run it with:
 
