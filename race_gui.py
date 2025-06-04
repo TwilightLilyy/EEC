@@ -9,6 +9,7 @@ import shutil
 import sys
 from pathlib import Path
 from queue import Queue, Empty
+import csv
 try:
     import irsdk
 except ImportError:
@@ -52,10 +53,11 @@ class RaceLoggerGUI:
         ttk.Button(frm, text="Reset Logs", command=self.reset_logs).grid(column=0, row=2, pady=5, sticky="ew")
         ttk.Button(frm, text="Save Logs…", command=self.save_logs).grid(column=1, row=2, pady=5, sticky="ew")
         ttk.Button(frm, text="View Logs…", command=self.view_logs).grid(column=0, row=3, columnspan=2, pady=5, sticky="ew")
-        ttk.Button(frm, text="Export to ChatGPT", command=self.export_logs).grid(column=0, row=4, columnspan=2, pady=5, sticky="ew")
+        ttk.Button(frm, text="View Standings…", command=self.view_standings).grid(column=0, row=4, columnspan=2, pady=5, sticky="ew")
+        ttk.Button(frm, text="Export to ChatGPT", command=self.export_logs).grid(column=0, row=5, columnspan=2, pady=5, sticky="ew")
 
         self.log_box = ScrolledText(frm, width=80, height=20, state="disabled")
-        self.log_box.grid(column=0, row=4, columnspan=2, pady=5)
+        self.log_box.grid(column=0, row=6, columnspan=2, pady=5)
 
         self.update_thread = threading.Thread(target=self.update_status_loop, daemon=True)
         self.update_thread.start()
@@ -169,6 +171,42 @@ class RaceLoggerGUI:
 
         ttk.Button(win, text="Refresh", command=load).pack(pady=5)
         combo.bind("<<ComboboxSelected>>", load)
+        load()
+
+    def view_standings(self):
+        csv_path = Path("sorted_standings.csv")
+        if not csv_path.exists():
+            messagebox.showinfo("Standings", "No standings file found")
+            return
+
+        win = tk.Toplevel(self.root)
+        win.title("Standings")
+        cols = ["Team", "Driver", "Class", "Pos", "Class Pos", "Laps",
+                "Pits", "Avg Lap", "Best Lap", "Last Lap", "In Pit"]
+        tree = ttk.Treeview(win, columns=cols, show="headings")
+        for c in cols:
+            tree.heading(c, text=c)
+            tree.column(c, anchor="center")
+        vsb = ttk.Scrollbar(win, orient="vertical", command=tree.yview)
+        tree.configure(yscrollcommand=vsb.set)
+        tree.grid(row=0, column=0, sticky="nsew")
+        vsb.grid(row=0, column=1, sticky="ns")
+        win.rowconfigure(0, weight=1)
+        win.columnconfigure(0, weight=1)
+
+        def load():
+            tree.delete(*tree.get_children())
+            try:
+                with csv_path.open("r", newline="", encoding="utf-8") as f:
+                    rows = list(csv.DictReader(f))
+                rows.sort(key=lambda r: (r.get("Class", ""),
+                                         int(r.get("Class Pos", 0))))
+                for r in rows:
+                    tree.insert("", "end", values=[r.get(c, "") for c in cols])
+            except Exception as e:
+                messagebox.showerror("Standings", f"Error reading {csv_path}: {e}")
+
+        ttk.Button(win, text="Refresh", command=load).grid(row=1, column=0, columnspan=2, pady=5)
         load()
 
     # ── ChatGPT export ──────────────────────────────────────────
