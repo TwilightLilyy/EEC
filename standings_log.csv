@@ -1,301 +1,190 @@
 Time,CarIdx,TeamName,UserName,CarClassID,Position,ClassPosition,Lap,BestLapTime,LastLapTime,OnPitRoad,PitCount
-2025-06-03T21:12:25,0,Pace Car,Pace Car,11,0,0,0,-1.0,-1.0,True,1
-2025-06-03T21:12:25,1,David Leo Martinez,David Leo Martinez,2708,1,1,1,-1.0,-1.0,False,0
-2025-06-03T21:12:25,2,Juan Pablo Sanchez,Juan Pablo Sanchez,2708,2,2,1,-1.0,-1.0,False,0
-2025-06-03T21:12:25,3,Vert Wheeler,Vert Wheeler,2708,3,3,1,-1.0,-1.0,False,0
-2025-06-03T21:12:25,4,Ross Oconnor,Ross Oconnor,2708,4,4,1,-1.0,-1.0,False,0
-2025-06-03T21:12:25,5,Tom F Kelley,Tom F Kelley,2708,5,5,1,-1.0,-1.0,False,0
-2025-06-03T21:12:25,6,Josh Cummings2,Josh Cummings2,2708,6,6,1,-1.0,-1.0,False,0
-2025-06-03T21:12:25,7,Matthew Morhardt,Matthew Morhardt,2708,7,7,1,-1.0,-1.0,False,0
-2025-06-03T21:12:25,8,Nazarii Prokopov4,Nazarii Prokopov4,2708,8,8,1,-1.0,-1.0,False,0
-2025-06-03T21:12:25,9,Taylor Belant,Taylor Belant,2708,9,9,1,-1.0,-1.0,False,0
-2025-06-03T21:12:25,10,Nick Mazza,Nick Mazza,2708,10,10,1,-1.0,-1.0,False,0
-2025-06-03T21:12:25,11,Joe Nathan,Joe Nathan,2708,11,11,1,-1.0,-1.0,False,0
-2025-06-03T21:12:25,12,Joao C B Araujo,Joao C B Araujo,2708,12,12,1,-1.0,-1.0,False,0
-2025-06-03T21:12:25,13,Kjell Haugen,Kjell Haugen,2708,13,13,1,-1.0,-1.0,False,0
-2025-06-03T21:12:25,14,Jay Bast,Jay Bast,2708,14,14,1,-1.0,-1.0,False,0
-2025-06-03T21:12:25,15,Matheus Goulart,Matheus Goulart,2708,15,15,1,-1.0,-1.0,False,0
-2025-06-03T21:12:25,16,Andrew Pickerl,Andrew Pickerl,2708,16,16,1,-1.0,-1.0,False,0
-2025-06-03T21:12:25,17,Deng Yi,Deng Yi,2708,17,17,1,-1.0,-1.0,False,0
-2025-06-03T21:12:25,18,Ezequiel Padilla,Ezequiel Padilla,2708,18,18,1,-1.0,-1.0,False,0
-2025-06-03T21:12:25,19,Markell Holmes,Markell Holmes,2708,19,19,1,-1.0,-1.0,False,0
-2025-06-03T21:12:25,20,Pablo Wolf,Pablo Wolf,2708,27,27,1,-1.0,-1.0,False,0
-2025-06-03T21:12:25,21,Renso Tejada Gomez,Renso Tejada Gomez,2708,20,20,1,-1.0,-1.0,False,0
-2025-06-03T21:12:25,22,Daniel Soto4,Daniel Soto4,2708,21,21,1,-1.0,-1.0,False,0
-2025-06-03T21:12:25,23,Gurkan Demir,Gurkan Demir,2708,22,22,1,-1.0,-1.0,False,0
-2025-06-03T21:12:25,24,Justin Bragan2,Justin Bragan2,2708,23,23,1,-1.0,-1.0,False,0
-2025-06-03T21:12:25,25,Thiago S Pereira,Thiago S Pereira,2708,24,24,1,-1.0,-1.0,False,0
-2025-06-03T21:12:25,26,Brendan Schade,Brendan Schade,2708,25,25,1,-1.0,-1.0,False,0
-2025-06-03T21:12:25,27,Carlos Llende,Carlos Llende,2708,26,26,1,-1.0,-1.0,False,0
-2025-06-03T21:12:25,28,Andrey Nazarov,Andrey Nazarov,2708,28,28,1,-1.0,-1.0,False,0
-2025-06-03T21:12:25,63,Lily Bowling,Lily Bowling,2708,0,0,-1,-1.0,-1.0,False,0
-2025-06-03T21:12:30,0,Pace Car,Pace Car,11,0,0,0,-1.0,-1.0,True,1
-2025-06-03T21:12:30,1,David Leo Martinez,David Leo Martinez,2708,1,1,1,-1.0,-1.0,False,0
-2025-06-03T21:12:30,2,Juan Pablo Sanchez,Juan Pablo Sanchez,2708,2,2,1,-1.0,-1.0,False,0
-2025-06-03T21:12:30,3,Vert Wheeler,Vert Wheeler,2708,3,3,1,-1.0,-1.0,False,0
-2025-06-03T21:12:30,4,Ross Oconnor,Ross Oconnor,2708,4,4,1,-1.0,-1.0,False,0
-2025-06-03T21:12:30,5,Tom F Kelley,Tom F Kelley,2708,5,5,1,-1.0,-1.0,False,0
-2025-06-03T21:12:30,6,Josh Cummings2,Josh Cummings2,2708,6,6,1,-1.0,-1.0,False,0
-2025-06-03T21:12:30,7,Matthew Morhardt,Matthew Morhardt,2708,7,7,1,-1.0,-1.0,False,0
-2025-06-03T21:12:30,8,Nazarii Prokopov4,Nazarii Prokopov4,2708,8,8,1,-1.0,-1.0,False,0
-2025-06-03T21:12:30,9,Taylor Belant,Taylor Belant,2708,9,9,1,-1.0,-1.0,False,0
-2025-06-03T21:12:30,10,Nick Mazza,Nick Mazza,2708,10,10,1,-1.0,-1.0,False,0
-2025-06-03T21:12:30,11,Joe Nathan,Joe Nathan,2708,11,11,1,-1.0,-1.0,False,0
-2025-06-03T21:12:30,12,Joao C B Araujo,Joao C B Araujo,2708,12,12,1,-1.0,-1.0,False,0
-2025-06-03T21:12:30,13,Kjell Haugen,Kjell Haugen,2708,13,13,1,-1.0,-1.0,False,0
-2025-06-03T21:12:30,14,Jay Bast,Jay Bast,2708,14,14,1,-1.0,-1.0,False,0
-2025-06-03T21:12:30,15,Matheus Goulart,Matheus Goulart,2708,15,15,1,-1.0,-1.0,False,0
-2025-06-03T21:12:30,16,Andrew Pickerl,Andrew Pickerl,2708,16,16,1,-1.0,-1.0,False,0
-2025-06-03T21:12:30,17,Deng Yi,Deng Yi,2708,17,17,1,-1.0,-1.0,False,0
-2025-06-03T21:12:30,18,Ezequiel Padilla,Ezequiel Padilla,2708,18,18,1,-1.0,-1.0,False,0
-2025-06-03T21:12:30,19,Markell Holmes,Markell Holmes,2708,19,19,1,-1.0,-1.0,False,0
-2025-06-03T21:12:30,20,Pablo Wolf,Pablo Wolf,2708,27,27,1,-1.0,-1.0,False,0
-2025-06-03T21:12:30,21,Renso Tejada Gomez,Renso Tejada Gomez,2708,20,20,1,-1.0,-1.0,False,0
-2025-06-03T21:12:30,22,Daniel Soto4,Daniel Soto4,2708,21,21,1,-1.0,-1.0,False,0
-2025-06-03T21:12:30,23,Gurkan Demir,Gurkan Demir,2708,22,22,1,-1.0,-1.0,False,0
-2025-06-03T21:12:30,24,Justin Bragan2,Justin Bragan2,2708,23,23,1,-1.0,-1.0,False,0
-2025-06-03T21:12:30,25,Thiago S Pereira,Thiago S Pereira,2708,24,24,1,-1.0,-1.0,False,0
-2025-06-03T21:12:30,26,Brendan Schade,Brendan Schade,2708,25,25,1,-1.0,-1.0,False,0
-2025-06-03T21:12:30,27,Carlos Llende,Carlos Llende,2708,26,26,1,-1.0,-1.0,False,0
-2025-06-03T21:12:30,28,Andrey Nazarov,Andrey Nazarov,2708,28,28,1,-1.0,-1.0,False,0
-2025-06-03T21:12:30,63,Lily Bowling,Lily Bowling,2708,0,0,-1,-1.0,-1.0,False,0
-2025-06-03T21:12:35,0,Pace Car,Pace Car,11,0,0,0,-1.0,-1.0,True,1
-2025-06-03T21:12:35,1,David Leo Martinez,David Leo Martinez,2708,1,1,1,-1.0,-1.0,False,0
-2025-06-03T21:12:35,2,Juan Pablo Sanchez,Juan Pablo Sanchez,2708,2,2,1,-1.0,-1.0,False,0
-2025-06-03T21:12:35,3,Vert Wheeler,Vert Wheeler,2708,3,3,1,-1.0,-1.0,False,0
-2025-06-03T21:12:35,4,Ross Oconnor,Ross Oconnor,2708,4,4,1,-1.0,-1.0,False,0
-2025-06-03T21:12:35,5,Tom F Kelley,Tom F Kelley,2708,5,5,1,-1.0,-1.0,False,0
-2025-06-03T21:12:35,6,Josh Cummings2,Josh Cummings2,2708,6,6,1,-1.0,-1.0,False,0
-2025-06-03T21:12:35,7,Matthew Morhardt,Matthew Morhardt,2708,7,7,1,-1.0,-1.0,False,0
-2025-06-03T21:12:35,8,Nazarii Prokopov4,Nazarii Prokopov4,2708,8,8,1,-1.0,-1.0,False,0
-2025-06-03T21:12:35,9,Taylor Belant,Taylor Belant,2708,9,9,1,-1.0,-1.0,False,0
-2025-06-03T21:12:35,10,Nick Mazza,Nick Mazza,2708,10,10,1,-1.0,-1.0,False,0
-2025-06-03T21:12:35,11,Joe Nathan,Joe Nathan,2708,11,11,1,-1.0,-1.0,False,0
-2025-06-03T21:12:35,12,Joao C B Araujo,Joao C B Araujo,2708,12,12,1,-1.0,-1.0,False,0
-2025-06-03T21:12:35,13,Kjell Haugen,Kjell Haugen,2708,13,13,1,-1.0,-1.0,False,0
-2025-06-03T21:12:35,14,Jay Bast,Jay Bast,2708,14,14,1,-1.0,-1.0,False,0
-2025-06-03T21:12:35,15,Matheus Goulart,Matheus Goulart,2708,15,15,1,-1.0,-1.0,False,0
-2025-06-03T21:12:35,16,Andrew Pickerl,Andrew Pickerl,2708,16,16,1,-1.0,-1.0,False,0
-2025-06-03T21:12:35,17,Deng Yi,Deng Yi,2708,17,17,1,-1.0,-1.0,False,0
-2025-06-03T21:12:35,18,Ezequiel Padilla,Ezequiel Padilla,2708,18,18,1,-1.0,-1.0,False,0
-2025-06-03T21:12:35,19,Markell Holmes,Markell Holmes,2708,19,19,1,-1.0,-1.0,False,0
-2025-06-03T21:12:35,20,Pablo Wolf,Pablo Wolf,2708,27,27,1,-1.0,-1.0,False,0
-2025-06-03T21:12:35,21,Renso Tejada Gomez,Renso Tejada Gomez,2708,20,20,1,-1.0,-1.0,False,0
-2025-06-03T21:12:35,22,Daniel Soto4,Daniel Soto4,2708,21,21,1,-1.0,-1.0,False,0
-2025-06-03T21:12:35,23,Gurkan Demir,Gurkan Demir,2708,22,22,1,-1.0,-1.0,False,0
-2025-06-03T21:12:35,24,Justin Bragan2,Justin Bragan2,2708,23,23,1,-1.0,-1.0,False,0
-2025-06-03T21:12:35,25,Thiago S Pereira,Thiago S Pereira,2708,24,24,1,-1.0,-1.0,False,0
-2025-06-03T21:12:35,26,Brendan Schade,Brendan Schade,2708,25,25,1,-1.0,-1.0,False,0
-2025-06-03T21:12:35,27,Carlos Llende,Carlos Llende,2708,26,26,1,-1.0,-1.0,False,0
-2025-06-03T21:12:35,28,Andrey Nazarov,Andrey Nazarov,2708,28,28,1,-1.0,-1.0,False,0
-2025-06-03T21:12:35,63,Lily Bowling,Lily Bowling,2708,0,0,-1,-1.0,-1.0,False,0
-2025-06-03T21:12:40,0,Pace Car,Pace Car,11,0,0,0,-1.0,-1.0,True,1
-2025-06-03T21:12:40,1,David Leo Martinez,David Leo Martinez,2708,1,1,1,-1.0,-1.0,False,0
-2025-06-03T21:12:40,2,Juan Pablo Sanchez,Juan Pablo Sanchez,2708,2,2,1,-1.0,-1.0,False,0
-2025-06-03T21:12:40,3,Vert Wheeler,Vert Wheeler,2708,3,3,1,-1.0,-1.0,False,0
-2025-06-03T21:12:40,4,Ross Oconnor,Ross Oconnor,2708,4,4,1,-1.0,-1.0,False,0
-2025-06-03T21:12:40,5,Tom F Kelley,Tom F Kelley,2708,5,5,1,-1.0,-1.0,False,0
-2025-06-03T21:12:40,6,Josh Cummings2,Josh Cummings2,2708,6,6,1,-1.0,-1.0,False,0
-2025-06-03T21:12:40,7,Matthew Morhardt,Matthew Morhardt,2708,7,7,1,-1.0,-1.0,False,0
-2025-06-03T21:12:40,8,Nazarii Prokopov4,Nazarii Prokopov4,2708,8,8,1,-1.0,-1.0,False,0
-2025-06-03T21:12:40,9,Taylor Belant,Taylor Belant,2708,9,9,1,-1.0,-1.0,False,0
-2025-06-03T21:12:40,10,Nick Mazza,Nick Mazza,2708,10,10,1,-1.0,-1.0,False,0
-2025-06-03T21:12:40,11,Joe Nathan,Joe Nathan,2708,11,11,1,-1.0,-1.0,False,0
-2025-06-03T21:12:40,12,Joao C B Araujo,Joao C B Araujo,2708,12,12,1,-1.0,-1.0,False,0
-2025-06-03T21:12:40,13,Kjell Haugen,Kjell Haugen,2708,13,13,1,-1.0,-1.0,False,0
-2025-06-03T21:12:40,14,Jay Bast,Jay Bast,2708,14,14,1,-1.0,-1.0,False,0
-2025-06-03T21:12:40,15,Matheus Goulart,Matheus Goulart,2708,15,15,1,-1.0,-1.0,False,0
-2025-06-03T21:12:40,16,Andrew Pickerl,Andrew Pickerl,2708,16,16,1,-1.0,-1.0,False,0
-2025-06-03T21:12:40,17,Deng Yi,Deng Yi,2708,17,17,1,-1.0,-1.0,False,0
-2025-06-03T21:12:40,18,Ezequiel Padilla,Ezequiel Padilla,2708,18,18,1,-1.0,-1.0,False,0
-2025-06-03T21:12:40,19,Markell Holmes,Markell Holmes,2708,19,19,1,-1.0,-1.0,False,0
-2025-06-03T21:12:40,20,Pablo Wolf,Pablo Wolf,2708,27,27,1,-1.0,-1.0,False,0
-2025-06-03T21:12:40,21,Renso Tejada Gomez,Renso Tejada Gomez,2708,20,20,1,-1.0,-1.0,False,0
-2025-06-03T21:12:40,22,Daniel Soto4,Daniel Soto4,2708,21,21,1,-1.0,-1.0,False,0
-2025-06-03T21:12:40,23,Gurkan Demir,Gurkan Demir,2708,22,22,1,-1.0,-1.0,False,0
-2025-06-03T21:12:40,24,Justin Bragan2,Justin Bragan2,2708,23,23,1,-1.0,-1.0,False,0
-2025-06-03T21:12:40,25,Thiago S Pereira,Thiago S Pereira,2708,24,24,1,-1.0,-1.0,False,0
-2025-06-03T21:12:40,26,Brendan Schade,Brendan Schade,2708,25,25,1,-1.0,-1.0,False,0
-2025-06-03T21:12:40,27,Carlos Llende,Carlos Llende,2708,26,26,1,-1.0,-1.0,False,0
-2025-06-03T21:12:40,28,Andrey Nazarov,Andrey Nazarov,2708,28,28,1,-1.0,-1.0,False,0
-2025-06-03T21:12:40,63,Lily Bowling,Lily Bowling,2708,0,0,-1,-1.0,-1.0,False,0
-2025-06-03T21:12:45,0,Pace Car,Pace Car,11,0,0,0,-1.0,-1.0,True,1
-2025-06-03T21:12:45,1,David Leo Martinez,David Leo Martinez,2708,1,1,1,-1.0,-1.0,False,0
-2025-06-03T21:12:45,2,Juan Pablo Sanchez,Juan Pablo Sanchez,2708,2,2,1,-1.0,-1.0,False,0
-2025-06-03T21:12:45,3,Vert Wheeler,Vert Wheeler,2708,3,3,1,-1.0,-1.0,False,0
-2025-06-03T21:12:45,4,Ross Oconnor,Ross Oconnor,2708,4,4,1,-1.0,-1.0,False,0
-2025-06-03T21:12:45,5,Tom F Kelley,Tom F Kelley,2708,5,5,1,-1.0,-1.0,False,0
-2025-06-03T21:12:45,6,Josh Cummings2,Josh Cummings2,2708,6,6,1,-1.0,-1.0,False,0
-2025-06-03T21:12:45,7,Matthew Morhardt,Matthew Morhardt,2708,7,7,1,-1.0,-1.0,False,0
-2025-06-03T21:12:45,8,Nazarii Prokopov4,Nazarii Prokopov4,2708,8,8,1,-1.0,-1.0,False,0
-2025-06-03T21:12:45,9,Taylor Belant,Taylor Belant,2708,9,9,1,-1.0,-1.0,False,0
-2025-06-03T21:12:45,10,Nick Mazza,Nick Mazza,2708,10,10,1,-1.0,-1.0,False,0
-2025-06-03T21:12:45,11,Joe Nathan,Joe Nathan,2708,11,11,1,-1.0,-1.0,False,0
-2025-06-03T21:12:45,12,Joao C B Araujo,Joao C B Araujo,2708,12,12,1,-1.0,-1.0,False,0
-2025-06-03T21:12:45,13,Kjell Haugen,Kjell Haugen,2708,13,13,1,-1.0,-1.0,False,0
-2025-06-03T21:12:45,14,Jay Bast,Jay Bast,2708,14,14,1,-1.0,-1.0,False,0
-2025-06-03T21:12:45,15,Matheus Goulart,Matheus Goulart,2708,15,15,1,-1.0,-1.0,False,0
-2025-06-03T21:12:45,16,Andrew Pickerl,Andrew Pickerl,2708,16,16,1,-1.0,-1.0,False,0
-2025-06-03T21:12:45,17,Deng Yi,Deng Yi,2708,17,17,1,-1.0,-1.0,False,0
-2025-06-03T21:12:45,18,Ezequiel Padilla,Ezequiel Padilla,2708,18,18,1,-1.0,-1.0,False,0
-2025-06-03T21:12:45,19,Markell Holmes,Markell Holmes,2708,19,19,1,-1.0,-1.0,False,0
-2025-06-03T21:12:45,20,Pablo Wolf,Pablo Wolf,2708,27,27,1,-1.0,-1.0,False,0
-2025-06-03T21:12:45,21,Renso Tejada Gomez,Renso Tejada Gomez,2708,20,20,1,-1.0,-1.0,False,0
-2025-06-03T21:12:45,22,Daniel Soto4,Daniel Soto4,2708,21,21,1,-1.0,-1.0,False,0
-2025-06-03T21:12:45,23,Gurkan Demir,Gurkan Demir,2708,22,22,1,-1.0,-1.0,False,0
-2025-06-03T21:12:45,24,Justin Bragan2,Justin Bragan2,2708,23,23,1,-1.0,-1.0,False,0
-2025-06-03T21:12:45,25,Thiago S Pereira,Thiago S Pereira,2708,24,24,1,-1.0,-1.0,False,0
-2025-06-03T21:12:45,26,Brendan Schade,Brendan Schade,2708,25,25,1,-1.0,-1.0,False,0
-2025-06-03T21:12:45,27,Carlos Llende,Carlos Llende,2708,26,26,1,-1.0,-1.0,False,0
-2025-06-03T21:12:45,28,Andrey Nazarov,Andrey Nazarov,2708,28,28,1,-1.0,-1.0,False,0
-2025-06-03T21:12:45,63,Lily Bowling,Lily Bowling,2708,0,0,-1,-1.0,-1.0,False,0
-2025-06-03T21:12:50,0,Pace Car,Pace Car,11,0,0,0,-1.0,-1.0,True,1
-2025-06-03T21:12:50,1,David Leo Martinez,David Leo Martinez,2708,1,1,1,-1.0,-1.0,False,0
-2025-06-03T21:12:50,2,Juan Pablo Sanchez,Juan Pablo Sanchez,2708,2,2,1,-1.0,-1.0,False,0
-2025-06-03T21:12:50,3,Vert Wheeler,Vert Wheeler,2708,3,3,1,-1.0,-1.0,False,0
-2025-06-03T21:12:50,4,Ross Oconnor,Ross Oconnor,2708,4,4,1,-1.0,-1.0,False,0
-2025-06-03T21:12:50,5,Tom F Kelley,Tom F Kelley,2708,5,5,1,-1.0,-1.0,False,0
-2025-06-03T21:12:50,6,Josh Cummings2,Josh Cummings2,2708,6,6,1,-1.0,-1.0,False,0
-2025-06-03T21:12:50,7,Matthew Morhardt,Matthew Morhardt,2708,7,7,1,-1.0,-1.0,False,0
-2025-06-03T21:12:50,8,Nazarii Prokopov4,Nazarii Prokopov4,2708,8,8,1,-1.0,-1.0,False,0
-2025-06-03T21:12:50,9,Taylor Belant,Taylor Belant,2708,9,9,1,-1.0,-1.0,False,0
-2025-06-03T21:12:50,10,Nick Mazza,Nick Mazza,2708,10,10,1,-1.0,-1.0,False,0
-2025-06-03T21:12:50,11,Joe Nathan,Joe Nathan,2708,11,11,1,-1.0,-1.0,False,0
-2025-06-03T21:12:50,12,Joao C B Araujo,Joao C B Araujo,2708,12,12,1,-1.0,-1.0,False,0
-2025-06-03T21:12:50,13,Kjell Haugen,Kjell Haugen,2708,13,13,1,-1.0,-1.0,False,0
-2025-06-03T21:12:50,14,Jay Bast,Jay Bast,2708,14,14,1,-1.0,-1.0,False,0
-2025-06-03T21:12:50,15,Matheus Goulart,Matheus Goulart,2708,15,15,1,-1.0,-1.0,False,0
-2025-06-03T21:12:50,16,Andrew Pickerl,Andrew Pickerl,2708,16,16,1,-1.0,-1.0,False,0
-2025-06-03T21:12:50,17,Deng Yi,Deng Yi,2708,17,17,1,-1.0,-1.0,False,0
-2025-06-03T21:12:50,18,Ezequiel Padilla,Ezequiel Padilla,2708,18,18,1,-1.0,-1.0,False,0
-2025-06-03T21:12:50,19,Markell Holmes,Markell Holmes,2708,19,19,1,-1.0,-1.0,False,0
-2025-06-03T21:12:50,20,Pablo Wolf,Pablo Wolf,2708,27,27,1,-1.0,-1.0,False,0
-2025-06-03T21:12:50,21,Renso Tejada Gomez,Renso Tejada Gomez,2708,20,20,1,-1.0,-1.0,False,0
-2025-06-03T21:12:50,22,Daniel Soto4,Daniel Soto4,2708,21,21,1,-1.0,-1.0,False,0
-2025-06-03T21:12:50,23,Gurkan Demir,Gurkan Demir,2708,22,22,1,-1.0,-1.0,False,0
-2025-06-03T21:12:50,24,Justin Bragan2,Justin Bragan2,2708,23,23,1,-1.0,-1.0,False,0
-2025-06-03T21:12:50,25,Thiago S Pereira,Thiago S Pereira,2708,24,24,1,-1.0,-1.0,False,0
-2025-06-03T21:12:50,26,Brendan Schade,Brendan Schade,2708,25,25,1,-1.0,-1.0,False,0
-2025-06-03T21:12:50,27,Carlos Llende,Carlos Llende,2708,26,26,1,-1.0,-1.0,False,0
-2025-06-03T21:12:50,28,Andrey Nazarov,Andrey Nazarov,2708,28,28,1,-1.0,-1.0,False,0
-2025-06-03T21:12:50,63,Lily Bowling,Lily Bowling,2708,0,0,-1,-1.0,-1.0,False,0
-2025-06-03T21:12:55,0,Pace Car,Pace Car,11,0,0,0,-1.0,-1.0,True,1
-2025-06-03T21:12:55,1,David Leo Martinez,David Leo Martinez,2708,1,1,1,-1.0,-1.0,False,0
-2025-06-03T21:12:55,2,Juan Pablo Sanchez,Juan Pablo Sanchez,2708,2,2,1,-1.0,-1.0,False,0
-2025-06-03T21:12:55,3,Vert Wheeler,Vert Wheeler,2708,3,3,1,-1.0,-1.0,False,0
-2025-06-03T21:12:55,4,Ross Oconnor,Ross Oconnor,2708,4,4,1,-1.0,-1.0,False,0
-2025-06-03T21:12:55,5,Tom F Kelley,Tom F Kelley,2708,5,5,1,-1.0,-1.0,False,0
-2025-06-03T21:12:55,6,Josh Cummings2,Josh Cummings2,2708,6,6,1,-1.0,-1.0,False,0
-2025-06-03T21:12:55,7,Matthew Morhardt,Matthew Morhardt,2708,7,7,1,-1.0,-1.0,False,0
-2025-06-03T21:12:55,8,Nazarii Prokopov4,Nazarii Prokopov4,2708,8,8,1,-1.0,-1.0,False,0
-2025-06-03T21:12:55,9,Taylor Belant,Taylor Belant,2708,9,9,1,-1.0,-1.0,False,0
-2025-06-03T21:12:55,10,Nick Mazza,Nick Mazza,2708,10,10,1,-1.0,-1.0,False,0
-2025-06-03T21:12:55,11,Joe Nathan,Joe Nathan,2708,11,11,1,-1.0,-1.0,False,0
-2025-06-03T21:12:55,12,Joao C B Araujo,Joao C B Araujo,2708,12,12,1,-1.0,-1.0,False,0
-2025-06-03T21:12:55,13,Kjell Haugen,Kjell Haugen,2708,13,13,1,-1.0,-1.0,False,0
-2025-06-03T21:12:55,14,Jay Bast,Jay Bast,2708,14,14,1,-1.0,-1.0,False,0
-2025-06-03T21:12:55,15,Matheus Goulart,Matheus Goulart,2708,15,15,1,-1.0,-1.0,False,0
-2025-06-03T21:12:55,16,Andrew Pickerl,Andrew Pickerl,2708,16,16,1,-1.0,-1.0,False,0
-2025-06-03T21:12:55,17,Deng Yi,Deng Yi,2708,17,17,1,-1.0,-1.0,False,0
-2025-06-03T21:12:55,18,Ezequiel Padilla,Ezequiel Padilla,2708,18,18,1,-1.0,-1.0,False,0
-2025-06-03T21:12:55,19,Markell Holmes,Markell Holmes,2708,19,19,1,-1.0,-1.0,False,0
-2025-06-03T21:12:55,20,Pablo Wolf,Pablo Wolf,2708,27,27,1,-1.0,-1.0,False,0
-2025-06-03T21:12:55,21,Renso Tejada Gomez,Renso Tejada Gomez,2708,20,20,1,-1.0,-1.0,False,0
-2025-06-03T21:12:55,22,Daniel Soto4,Daniel Soto4,2708,21,21,1,-1.0,-1.0,False,0
-2025-06-03T21:12:55,23,Gurkan Demir,Gurkan Demir,2708,22,22,1,-1.0,-1.0,False,0
-2025-06-03T21:12:55,24,Justin Bragan2,Justin Bragan2,2708,23,23,1,-1.0,-1.0,False,0
-2025-06-03T21:12:55,25,Thiago S Pereira,Thiago S Pereira,2708,24,24,1,-1.0,-1.0,False,0
-2025-06-03T21:12:55,26,Brendan Schade,Brendan Schade,2708,25,25,1,-1.0,-1.0,False,0
-2025-06-03T21:12:55,27,Carlos Llende,Carlos Llende,2708,26,26,1,-1.0,-1.0,False,0
-2025-06-03T21:12:55,28,Andrey Nazarov,Andrey Nazarov,2708,28,28,1,-1.0,-1.0,False,0
-2025-06-03T21:12:55,63,Lily Bowling,Lily Bowling,2708,0,0,-1,-1.0,-1.0,False,0
-2025-06-03T21:13:00,0,Pace Car,Pace Car,11,0,0,0,-1.0,-1.0,True,1
-2025-06-03T21:13:00,1,David Leo Martinez,David Leo Martinez,2708,1,1,1,-1.0,-1.0,False,0
-2025-06-03T21:13:00,2,Juan Pablo Sanchez,Juan Pablo Sanchez,2708,2,2,1,-1.0,-1.0,False,0
-2025-06-03T21:13:00,3,Vert Wheeler,Vert Wheeler,2708,3,3,1,-1.0,-1.0,False,0
-2025-06-03T21:13:00,4,Ross Oconnor,Ross Oconnor,2708,4,4,1,-1.0,-1.0,False,0
-2025-06-03T21:13:00,5,Tom F Kelley,Tom F Kelley,2708,5,5,1,-1.0,-1.0,False,0
-2025-06-03T21:13:00,6,Josh Cummings2,Josh Cummings2,2708,6,6,1,-1.0,-1.0,False,0
-2025-06-03T21:13:00,7,Matthew Morhardt,Matthew Morhardt,2708,7,7,1,-1.0,-1.0,False,0
-2025-06-03T21:13:00,8,Nazarii Prokopov4,Nazarii Prokopov4,2708,8,8,1,-1.0,-1.0,False,0
-2025-06-03T21:13:00,9,Taylor Belant,Taylor Belant,2708,9,9,1,-1.0,-1.0,False,0
-2025-06-03T21:13:00,10,Nick Mazza,Nick Mazza,2708,10,10,1,-1.0,-1.0,False,0
-2025-06-03T21:13:00,11,Joe Nathan,Joe Nathan,2708,11,11,1,-1.0,-1.0,False,0
-2025-06-03T21:13:00,12,Joao C B Araujo,Joao C B Araujo,2708,12,12,1,-1.0,-1.0,False,0
-2025-06-03T21:13:00,13,Kjell Haugen,Kjell Haugen,2708,13,13,1,-1.0,-1.0,False,0
-2025-06-03T21:13:00,14,Jay Bast,Jay Bast,2708,14,14,1,-1.0,-1.0,False,0
-2025-06-03T21:13:00,15,Matheus Goulart,Matheus Goulart,2708,15,15,1,-1.0,-1.0,False,0
-2025-06-03T21:13:00,16,Andrew Pickerl,Andrew Pickerl,2708,16,16,1,-1.0,-1.0,False,0
-2025-06-03T21:13:00,17,Deng Yi,Deng Yi,2708,17,17,1,-1.0,-1.0,False,0
-2025-06-03T21:13:00,18,Ezequiel Padilla,Ezequiel Padilla,2708,18,18,1,-1.0,-1.0,False,0
-2025-06-03T21:13:00,19,Markell Holmes,Markell Holmes,2708,19,19,1,-1.0,-1.0,False,0
-2025-06-03T21:13:00,20,Pablo Wolf,Pablo Wolf,2708,27,27,1,-1.0,-1.0,False,0
-2025-06-03T21:13:00,21,Renso Tejada Gomez,Renso Tejada Gomez,2708,20,20,1,-1.0,-1.0,False,0
-2025-06-03T21:13:00,22,Daniel Soto4,Daniel Soto4,2708,21,21,1,-1.0,-1.0,False,0
-2025-06-03T21:13:00,23,Gurkan Demir,Gurkan Demir,2708,22,22,1,-1.0,-1.0,False,0
-2025-06-03T21:13:00,24,Justin Bragan2,Justin Bragan2,2708,23,23,1,-1.0,-1.0,False,0
-2025-06-03T21:13:00,25,Thiago S Pereira,Thiago S Pereira,2708,24,24,1,-1.0,-1.0,False,0
-2025-06-03T21:13:00,26,Brendan Schade,Brendan Schade,2708,25,25,1,-1.0,-1.0,False,0
-2025-06-03T21:13:00,27,Carlos Llende,Carlos Llende,2708,26,26,1,-1.0,-1.0,False,0
-2025-06-03T21:13:00,28,Andrey Nazarov,Andrey Nazarov,2708,28,28,1,-1.0,-1.0,False,0
-2025-06-03T21:13:00,63,Lily Bowling,Lily Bowling,2708,0,0,-1,-1.0,-1.0,False,0
-2025-06-03T21:13:05,0,Pace Car,Pace Car,11,0,0,0,-1.0,-1.0,True,1
-2025-06-03T21:13:05,1,David Leo Martinez,David Leo Martinez,2708,1,1,1,-1.0,-1.0,False,0
-2025-06-03T21:13:05,2,Juan Pablo Sanchez,Juan Pablo Sanchez,2708,2,2,1,-1.0,-1.0,False,0
-2025-06-03T21:13:05,3,Vert Wheeler,Vert Wheeler,2708,3,3,1,-1.0,-1.0,False,0
-2025-06-03T21:13:05,4,Ross Oconnor,Ross Oconnor,2708,4,4,1,-1.0,-1.0,False,0
-2025-06-03T21:13:05,5,Tom F Kelley,Tom F Kelley,2708,5,5,1,-1.0,-1.0,False,0
-2025-06-03T21:13:05,6,Josh Cummings2,Josh Cummings2,2708,6,6,1,-1.0,-1.0,False,0
-2025-06-03T21:13:05,7,Matthew Morhardt,Matthew Morhardt,2708,7,7,1,-1.0,-1.0,False,0
-2025-06-03T21:13:05,8,Nazarii Prokopov4,Nazarii Prokopov4,2708,8,8,1,-1.0,-1.0,False,0
-2025-06-03T21:13:05,9,Taylor Belant,Taylor Belant,2708,9,9,1,-1.0,-1.0,False,0
-2025-06-03T21:13:05,10,Nick Mazza,Nick Mazza,2708,10,10,1,-1.0,-1.0,False,0
-2025-06-03T21:13:05,11,Joe Nathan,Joe Nathan,2708,11,11,1,-1.0,-1.0,False,0
-2025-06-03T21:13:05,12,Joao C B Araujo,Joao C B Araujo,2708,12,12,1,-1.0,-1.0,False,0
-2025-06-03T21:13:05,13,Kjell Haugen,Kjell Haugen,2708,13,13,1,-1.0,-1.0,False,0
-2025-06-03T21:13:05,14,Jay Bast,Jay Bast,2708,14,14,1,-1.0,-1.0,False,0
-2025-06-03T21:13:05,15,Matheus Goulart,Matheus Goulart,2708,15,15,1,-1.0,-1.0,False,0
-2025-06-03T21:13:05,16,Andrew Pickerl,Andrew Pickerl,2708,16,16,1,-1.0,-1.0,False,0
-2025-06-03T21:13:05,17,Deng Yi,Deng Yi,2708,17,17,1,-1.0,-1.0,False,0
-2025-06-03T21:13:05,18,Ezequiel Padilla,Ezequiel Padilla,2708,18,18,1,-1.0,-1.0,False,0
-2025-06-03T21:13:05,19,Markell Holmes,Markell Holmes,2708,19,19,1,-1.0,-1.0,False,0
-2025-06-03T21:13:05,20,Pablo Wolf,Pablo Wolf,2708,27,27,1,-1.0,-1.0,False,0
-2025-06-03T21:13:05,21,Renso Tejada Gomez,Renso Tejada Gomez,2708,20,20,1,-1.0,-1.0,False,0
-2025-06-03T21:13:05,22,Daniel Soto4,Daniel Soto4,2708,21,21,1,-1.0,-1.0,False,0
-2025-06-03T21:13:05,23,Gurkan Demir,Gurkan Demir,2708,22,22,1,-1.0,-1.0,False,0
-2025-06-03T21:13:05,24,Justin Bragan2,Justin Bragan2,2708,23,23,1,-1.0,-1.0,False,0
-2025-06-03T21:13:05,25,Thiago S Pereira,Thiago S Pereira,2708,24,24,1,-1.0,-1.0,False,0
-2025-06-03T21:13:05,26,Brendan Schade,Brendan Schade,2708,25,25,1,-1.0,-1.0,False,0
-2025-06-03T21:13:05,27,Carlos Llende,Carlos Llende,2708,26,26,1,-1.0,-1.0,False,0
-2025-06-03T21:13:05,28,Andrey Nazarov,Andrey Nazarov,2708,28,28,1,-1.0,-1.0,False,0
-2025-06-03T21:13:05,63,Lily Bowling,Lily Bowling,2708,0,0,-1,-1.0,-1.0,False,0
-2025-06-03T21:13:10,0,Pace Car,Pace Car,11,-1,-1,-1,-1.0,-1.0,False,1
-2025-06-03T21:13:10,1,David Leo Martinez,David Leo Martinez,2708,-1,-1,1,-1.0,-1.0,False,0
-2025-06-03T21:13:10,2,Juan Pablo Sanchez,Juan Pablo Sanchez,2708,-1,-1,1,-1.0,-1.0,False,0
-2025-06-03T21:13:10,3,Vert Wheeler,Vert Wheeler,2708,-1,-1,1,-1.0,-1.0,False,0
-2025-06-03T21:13:10,4,Ross Oconnor,Ross Oconnor,2708,-1,-1,1,-1.0,-1.0,False,0
-2025-06-03T21:13:10,5,Tom F Kelley,Tom F Kelley,2708,-1,-1,1,-1.0,-1.0,False,0
-2025-06-03T21:13:10,6,Josh Cummings2,Josh Cummings2,2708,-1,-1,1,-1.0,-1.0,False,0
-2025-06-03T21:13:10,7,Matthew Morhardt,Matthew Morhardt,2708,-1,-1,1,-1.0,-1.0,False,0
-2025-06-03T21:13:10,8,Nazarii Prokopov4,Nazarii Prokopov4,2708,-1,-1,1,-1.0,-1.0,False,0
-2025-06-03T21:13:10,9,Taylor Belant,Taylor Belant,2708,-1,-1,1,-1.0,-1.0,False,0
-2025-06-03T21:13:10,10,Nick Mazza,Nick Mazza,2708,-1,-1,1,-1.0,-1.0,False,0
-2025-06-03T21:13:10,11,Joe Nathan,Joe Nathan,2708,-1,-1,-1,-1.0,-1.0,False,0
-2025-06-03T21:13:10,12,Joao C B Araujo,Joao C B Araujo,2708,-1,-1,1,-1.0,-1.0,False,0
-2025-06-03T21:13:10,13,Kjell Haugen,Kjell Haugen,2708,-1,-1,1,-1.0,-1.0,False,0
-2025-06-03T21:13:10,14,Jay Bast,Jay Bast,2708,-1,-1,1,-1.0,-1.0,False,0
-2025-06-03T21:13:10,15,Matheus Goulart,Matheus Goulart,2708,-1,-1,1,-1.0,-1.0,False,0
-2025-06-03T21:13:10,16,Andrew Pickerl,Andrew Pickerl,2708,-1,-1,1,-1.0,-1.0,False,0
-2025-06-03T21:13:10,17,Deng Yi,Deng Yi,2708,-1,-1,1,-1.0,-1.0,False,0
-2025-06-03T21:13:10,18,Ezequiel Padilla,Ezequiel Padilla,2708,-1,-1,1,-1.0,-1.0,False,0
-2025-06-03T21:13:10,19,Markell Holmes,Markell Holmes,2708,-1,-1,1,-1.0,-1.0,False,0
-2025-06-03T21:13:10,20,Pablo Wolf,Pablo Wolf,2708,-1,-1,-1,-1.0,-1.0,False,0
-2025-06-03T21:13:10,21,Renso Tejada Gomez,Renso Tejada Gomez,2708,-1,-1,1,-1.0,-1.0,False,0
-2025-06-03T21:13:10,22,Daniel Soto4,Daniel Soto4,2708,-1,-1,1,-1.0,-1.0,False,0
-2025-06-03T21:13:10,23,Gurkan Demir,Gurkan Demir,2708,-1,-1,1,-1.0,-1.0,False,0
-2025-06-03T21:13:10,24,Justin Bragan2,Justin Bragan2,2708,-1,-1,1,-1.0,-1.0,False,0
-2025-06-03T21:13:10,25,Thiago S Pereira,Thiago S Pereira,2708,-1,-1,1,-1.0,-1.0,False,0
-2025-06-03T21:13:10,26,Brendan Schade,Brendan Schade,2708,-1,-1,1,-1.0,-1.0,False,0
-2025-06-03T21:13:10,27,Carlos Llende,Carlos Llende,2708,-1,-1,1,-1.0,-1.0,False,0
-2025-06-03T21:13:10,28,Andrey Nazarov,Andrey Nazarov,2708,-1,-1,-1,-1.0,-1.0,False,0
-2025-06-03T21:13:10,63,Lily Bowling,Lily Bowling,2708,-1,-1,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:07,0,Side Ting Racing,Lachy R Brett,4083,1,1,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:07,1,USRA Red,Chris Schultz2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:07,2,Team Mike Bowen3,Mike Bowen3,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:07,3,Stephen Hawking s Pit Crew,Andrew Hess2,4083,0,0,3,-1.0,-1.0,False,0
+2025-06-04T00:10:07,4,Team John McDonald V,John McDonald V,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:07,5,Faded Line,Mack McGuire,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:07,6,GDX Racing,Gustavo Diniz,4083,0,0,3,-1.0,-1.0,False,0
+2025-06-04T00:10:07,7,SGrey,Simple Grey,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:07,8,Team Julián Toro,Julián Toro,4084,3,1,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:07,9,ATR Argentos MP Maro Plumbing,Diego A Armendariz,4083,0,0,2,-1.0,-1.0,False,0
+2025-06-04T00:10:07,10,Team Krishen Sharma,Krishen Sharma,4083,2,2,2,520.764892578125,520.764892578125,False,0
+2025-06-04T00:10:07,11,Team James Pyper,James Pyper,4083,0,0,1,-1.0,-1.0,True,1
+2025-06-04T00:10:07,12,Amateur Hour Racing,Joshua Yu,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:07,13,Valkyrie Racing Team,Ian Knox2,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:07,14,Team SoggyFrenchFries,James Allen,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:07,15,Team Yuxuan Cai,Yuxuan Cai,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:10:07,16,LMRT,Eduardo Chongkan,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:07,17,"Friendly, Don t Shoot ",Stephen Mcilwaine,4084,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:07,18,HyPrix SimRaceCity Aurora,Eddie Gomez,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:07,19,FROG LEAP JUICD RACING GREEN,Braden Oloughlin,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:10:07,20,Motus Tardus Racing,Kirill Bratchenko,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:07,21,Drag-On Racing 934,Hongjun Xu,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:10:07,22,Full Force Gremlins 002,Rune Clutch Johansen,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:07,23,Team Matt Hewett2,Matt Hewett2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:07,24,Dogs Watch Racing Team,Jarrod Collins,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:07,25,Don t Kill the Messenger,Hugh Messenger,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:07,63,Lily Bowling,Lily Bowling,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:12,0,Side Ting Racing,Lachy R Brett,4083,1,1,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:12,1,USRA Red,Chris Schultz2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:12,2,Team Mike Bowen3,Mike Bowen3,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:12,3,Stephen Hawking s Pit Crew,Andrew Hess2,4083,0,0,3,-1.0,-1.0,False,0
+2025-06-04T00:10:12,4,Team John McDonald V,John McDonald V,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:12,5,Faded Line,Mack McGuire,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:12,6,GDX Racing,Gustavo Diniz,4083,0,0,3,-1.0,-1.0,False,0
+2025-06-04T00:10:12,7,SGrey,Simple Grey,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:12,8,Team Julián Toro,Julián Toro,4084,3,1,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:12,9,ATR Argentos MP Maro Plumbing,Diego A Armendariz,4083,0,0,2,-1.0,-1.0,False,0
+2025-06-04T00:10:12,10,Team Krishen Sharma,Krishen Sharma,4083,2,2,2,520.764892578125,520.764892578125,False,0
+2025-06-04T00:10:12,11,Team James Pyper,James Pyper,4083,0,0,1,-1.0,-1.0,True,1
+2025-06-04T00:10:12,12,Amateur Hour Racing,Joshua Yu,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:12,13,Valkyrie Racing Team,Ian Knox2,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:12,14,Team SoggyFrenchFries,James Allen,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:12,15,Team Yuxuan Cai,Yuxuan Cai,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:10:12,16,LMRT,Eduardo Chongkan,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:12,17,"Friendly, Don t Shoot ",Stephen Mcilwaine,4084,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:12,18,HyPrix SimRaceCity Aurora,Eddie Gomez,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:12,19,FROG LEAP JUICD RACING GREEN,Braden Oloughlin,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:12,20,Motus Tardus Racing,Kirill Bratchenko,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:12,21,Drag-On Racing 934,Hongjun Xu,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:10:12,22,Full Force Gremlins 002,Rune Clutch Johansen,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:12,23,Team Matt Hewett2,Matt Hewett2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:12,24,Dogs Watch Racing Team,Jarrod Collins,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:12,25,Don t Kill the Messenger,Hugh Messenger,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:12,63,Lily Bowling,Lily Bowling,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:17,0,Side Ting Racing,Lachy R Brett,4083,1,1,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:17,1,USRA Red,Chris Schultz2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:17,2,Team Mike Bowen3,Mike Bowen3,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:17,3,Stephen Hawking s Pit Crew,Andrew Hess2,4083,0,0,3,-1.0,-1.0,False,0
+2025-06-04T00:10:17,4,Team John McDonald V,John McDonald V,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:17,5,Faded Line,Mack McGuire,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:17,6,GDX Racing,Gustavo Diniz,4083,0,0,3,-1.0,-1.0,False,0
+2025-06-04T00:10:17,7,SGrey,Simple Grey,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:17,8,Team Julián Toro,Julián Toro,4084,3,1,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:17,9,ATR Argentos MP Maro Plumbing,Diego A Armendariz,4083,0,0,2,-1.0,-1.0,False,0
+2025-06-04T00:10:17,10,Team Krishen Sharma,Krishen Sharma,4083,2,2,2,520.764892578125,520.764892578125,False,0
+2025-06-04T00:10:17,11,Team James Pyper,James Pyper,4083,0,0,1,-1.0,-1.0,True,1
+2025-06-04T00:10:17,12,Amateur Hour Racing,Joshua Yu,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:17,13,Valkyrie Racing Team,Ian Knox2,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:17,14,Team SoggyFrenchFries,James Allen,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:17,15,Team Yuxuan Cai,Yuxuan Cai,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:10:17,16,LMRT,Eduardo Chongkan,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:17,17,"Friendly, Don t Shoot ",Stephen Mcilwaine,4084,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:17,18,HyPrix SimRaceCity Aurora,Eddie Gomez,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:17,19,FROG LEAP JUICD RACING GREEN,Braden Oloughlin,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:17,20,Motus Tardus Racing,Kirill Bratchenko,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:17,21,Drag-On Racing 934,Hongjun Xu,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:10:17,22,Full Force Gremlins 002,Rune Clutch Johansen,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:17,23,Team Matt Hewett2,Matt Hewett2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:17,24,Dogs Watch Racing Team,Jarrod Collins,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:17,25,Don t Kill the Messenger,Hugh Messenger,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:17,63,Lily Bowling,Lily Bowling,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:22,0,Side Ting Racing,Lachy R Brett,4083,1,1,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:22,1,USRA Red,Chris Schultz2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:22,2,Team Mike Bowen3,Mike Bowen3,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:22,3,Stephen Hawking s Pit Crew,Andrew Hess2,4083,0,0,3,-1.0,-1.0,False,0
+2025-06-04T00:10:22,4,Team John McDonald V,John McDonald V,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:22,5,Faded Line,Mack McGuire,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:22,6,GDX Racing,Gustavo Diniz,4083,0,0,3,-1.0,-1.0,False,0
+2025-06-04T00:10:22,7,SGrey,Simple Grey,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:22,8,Team Julián Toro,Julián Toro,4084,3,1,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:22,9,ATR Argentos MP Maro Plumbing,Diego A Armendariz,4083,0,0,2,-1.0,-1.0,False,0
+2025-06-04T00:10:22,10,Team Krishen Sharma,Krishen Sharma,4083,2,2,2,520.764892578125,520.764892578125,False,0
+2025-06-04T00:10:22,11,Team James Pyper,James Pyper,4083,0,0,1,-1.0,-1.0,True,1
+2025-06-04T00:10:22,12,Amateur Hour Racing,Joshua Yu,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:22,13,Valkyrie Racing Team,Ian Knox2,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:22,14,Team SoggyFrenchFries,James Allen,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:22,15,Team Yuxuan Cai,Yuxuan Cai,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:10:22,16,LMRT,Eduardo Chongkan,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:22,17,"Friendly, Don t Shoot ",Stephen Mcilwaine,4084,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:22,18,HyPrix SimRaceCity Aurora,Eddie Gomez,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:22,19,FROG LEAP JUICD RACING GREEN,Braden Oloughlin,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:22,20,Motus Tardus Racing,Kirill Bratchenko,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:22,21,Drag-On Racing 934,Hongjun Xu,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:10:22,22,Full Force Gremlins 002,Rune Clutch Johansen,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:22,23,Team Matt Hewett2,Matt Hewett2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:22,24,Dogs Watch Racing Team,Jarrod Collins,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:22,25,Don t Kill the Messenger,Hugh Messenger,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:22,63,Lily Bowling,Lily Bowling,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:27,0,Side Ting Racing,Lachy R Brett,4083,1,1,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:27,1,USRA Red,Chris Schultz2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:27,2,Team Mike Bowen3,Mike Bowen3,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:27,3,Stephen Hawking s Pit Crew,Andrew Hess2,4083,0,0,3,-1.0,-1.0,False,0
+2025-06-04T00:10:27,4,Team John McDonald V,John McDonald V,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:27,5,Faded Line,Mack McGuire,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:27,6,GDX Racing,Gustavo Diniz,4083,0,0,3,-1.0,-1.0,False,0
+2025-06-04T00:10:27,7,SGrey,Simple Grey,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:27,8,Team Julián Toro,Julián Toro,4084,3,1,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:27,9,ATR Argentos MP Maro Plumbing,Diego A Armendariz,4083,0,0,2,-1.0,-1.0,False,0
+2025-06-04T00:10:27,10,Team Krishen Sharma,Krishen Sharma,4083,2,2,2,520.764892578125,520.764892578125,False,0
+2025-06-04T00:10:27,11,Team James Pyper,James Pyper,4083,0,0,1,-1.0,-1.0,True,1
+2025-06-04T00:10:27,12,Amateur Hour Racing,Joshua Yu,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:27,13,Valkyrie Racing Team,Ian Knox2,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:27,14,Team SoggyFrenchFries,James Allen,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:27,15,Team Yuxuan Cai,Yuxuan Cai,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:10:27,16,LMRT,Eduardo Chongkan,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:27,17,"Friendly, Don t Shoot ",Stephen Mcilwaine,4084,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:27,18,HyPrix SimRaceCity Aurora,Eddie Gomez,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:27,19,FROG LEAP JUICD RACING GREEN,Braden Oloughlin,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:27,20,Motus Tardus Racing,Kirill Bratchenko,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:27,21,Drag-On Racing 934,Hongjun Xu,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:10:27,22,Full Force Gremlins 002,Rune Clutch Johansen,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:27,23,Team Matt Hewett2,Matt Hewett2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:27,24,Dogs Watch Racing Team,Jarrod Collins,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:27,25,Don t Kill the Messenger,Hugh Messenger,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:27,63,Lily Bowling,Lily Bowling,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:32,0,Side Ting Racing,Lachy R Brett,4083,1,1,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:32,1,USRA Red,Chris Schultz2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:32,2,Team Mike Bowen3,Mike Bowen3,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:32,3,Stephen Hawking s Pit Crew,Andrew Hess2,4083,0,0,3,-1.0,-1.0,False,0
+2025-06-04T00:10:32,4,Team John McDonald V,John McDonald V,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:32,5,Faded Line,Mack McGuire,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:32,6,GDX Racing,Gustavo Diniz,4083,0,0,3,-1.0,-1.0,False,0
+2025-06-04T00:10:32,7,SGrey,Simple Grey,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:32,8,Team Julián Toro,Julián Toro,4084,3,1,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:32,9,ATR Argentos MP Maro Plumbing,Diego A Armendariz,4083,0,0,2,-1.0,-1.0,False,0
+2025-06-04T00:10:32,10,Team Krishen Sharma,Krishen Sharma,4083,2,2,2,520.764892578125,520.764892578125,False,0
+2025-06-04T00:10:32,11,Team James Pyper,James Pyper,4083,0,0,1,-1.0,-1.0,True,1
+2025-06-04T00:10:32,12,Amateur Hour Racing,Joshua Yu,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:32,13,Valkyrie Racing Team,Ian Knox2,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:32,14,Team SoggyFrenchFries,James Allen,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:32,15,Team Yuxuan Cai,Yuxuan Cai,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:10:32,16,LMRT,Eduardo Chongkan,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:32,17,"Friendly, Don t Shoot ",Stephen Mcilwaine,4084,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:32,18,HyPrix SimRaceCity Aurora,Eddie Gomez,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:32,19,FROG LEAP JUICD RACING GREEN,Braden Oloughlin,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:32,20,Motus Tardus Racing,Kirill Bratchenko,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:32,21,Drag-On Racing 934,Hongjun Xu,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:10:32,22,Full Force Gremlins 002,Rune Clutch Johansen,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:32,23,Team Matt Hewett2,Matt Hewett2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:32,24,Dogs Watch Racing Team,Jarrod Collins,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:32,25,Don t Kill the Messenger,Hugh Messenger,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:32,63,Lily Bowling,Lily Bowling,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:37,0,Side Ting Racing,Lachy R Brett,4083,1,1,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:37,1,USRA Red,Chris Schultz2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:37,2,Team Mike Bowen3,Mike Bowen3,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:37,3,Stephen Hawking s Pit Crew,Andrew Hess2,4083,0,0,3,-1.0,-1.0,False,0
+2025-06-04T00:10:37,4,Team John McDonald V,John McDonald V,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:37,5,Faded Line,Mack McGuire,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:37,6,GDX Racing,Gustavo Diniz,4083,0,0,3,-1.0,-1.0,False,0
+2025-06-04T00:10:37,7,SGrey,Simple Grey,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:37,8,Team Julián Toro,Julián Toro,4084,3,1,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:37,9,ATR Argentos MP Maro Plumbing,Diego A Armendariz,4083,0,0,2,-1.0,-1.0,False,0
+2025-06-04T00:10:37,10,Team Krishen Sharma,Krishen Sharma,4083,2,2,2,520.764892578125,520.764892578125,False,0
+2025-06-04T00:10:37,11,Team James Pyper,James Pyper,4083,0,0,1,-1.0,-1.0,True,1
+2025-06-04T00:10:37,12,Amateur Hour Racing,Joshua Yu,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:37,13,Valkyrie Racing Team,Ian Knox2,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:37,14,Team SoggyFrenchFries,James Allen,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:37,15,Team Yuxuan Cai,Yuxuan Cai,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:10:37,16,LMRT,Eduardo Chongkan,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:37,17,"Friendly, Don t Shoot ",Stephen Mcilwaine,4084,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:37,18,HyPrix SimRaceCity Aurora,Eddie Gomez,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:37,19,FROG LEAP JUICD RACING GREEN,Braden Oloughlin,4083,0,0,1,-1.0,-1.0,False,0
+2025-06-04T00:10:37,20,Motus Tardus Racing,Kirill Bratchenko,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:37,21,Drag-On Racing 934,Hongjun Xu,4083,0,0,0,-1.0,-1.0,False,0
+2025-06-04T00:10:37,22,Full Force Gremlins 002,Rune Clutch Johansen,4083,0,0,0,-1.0,-1.0,True,1
+2025-06-04T00:10:37,23,Team Matt Hewett2,Matt Hewett2,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:37,24,Dogs Watch Racing Team,Jarrod Collins,4083,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:37,25,Don t Kill the Messenger,Hugh Messenger,4084,0,0,-1,-1.0,-1.0,False,0
+2025-06-04T00:10:37,63,Lily Bowling,Lily Bowling,4084,0,0,-1,-1.0,-1.0,False,0
