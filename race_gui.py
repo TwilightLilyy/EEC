@@ -247,9 +247,16 @@ class RaceLoggerGUI:
 
         def load() -> None:
             tree.delete(*tree.get_children())
-            if not os.path.exists(csv_path):
+            path = Path(csv_path)
+            if not path.exists():
+                base = Path(sys.argv[0]).resolve().parent
+                for p in (Path.cwd() / csv_path, base / csv_path, base.parent / csv_path):
+                    if p.exists():
+                        path = p
+                        break
+            if not path.exists():
                 return
-            with open(csv_path, newline="", encoding="utf-8") as f:
+            with open(path, newline="", encoding="utf-8") as f:
                 reader = csv.DictReader(f)
                 if not reader.fieldnames:
                     return
