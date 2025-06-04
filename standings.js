@@ -103,11 +103,24 @@ function renderStandings() {
     const rows = [...standingsData];
 
     if (sortIndex === null) {
+        const leaders = {};
+        for (const r of rows) {
+            const cls = r[colIdx.class];
+            const pos = parseInt(r[colIdx.pos], 10);
+            if (!(cls in leaders) || pos < leaders[cls]) {
+                leaders[cls] = pos;
+            }
+        }
+        const classOrder = Object.entries(leaders)
+            .sort((a, b) => a[1] - b[1])
+            .map(([cls]) => cls);
+        const orderMap = {};
+        classOrder.forEach((c, i) => (orderMap[c] = i));
         rows.sort((a, b) => {
-            const aClass = CLASS_MAP[a[colIdx.class]] ? CLASS_MAP[a[colIdx.class]].order : 99;
-            const bClass = CLASS_MAP[b[colIdx.class]] ? CLASS_MAP[b[colIdx.class]].order : 99;
+            const aClass = orderMap[a[colIdx.class]] ?? 99;
+            const bClass = orderMap[b[colIdx.class]] ?? 99;
             if (aClass !== bClass) return aClass - bClass;
-            return Number(a[colIdx.classPos]) - Number(b[colIdx.classPos]);
+            return Number(a[colIdx.pos]) - Number(b[colIdx.pos]);
         });
     } else {
         rows.sort((a, b) => {

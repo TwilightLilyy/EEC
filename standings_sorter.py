@@ -79,7 +79,12 @@ def sort_and_write():
             "In Pit",
         ]
 
-        latest.sort_values(by=["Class", "Pos"]).to_csv(
+        # determine class order based on the best overall position per class
+        class_leaders = latest.groupby("Class")["Pos"].min().sort_values()
+        order_map = {c: i for i, c in enumerate(class_leaders.index)}
+        latest["ClassOrder"] = latest["Class"].map(order_map)
+
+        latest.sort_values(by=["ClassOrder", "Pos"]).to_csv(
             OUTPUT, columns=cols, index=False
         )
         print("[OK] standings written →", OUTPUT)
