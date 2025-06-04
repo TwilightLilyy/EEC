@@ -55,9 +55,9 @@ def colour_for(cls: str) -> str:
 
 
 SCRIPTS = [
-    ("AI Logger",        ["python", "ai_standings_logger.py"]),
-    ("Pit Logger",       ["python", "pitstop_logger_enhanced.py"]),
-    ("Standings Sorter", ["python", "standings_sorter.py"]),
+    ("AI Logger",        ["python", str(BASE_DIR / "ai_standings_logger.py")]),
+    ("Pit Logger",       ["python", str(BASE_DIR / "pitstop_logger_enhanced.py")]),
+    ("Standings Sorter", ["python", str(BASE_DIR / "standings_sorter.py")]),
     # add more here as needed
 ]
 
@@ -70,7 +70,8 @@ def iso_stamp() -> str:
 def launch(name, cmd):
     logfile = LOG_DIR / f"{name.replace(' ', '_').lower()}.txt"
     return subprocess.Popen(
-        cmd, stdout=open(logfile, "w"), stderr=subprocess.STDOUT, text=True
+        cmd, stdout=open(logfile, "w"), stderr=subprocess.STDOUT,
+        text=True
     )
 
 procs = {name: launch(name, cmd) for name, cmd in SCRIPTS}
