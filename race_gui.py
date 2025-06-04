@@ -342,7 +342,12 @@ class RaceLoggerGUI:
         load()
 
     def view_driver_times(self):
-        csv_path = Path("driver_times.csv")
+        base = Path(sys.argv[0]).resolve().parent
+        csv_path = base / "driver_times.csv"
+        if not csv_path.exists():
+            csv_path = base.parent / "driver_times.csv"
+        if not csv_path.exists():
+            csv_path = Path("driver_times.csv")
         if not csv_path.exists():
             messagebox.showinfo("Driver Times", "No driver time file found")
             return
