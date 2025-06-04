@@ -131,7 +131,11 @@ class RaceLoggerGUI:
 
     def view_logs(self):
         log_dir = Path("logs")
-        files = [f.name for f in log_dir.glob("*.txt")]
+        file_map = {f.name: f for f in log_dir.glob("*.txt")}
+        swap_file = Path("driver_swaps.csv")
+        if swap_file.exists():
+            file_map[swap_file.name] = swap_file
+        files = list(file_map.keys())
         if not files:
             messagebox.showinfo("Logs", "No log files found")
             return
@@ -147,7 +151,7 @@ class RaceLoggerGUI:
         txt.pack(fill="both", expand=True, padx=5, pady=5)
 
         def load(event=None):
-            path = log_dir / sel.get()
+            path = file_map[sel.get()]
             try:
                 with open(path, "r", encoding="utf-8", errors="ignore") as fh:
                     content = fh.read()
