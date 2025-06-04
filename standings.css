@@ -19,19 +19,29 @@ body {
     margin: 0 0.2em;
 }
 
-tr.class-hypercar td {
+tr.class-1 td {
+    background: linear-gradient(90deg, #f3e36b 60%, #b59f00 100%);
+    color: #232323;
+}
+
+tr.class-2 td {
     background: linear-gradient(90deg, #174fa3 60%, #1f3262 100%);
     color: #fff;
 }
 
-tr.class-p2 td {
+tr.class-3 td {
+    background: linear-gradient(90deg, #d9534f 60%, #7a2624 100%);
+    color: #fff;
+}
+
+tr.class-4 td {
     background: linear-gradient(90deg, #24c080 60%, #135c41 100%);
     color: #fff;
 }
 
-tr.class-gt3 td {
-    background: linear-gradient(90deg, #f3c46a 60%, #917737 100%);
-    color: #232323;
+tr.class-5 td {
+    background: linear-gradient(90deg, #d878d8 60%, #773977 100%);
+    color: #fff;
 }
 
 tr.leader td {
@@ -40,16 +50,24 @@ tr.leader td {
     box-shadow: 0 0 10px 2px gold;
 }
 
-tr.class-hypercar.leader td {
+tr.class-1.leader td {
+    box-shadow: 0 0 8px #e5c72f;
+}
+
+tr.class-2.leader td {
     box-shadow: 0 0 8px #60a3fa;
 }
 
-tr.class-p2.leader td {
+tr.class-3.leader td {
+    box-shadow: 0 0 8px #d24b4e;
+}
+
+tr.class-4.leader td {
     box-shadow: 0 0 8px #24c080;
 }
 
-tr.class-gt3.leader td {
-    box-shadow: 0 0 8px #e8bc47;
+tr.class-5.leader td {
+    box-shadow: 0 0 8px #c84bc7;
 }
 
 /* Group header rows per class */
@@ -60,19 +78,29 @@ tr.group-header td {
     font-size: 1.2em;
 }
 
-tr.class-hypercar.group-header td {
+tr.class-1.group-header td {
+    background: linear-gradient(90deg, #f3e36b 60%, #b59f00 100%);
+    color: #232323;
+}
+
+tr.class-2.group-header td {
     background: linear-gradient(90deg, #174fa3 60%, #1f3262 100%);
     color: #fff;
 }
 
-tr.class-p2.group-header td {
+tr.class-3.group-header td {
+    background: linear-gradient(90deg, #d9534f 60%, #7a2624 100%);
+    color: #fff;
+}
+
+tr.class-4.group-header td {
     background: linear-gradient(90deg, #24c080 60%, #135c41 100%);
     color: #fff;
 }
 
-tr.class-gt3.group-header td {
-    background: linear-gradient(90deg, #f3c46a 60%, #917737 100%);
-    color: #232323;
+tr.class-5.group-header td {
+    background: linear-gradient(90deg, #d878d8 60%, #773977 100%);
+    color: #fff;
 }
 
 #standingsTable {

@@ -35,11 +35,13 @@ STANDINGS_LOG = Path("standings_log.csv")   # the file ai_standings_logger write
 DRIVER_SWAP_CSV = Path("driver_swaps.csv")
 
 
-# A finite palette of bright-ish colours (skip yellow – hard to read on white terminals)
+# Ordered palette for class colours (fastest → slowest)
 _PALETTE = [
-    Fore.MAGENTA, Fore.CYAN, Fore.GREEN,
-    Fore.BLUE, Fore.RED, Fore.LIGHTMAGENTA_EX,
-    Fore.LIGHTCYAN_EX, Fore.LIGHTGREEN_EX, Fore.LIGHTBLUE_EX,
+    Style.BRIGHT + Fore.YELLOW,
+    Fore.BLUE,
+    Fore.RED,
+    Fore.GREEN,
+    Fore.MAGENTA,
 ]
 CLASS_COLOUR: dict[str, str] = {}          # filled on the fly
 
