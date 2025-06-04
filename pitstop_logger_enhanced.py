@@ -104,8 +104,14 @@ while True:
 
                 # start stint
                 if idx not in stint and not pit:
-                    stint[idx] = {"start_time": datetime.now(),
-                                  "start_sess": sess, "start_lap": lap, "on_pit": False}
+                    stint[idx] = {
+                        "start_time": datetime.now(),
+                        "start_sess": sess,
+                        "start_lap": lap,
+                        "team": team,
+                        "driver": drv,
+                        "on_pit": False,
+                    }
 
                 if idx in stint:
                     was = stint[idx]["on_pit"]
@@ -145,8 +151,14 @@ while True:
 
                     # pit exit → new stint
                     elif not pit and was:
-                        stint[idx] = {"start_time": datetime.now(),
-                                      "start_sess": sess, "start_lap": lap, "on_pit": False}
+                        stint[idx] = {
+                            "start_time": datetime.now(),
+                            "start_sess": sess,
+                            "start_lap": lap,
+                            "team": team,
+                            "driver": drv,
+                            "on_pit": False,
+                        }
 
             # ── periodic update of driver times ──────────────────
             now = datetime.now()
@@ -167,6 +179,19 @@ while True:
                 last_total_update = time.time()
         time.sleep(0.5)
     except KeyboardInterrupt:
+        now = datetime.now()
+        for idx, info in list(stint.items()):
+            if "start_time" in info:
+                team = info.get("team", f"Car {idx}")
+                drv = info.get("driver", f"Car {idx}")
+                dur_s = (now - info["start_time"]).total_seconds()
+                key = (team, drv)
+                driver_total[key] = driver_total.get(key, 0) + dur_s
+        with open(DRIVER_TOTAL_FILE, "w", newline="", encoding="utf-8") as dt:
+            wr = csv.writer(dt)
+            wr.writerow(DRIVER_HEADERS)
+            for (t, d), tot in driver_total.items():
+                wr.writerow([t, d, tot, hms(tot)])
         print("\nLogger stopped.")
         break
     except Exception as e:
