@@ -100,6 +100,10 @@ tr.class-gt3.group-header td {
     border-bottom: 3px solid #444b65;
 }
 
+#standingsTable th.sortable {
+    cursor: pointer;
+}
+
 /* Icon style */
 .class-icon {
     margin-right: 0.5em;
