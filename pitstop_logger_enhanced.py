@@ -7,6 +7,12 @@ from datetime import datetime
 
 CSV_FILE     = "pitstop_log.csv"
 OVERLAY_FILE = "live_standings_overlay.html"
+DRIVER_TOTAL_FILE = "driver_times.csv"
+
+DRIVER_HEADERS = [
+    "TeamName", "DriverName",
+    "Total Time (sec)", "Total Time (h:m:s)"
+]
 
 HEADERS = [
     "CarIdx", "Class",               # NEW
@@ -23,6 +29,11 @@ def iso_now():
 def minsec(sec):
     m, s = divmod(int(sec), 60)
     return f"{m}:{s:02d}"
+
+def hms(sec):
+    h, rem = divmod(int(sec), 3600)
+    m, s = divmod(rem, 60)
+    return f"{h}:{m:02d}:{s:02d}"
 
 def write_overlay(csv_path, html_path=OVERLAY_FILE):
     if pd is None:
@@ -54,11 +65,22 @@ def write_overlay(csv_path, html_path=OVERLAY_FILE):
     html += "</table></body></html>"
     open(html_path, "w", encoding="utf-8").write(html)
 
-# ── initialise CSV ────────────────────────────────────────────
+# ── initialise CSVs ───────────────────────────────────────────
 try:
     open(CSV_FILE, "x", newline="").write(",".join(HEADERS) + "\n")
 except FileExistsError:
     pass
+
+try:
+    with open(DRIVER_TOTAL_FILE, "r", newline="", encoding="utf-8") as f:
+        rdr = csv.DictReader(f)
+        driver_total = {
+            (r["TeamName"], r["DriverName"]): float(r["Total Time (sec)"])
+            for r in rdr
+        }
+except FileNotFoundError:
+    open(DRIVER_TOTAL_FILE, "w", newline="").write(",".join(DRIVER_HEADERS) + "\n")
+    driver_total = {}
 
 ir = irsdk.IRSDK(); ir.startup()
 stint = {}                           # carIdx → dict
@@ -106,6 +128,15 @@ while True:
                             csv.writer(f).writerow(row)
                         print(f"[{iso_now()}] STINT END – "
                             f"{team} / {drv}: {row[-1]} laps, {row[-2]}.")
+
+                        # update per-driver totals
+                        key = (team, drv)
+                        driver_total[key] = driver_total.get(key, 0) + dur_s
+                        with open(DRIVER_TOTAL_FILE, "w", newline="", encoding="utf-8") as dt:
+                            wr = csv.writer(dt)
+                            wr.writerow(DRIVER_HEADERS)
+                            for (t, d), tot in driver_total.items():
+                                wr.writerow([t, d, tot, hms(tot)])
 
                         if pd is not None:
                             write_overlay(CSV_FILE)

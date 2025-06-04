@@ -26,6 +26,7 @@ LOG_FILES = [
     "standings_log.csv",
     "sorted_standings.csv",
     "driver_swaps.csv",
+    "driver_times.csv",
 ]
 
 # Map ANSI colour codes (foreground) to Tkinter tag names
@@ -68,10 +69,11 @@ class RaceLoggerGUI:
         ttk.Button(frm, text="Save Logs…", command=self.save_logs).grid(column=1, row=2, pady=5, sticky="ew")
         ttk.Button(frm, text="View Logs…", command=self.view_logs).grid(column=0, row=3, columnspan=2, pady=5, sticky="ew")
         ttk.Button(frm, text="View Standings…", command=self.view_standings).grid(column=0, row=4, columnspan=2, pady=5, sticky="ew")
-        ttk.Button(frm, text="Export to ChatGPT", command=self.export_logs).grid(column=0, row=5, columnspan=2, pady=5, sticky="ew")
+        ttk.Button(frm, text="View Drive Times…", command=self.view_driver_times).grid(column=0, row=5, columnspan=2, pady=5, sticky="ew")
+        ttk.Button(frm, text="Export to ChatGPT", command=self.export_logs).grid(column=0, row=6, columnspan=2, pady=5, sticky="ew")
 
         self.log_box = ScrolledText(frm, width=80, height=20, state="disabled")
-        self.log_box.grid(column=0, row=6, columnspan=2, pady=5)
+        self.log_box.grid(column=0, row=7, columnspan=2, pady=5)
 
         # ── ANSI colour setup for log output ────────────────────
         self._ansi_re = re.compile(r"\x1b\[([0-9;]+)m")
@@ -246,6 +248,53 @@ class RaceLoggerGUI:
                     tree.insert("", "end", values=[r.get(c, "") for c in cols])
             except Exception as e:
                 messagebox.showerror("Standings", f"Error reading {csv_path}: {e}")
+
+        ttk.Button(win, text="Refresh", command=load).grid(row=1, column=0, columnspan=2, pady=5)
+        load()
+
+    def view_driver_times(self):
+        csv_path = Path("driver_times.csv")
+        if not csv_path.exists():
+            messagebox.showinfo("Driver Times", "No driver time file found")
+            return
+
+        win = tk.Toplevel(self.root)
+        win.title("Driver Times")
+        cols = ["Team", "Driver", "Total"]
+        tree = ttk.Treeview(win, columns=cols, show="headings")
+        for c in cols:
+            tree.heading(c, text=c)
+            tree.column(c, anchor="center")
+        vsb = ttk.Scrollbar(win, orient="vertical", command=tree.yview)
+        tree.configure(yscrollcommand=vsb.set)
+        tree.grid(row=0, column=0, sticky="nsew")
+        vsb.grid(row=0, column=1, sticky="ns")
+        win.rowconfigure(0, weight=1)
+        win.columnconfigure(0, weight=1)
+
+        def fmt(sec: str) -> str:
+            try:
+                val = float(sec)
+            except Exception:
+                return sec
+            h = int(val // 3600)
+            m = int((val % 3600) // 60)
+            s = int(val % 60)
+            return f"{h}:{m:02d}:{s:02d}"
+
+        def load():
+            tree.delete(*tree.get_children())
+            try:
+                with csv_path.open("r", newline="", encoding="utf-8") as f:
+                    rows = list(csv.DictReader(f))
+                for r in rows:
+                    tree.insert("", "end", values=[
+                        r.get("TeamName", r.get("Team", "")),
+                        r.get("DriverName", r.get("Driver", "")),
+                        r.get("Total Time (h:m:s)") or fmt(r.get("Total Time (sec)", ""))
+                    ])
+            except Exception as e:
+                messagebox.showerror("Driver Times", f"Error reading {csv_path}: {e}")
 
         ttk.Button(win, text="Refresh", command=load).grid(row=1, column=0, columnspan=2, pady=5)
         load()
