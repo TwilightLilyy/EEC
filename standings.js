@@ -32,14 +32,14 @@ async function fetchAndRenderStandings() {
             inPit: headers.indexOf("In Pit")
         };
 
-        // Map your internal class labels to display and sort order
+        // Map your internal class labels to display names
         const CLASS_MAP = {
-            "Hypercar":   { display: "Hypercar", order: 1 },
-            "P2":         { display: "P2",       order: 2 },
-            "GT3":        { display: "GT3",      order: 3 },
-            "Class 2523": { display: "P2",       order: 2 }, // For legacy CSVs!
-            "Class 2708": { display: "GT3",      order: 3 },
-            "Class 4074": { display: "Hypercar", order: 1 }
+            "Hypercar":   { display: "Hypercar" },
+            "P2":         { display: "P2"       },
+            "GT3":        { display: "GT3"      },
+            "Class 2523": { display: "P2"       }, // For legacy CSVs!
+            "Class 2708": { display: "GT3"      },
+            "Class 4074": { display: "Hypercar" }
         };
 
         const tbody = document.querySelector("#standingsTable tbody");
@@ -61,14 +61,23 @@ async function fetchAndRenderStandings() {
             dataRows.push(row);
         }
 
-        // Sort by custom class order, then by class position
+        // Determine best overall position per class for dynamic ordering
+        const bestPos = {};
+        for (const r of dataRows) {
+            const cls = r[colIdx.class];
+            const p = Number(r[colIdx.pos]);
+            if (!bestPos[cls] || p < bestPos[cls]) bestPos[cls] = p;
+        }
+        const classOrder = Object.keys(bestPos)
+            .sort((a, b) => bestPos[a] - bestPos[b])
+            .reduce((acc, c, i) => { acc[c] = i; return acc; }, {});
+
+        // Sort by dynamic class order, then overall position
         dataRows.sort((a, b) => {
-            // Get mapped class order
-            const aClass = CLASS_MAP[a[colIdx.class]] ? CLASS_MAP[a[colIdx.class]].order : 99;
-            const bClass = CLASS_MAP[b[colIdx.class]] ? CLASS_MAP[b[colIdx.class]].order : 99;
-            if (aClass !== bClass) return aClass - bClass;
-            // Then sort by class position numerically
-            return Number(a[colIdx.classPos]) - Number(b[colIdx.classPos]);
+            const aOrder = classOrder[a[colIdx.class]] ?? 99;
+            const bOrder = classOrder[b[colIdx.class]] ?? 99;
+            if (aOrder !== bOrder) return aOrder - bOrder;
+            return Number(a[colIdx.pos]) - Number(b[colIdx.pos]);
         });
 
         // Now render in sorted order, substituting the display class name and color

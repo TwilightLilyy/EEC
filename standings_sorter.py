@@ -55,7 +55,13 @@ def sort_and_write():
         cols = ["Team", "Driver", "Class", "Pos", "Class Pos",
                 "Laps", "Pits", "Avg Lap", "Best Lap", "Last Lap", "In Pit"]
 
-        latest.sort_values(by=["Class", "Pos"]).to_csv(OUTPUT, columns=cols, index=False)
+        # sort classes by the best overall position so faster classes appear first
+        order = latest.groupby("Class")["Pos"].min().sort_values().index
+        class_order = {c: i for i, c in enumerate(order)}
+        latest["_cls_order"] = latest["Class"].map(class_order)
+        latest.sort_values(by=["_cls_order", "Pos"], inplace=True)
+        latest.drop(columns="_cls_order", inplace=True)
+        latest.to_csv(OUTPUT, columns=cols, index=False)
         print("[OK] standings written →", OUTPUT)
     except Exception as e:
         print("[ERR]", e)
