@@ -84,6 +84,7 @@ except FileNotFoundError:
 
 ir = irsdk.IRSDK(); ir.startup()
 stint = {}                           # carIdx → dict
+last_total_update = time.time()
 
 print("Enhanced pit-stop logger running… Ctrl-C to stop.")
 while True:
@@ -146,6 +147,24 @@ while True:
                     elif not pit and was:
                         stint[idx] = {"start_time": datetime.now(),
                                       "start_sess": sess, "start_lap": lap, "on_pit": False}
+
+            # ── periodic update of driver times ──────────────────
+            now = datetime.now()
+            if time.time() - last_total_update >= 60:
+                cur_totals = dict(driver_total)
+                for idx, s in stint.items():
+                    if s.get("on_pit") is False and "start_time" in s:
+                        team = drvs[idx]["TeamName"] if idx < len(drvs) else f"Car {idx}"
+                        drv  = drvs[idx]["UserName"] if idx < len(drvs) else f"Car {idx}"
+                        dur = (now - s["start_time"]).total_seconds()
+                        key = (team, drv)
+                        cur_totals[key] = cur_totals.get(key, 0) + dur
+                with open(DRIVER_TOTAL_FILE, "w", newline="", encoding="utf-8") as dt:
+                    wr = csv.writer(dt)
+                    wr.writerow(DRIVER_HEADERS)
+                    for (t, d), tot in cur_totals.items():
+                        wr.writerow([t, d, tot, hms(tot)])
+                last_total_update = time.time()
         time.sleep(0.5)
     except KeyboardInterrupt:
         print("\nLogger stopped.")
