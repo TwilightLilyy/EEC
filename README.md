@@ -13,9 +13,22 @@ A collection of utilities for logging and displaying data from iRacing AI races.
 
 Python 3.9 or newer with the packages `pandas`, `colorama` and `irsdk` installed.
 
+
 ```bash
 pip install pandas colorama irsdk
 ```
+
+### Quick setup
+
+Run the included script to create a virtual environment and install the
+dependencies from `requirements.txt`:
+
+```bash
+./setup.sh
+```
+
+The optional `openai` package can be installed afterwards if you plan to
+use the ChatGPT export feature in the GUI.
 
 ## Usage
 
