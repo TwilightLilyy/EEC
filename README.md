@@ -48,7 +48,10 @@ pip install pyinstaller
 pyinstaller --onefile race_gui.py
 ```
 
-The resulting `dist/race_gui.exe` will include all scripts and can be run without Python installed.
+The resulting `dist/race_gui.exe` can be distributed by itself.  When launched from
+inside the `dist` folder it looks for `race_data_runner.py` in the parent directory
+(the project root), so keep the default folder structure or adjust the path in
+`race_gui.py` if you move the executable elsewhere.
 
 ### Running the executable
 
