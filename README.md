@@ -46,7 +46,7 @@ Logos and spec maps under `Logos/` and `SpecMaps/` contain the Final Fantasy XIV
 
 ## GUI
 A basic Tkinter interface is provided in `race_gui.py`.  It lets you start and stop the logging utilities, shows the current iRacing connection status and has buttons to reset or save the log files.  The window now includes tabs to view the `pitstop_log.csv`, `driver_swaps.csv` and `standings_log.csv` files directly.  If the optional `openai` package is installed and an `OPENAI_API_KEY` environment variable is set, the GUI can send the logs to ChatGPT and store the resulting analysis in a text file.
-The window also provides a simple *File* menu with a *Quit* action to close the application.
+The window also provides a simple *File* menu with a *Quit* action to close the application.  A dark colour scheme based on the `clam` style is applied and the `Logos/App/EECApp.png` image will be used as the window icon when available.
 
 Run it with:
 
@@ -74,3 +74,7 @@ Once `pyinstaller` has finished you will find the built program in the `dist/` f
 On Windows the file will be `race_gui.exe` while on Linux it will simply be `race_gui`.
 Launch it from a terminal or double–click the file to start the GUI.  No additional
 Python installation is required.
+
+### Recommended assets
+
+For a nicer overlay you can replace the emoji class icons in `standings.js` with small PNG or SVG images and add them to a new `assets/` folder.  Background images or team logos placed under `Logos/` can also be referenced from the CSS to further theme the UI.
