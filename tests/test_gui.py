@@ -4,7 +4,7 @@ import signal
 import types
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from race_gui import RaceLoggerGUI
+from race_gui import RaceLoggerGUI, filter_rows
 
 class DummyProc:
     def __init__(self):
@@ -37,4 +37,16 @@ def test_stop_logging_sends_sigint():
     assert p.waits == 1
     assert p.terminated is False
     assert gui.output_thread is None
+
+
+def test_filter_rows_removes_pace_and_zero_lap_entries():
+    rows = [
+        {"Driver": "DriverA", "Pos": "1", "Laps": "5"},
+        {"Driver": "Pace Car", "Pos": "1", "Laps": "5"},
+        {"Driver": "DriverB", "Pos": "0", "Laps": "2"},
+        {"Driver": "DriverC", "Pos": "3", "Laps": "0"},
+    ]
+    filtered = filter_rows(rows)
+    assert len(filtered) == 1
+    assert filtered[0]["Driver"] == "DriverA"
 
