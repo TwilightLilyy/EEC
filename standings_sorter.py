@@ -1,4 +1,7 @@
-import pandas as pd
+try:
+    import pandas as pd
+except Exception:
+    pd = None
 import time
 
 INPUT  = "standings_log.csv"
@@ -13,6 +16,9 @@ def class_name(cid: str) -> str:
     return CAR_CLASS_MAP.get(str(cid), f"Class {cid}")
 
 def sort_and_write():
+    if pd is None:
+        print("[ERR] pandas not installed – standings sorter disabled")
+        return
     try:
         df = pd.read_csv(INPUT)
 

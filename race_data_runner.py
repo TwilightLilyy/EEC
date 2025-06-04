@@ -3,9 +3,18 @@ import subprocess, signal, sys, time, os, threading, shutil
 import csv, itertools
 from pathlib import Path
 from datetime import datetime
-from colorama import init as _init, Fore, Style
+try:
+    from colorama import init as _init, Fore, Style
+    _init(autoreset=True)
+except Exception:  # colorama not installed
+    class _Dummy:
+        def __getattr__(self, _):
+            return ""
+
+    Fore = Style = _Dummy()
+    def _init(*args, **kwargs):
+        pass
 from collections import defaultdict
-_init(autoreset=True)          # initialise colourama (harmless on *nix)
 
 PITLOG = Path("pitstop_log.csv")   # same name the logger writes
 STANDINGS_LOG = Path("standings_log.csv")   # the file ai_standings_logger writes
