@@ -1,3 +1,6 @@
 
 sorted_standings.csv
 live_standings_overlay.html
+.venv/
+__pycache__/
+tests/__pycache__/
