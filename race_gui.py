@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
 from tkinter.scrolledtext import ScrolledText
 import subprocess
+import signal
 import threading
 import time
 import os
@@ -119,11 +120,16 @@ class RaceLoggerGUI:
     def stop_logging(self):
         if not self.proc:
             return
-        self.proc.terminate()
         try:
+            # Gracefully stop the runner so it can terminate child processes
+            self.proc.send_signal(signal.SIGINT)
             self.proc.wait(timeout=5)
         except subprocess.TimeoutExpired:
-            self.proc.kill()
+            # Fallback to force termination if it doesn't exit
+            self.proc.terminate()
+            self.proc.wait(timeout=5)
+        except Exception:
+            pass
         self.proc = None
         self.output_thread = None
         self.start_btn.config(state="normal")
