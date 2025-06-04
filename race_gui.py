@@ -1,10 +1,12 @@
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
+from tkinter.scrolledtext import ScrolledText
 import subprocess
 import threading
 import time
 import os
 import shutil
+from queue import Queue, Empty
 try:
     import irsdk
 except ImportError:
@@ -26,6 +28,8 @@ class RaceLoggerGUI:
         self.root = root
         self.root.title("EEC Logger")
         self.proc = None
+        self.log_queue: Queue[str] = Queue()
+        self.output_thread = None
 
         frm = ttk.Frame(root, padding=10)
         frm.grid()
@@ -41,8 +45,12 @@ class RaceLoggerGUI:
         ttk.Button(frm, text="Save Logs…", command=self.save_logs).grid(column=1, row=2, pady=5, sticky="ew")
         ttk.Button(frm, text="Export to ChatGPT", command=self.export_logs).grid(column=0, row=3, columnspan=2, pady=5, sticky="ew")
 
+        self.log_box = ScrolledText(frm, width=80, height=20, state="disabled")
+        self.log_box.grid(column=0, row=4, columnspan=2, pady=5)
+
         self.update_thread = threading.Thread(target=self.update_status_loop, daemon=True)
         self.update_thread.start()
+        self.root.after(100, self.update_log_box)
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
 
     # ── logging subprocess management ────────────────────────────
@@ -50,7 +58,15 @@ class RaceLoggerGUI:
         if self.proc:
             messagebox.showinfo("Logger", "Already running")
             return
-        self.proc = subprocess.Popen(["python", "race_data_runner.py"])
+        self.proc = subprocess.Popen(
+            ["python", "race_data_runner.py"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            bufsize=1,
+        )
+        self.output_thread = threading.Thread(target=self.read_output, daemon=True)
+        self.output_thread.start()
         self.start_btn.config(state="disabled")
         self.stop_btn.config(state="normal")
 
@@ -63,6 +79,7 @@ class RaceLoggerGUI:
         except subprocess.TimeoutExpired:
             self.proc.kill()
         self.proc = None
+        self.output_thread = None
         self.start_btn.config(state="normal")
         self.stop_btn.config(state="disabled")
 
@@ -134,6 +151,24 @@ class RaceLoggerGUI:
                 messagebox.showinfo("Export", f"Analysis saved to {info}")
         except Exception as e:
             messagebox.showerror("Export", f"Error: {e}")
+
+    # ── log output handling ─────────────────────────────────────
+    def read_output(self):
+        if self.proc and self.proc.stdout:
+            for line in self.proc.stdout:
+                self.log_queue.put(line)
+
+    def update_log_box(self):
+        try:
+            while True:
+                line = self.log_queue.get_nowait()
+                self.log_box.configure(state="normal")
+                self.log_box.insert("end", line)
+                self.log_box.see("end")
+                self.log_box.configure(state="disabled")
+        except Empty:
+            pass
+        self.root.after(100, self.update_log_box)
 
     def on_close(self):
         if self.proc:
