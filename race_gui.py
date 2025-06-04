@@ -41,10 +41,39 @@ ANSI_COLOUR_MAP = {
     "37": "white", "97": "white",
 }
 
+
+def filter_rows(rows):
+    """Filter out non-racing entries from standings rows."""
+    filtered = []
+    for r in rows:
+        driver = r.get("Driver", "")
+        try:
+            pos = int(r.get("Pos", 0))
+        except Exception:
+            pos = 0
+        try:
+            laps = float(r.get("Laps", 0))
+        except Exception:
+            laps = 0.0
+        if driver in {"Pace Car", "Lily Bowling"}:
+            continue
+        if pos <= 0 or laps <= 0:
+            continue
+        filtered.append(r)
+    return filtered
+
 class RaceLoggerGUI:
     def __init__(self, root: tk.Tk):
         self.root = root
         self.root.title("EEC Logger")
+
+        self.setup_style()
+        icon_path = Path(__file__).resolve().parent / "Logos" / "App" / "EECApp.png"
+        if icon_path.exists():
+            try:
+                self.root.iconphoto(True, tk.PhotoImage(file=icon_path))
+            except Exception:
+                pass
         self.proc = None
         self.log_queue: Queue[str] = Queue()
         self.output_thread = None
@@ -74,7 +103,10 @@ class RaceLoggerGUI:
         ttk.Button(frm, text="View Drive Times…", command=self.view_driver_times).grid(column=0, row=5, columnspan=2, pady=5, sticky="ew")
         ttk.Button(frm, text="Export to ChatGPT", command=self.export_logs).grid(column=0, row=6, columnspan=2, pady=5, sticky="ew")
 
-        self.log_box = ScrolledText(frm, width=80, height=20, state="disabled")
+        self.log_box = ScrolledText(
+            frm, width=80, height=20, state="disabled",
+            background=self.log_box_bg, foreground=self.fg, insertbackground="white"
+        )
         self.log_box.grid(column=0, row=7, columnspan=2, pady=5)
 
         # Additional tabs for CSV logs
@@ -104,6 +136,25 @@ class RaceLoggerGUI:
         self.root.after(100, self.update_log_box)
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
 
+    def setup_style(self) -> None:
+        style = ttk.Style(self.root)
+        try:
+            style.theme_use("clam")
+        except Exception:
+            pass
+        self.bg = "#23272e"
+        self.fg = "#e7e7ff"
+        accent = "#3c445c"
+        self.root.configure(bg=self.bg)
+        self.root.option_add("*Font", "Segoe UI 10")
+        style.configure("TFrame", background=self.bg)
+        style.configure("TLabel", background=self.bg, foreground=self.fg)
+        style.configure("TButton", background="#2b3249", foreground=self.fg, padding=6)
+        style.map("TButton", background=[("active", accent)])
+        style.configure("TNotebook", background=self.bg)
+        style.configure("TNotebook.Tab", background="#2b3249", foreground=self.fg, padding=(10, 4))
+        style.map("TNotebook.Tab", background=[("selected", accent)])
+        self.log_box_bg = "#111111"
     # ── logging subprocess management ────────────────────────────
     def start_logging(self):
         if self.proc:
@@ -278,6 +329,7 @@ class RaceLoggerGUI:
             try:
                 with csv_path.open("r", newline="", encoding="utf-8") as f:
                     rows = list(csv.DictReader(f))
+                rows = filter_rows(rows)
                 rows.sort(key=lambda r: (r.get("Class", ""),
                                          int(r.get("Class Pos", 0))))
                 for r in rows:
