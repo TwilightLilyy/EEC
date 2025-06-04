@@ -41,6 +41,27 @@ ANSI_COLOUR_MAP = {
     "37": "white", "97": "white",
 }
 
+
+def filter_rows(rows):
+    """Filter out non-racing entries from standings rows."""
+    filtered = []
+    for r in rows:
+        driver = r.get("Driver", "")
+        try:
+            pos = int(r.get("Pos", 0))
+        except Exception:
+            pos = 0
+        try:
+            laps = float(r.get("Laps", 0))
+        except Exception:
+            laps = 0.0
+        if driver in {"Pace Car", "Lily Bowling"}:
+            continue
+        if pos <= 0 or laps <= 0:
+            continue
+        filtered.append(r)
+    return filtered
+
 class RaceLoggerGUI:
     def __init__(self, root: tk.Tk):
         self.root = root
@@ -278,6 +299,7 @@ class RaceLoggerGUI:
             try:
                 with csv_path.open("r", newline="", encoding="utf-8") as f:
                     rows = list(csv.DictReader(f))
+                rows = filter_rows(rows)
                 rows.sort(key=lambda r: (r.get("Class", ""),
                                          int(r.get("Class Pos", 0))))
                 for r in rows:
