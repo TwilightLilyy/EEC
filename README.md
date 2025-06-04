@@ -4,7 +4,9 @@ A collection of utilities for logging and displaying data from iRacing AI races.
 
 ## Features
 
-- **ai_standings_logger.py** – periodically records session standings to `standings_log.csv`.
+- **ai_standings_logger.py** – periodically records session standings to
+  a CSV file (default `standings_log.csv`).  Use `--output` and `--interval`
+  arguments to configure the file path and polling delay.
 - **pitstop_logger_enhanced.py** – tracks stints and pit stops, writing results to `pitstop_log.csv` and updating `live_standings_overlay.html`.
 - **standings_sorter.py** – produces `sorted_standings.csv` so the overlay can show the latest order per class.
 - **race_data_runner.py** – helper script that launches all of the above and restarts them if they stop.
