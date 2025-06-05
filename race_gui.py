@@ -54,8 +54,10 @@ ANSI_COLOUR_MAP = {
 def filter_rows(rows):
     """Filter out non-racing entries from standings rows."""
     filtered = []
+    car_re = re.compile(r"car\s*\d+$", re.IGNORECASE)
     for r in rows:
-        driver = r.get("Driver", "")
+        driver = r.get("Driver", r.get("DriverName", ""))
+        team = r.get("Team", r.get("TeamName", ""))
         try:
             pos = int(r.get("Pos", 0))
         except Exception:
@@ -65,6 +67,12 @@ def filter_rows(rows):
         except Exception:
             laps = 0.0
         if driver in {"Pace Car", "Lily Bowling"}:
+            continue
+        if team == "Lily Bowling":
+            continue
+        d = driver.strip().lower()
+        t = team.strip().lower()
+        if d == t and car_re.match(d):
             continue
         if pos <= 0 or laps <= 0:
             continue
