@@ -22,6 +22,11 @@ try:
 except ImportError:
     openai = None
 
+try:
+    import sv_ttk
+except Exception:
+    sv_ttk = None
+
 LOG_FILES = [
     "pitstop_log.csv",
     "standings_log.csv",
@@ -191,10 +196,16 @@ class RaceLoggerGUI:
 
     def setup_style(self) -> None:
         style = ttk.Style(self.root)
-        try:
-            style.theme_use("clam")
-        except Exception:
-            pass
+        if sv_ttk is not None:
+            try:
+                sv_ttk.set_theme("dark", self.root)
+            except Exception:
+                pass
+        else:
+            try:
+                style.theme_use("clam")
+            except Exception:
+                pass
         self.bg = "#23272e"
         self.fg = "#e7e7ff"
         accent = "#3c445c"

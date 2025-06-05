@@ -2,3 +2,4 @@ pandas
 colorama
 pyirsdk
 openai  # optional for ChatGPT export via race_gui.py
+sv_ttk   # modern theme for the Tkinter GUI
