@@ -39,12 +39,15 @@ def test_stop_logging_sends_sigint():
     assert gui.output_thread is None
 
 
-def test_filter_rows_removes_pace_and_zero_lap_entries():
+def test_filter_rows_removes_hidden_entries():
     rows = [
-        {"Driver": "DriverA", "Pos": "1", "Laps": "5"},
-        {"Driver": "Pace Car", "Pos": "1", "Laps": "5"},
-        {"Driver": "DriverB", "Pos": "0", "Laps": "2"},
-        {"Driver": "DriverC", "Pos": "3", "Laps": "0"},
+        {"Team": "T1", "Driver": "DriverA", "Pos": "1", "Laps": "5"},
+        {"Team": "Pace Car", "Driver": "Pace Car", "Pos": "1", "Laps": "5"},
+        {"Team": "TeamB", "Driver": "DriverB", "Pos": "0", "Laps": "2"},
+        {"Team": "TeamC", "Driver": "DriverC", "Pos": "3", "Laps": "0"},
+        {"Team": "Any", "Driver": "Lily Bowling", "Pos": "2", "Laps": "3"},
+        {"Team": "Lily Bowling", "Driver": "Someone", "Pos": "2", "Laps": "3"},
+        {"Team": "Car 20", "Driver": "Car 20", "Pos": "5", "Laps": "10"},
     ]
     filtered = filter_rows(rows)
     assert len(filtered) == 1

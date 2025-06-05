@@ -31,6 +31,7 @@ async function fetchAndRenderStandings() {
 
         // Indexes for all columns we want, regardless of order
         const colIdx = {
+            team: headers.indexOf("Team"),
             driver: headers.indexOf("Driver"),
             class: headers.indexOf("Class"),
             pos: headers.indexOf("Pos"),
@@ -58,13 +59,17 @@ async function fetchAndRenderStandings() {
 
         // Gather all rows as arrays for easier sorting/filtering
         const rows = [];
+        const carRe = /^car\s*\d+$/i;
         for (let i = 1; i < lines.length; i++) {
             const row = lines[i].split(',').map(cell => cell.trim());
             if (row.length < headers.length) continue;
-            // Filter: skip if Driver is Lily Bowling or Pace Car
             const driverName = row[colIdx.driver];
+            const teamName = row[colIdx.team] || "";
             if (driverName === "Lily Bowling" || driverName === "Pace Car") continue;
-            // Hide entries with position 0 or non-positive lap count
+            if (teamName === "Lily Bowling") continue;
+            const d = driverName.toLowerCase();
+            const t = teamName.toLowerCase();
+            if (d === t && carRe.test(d)) continue;
             const pos = parseInt(row[colIdx.pos], 10);
             const laps = parseFloat(row[colIdx.laps]);
             if (pos === 0 || laps <= 0) continue;
