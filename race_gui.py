@@ -161,7 +161,12 @@ class RaceLoggerGUI:
         self.update_wrap()
 
         # Additional tabs for CSV logs
-        self.create_csv_tab("pitstop_log.csv", "Pit Stops")
+        self.create_csv_tab(
+            "pitstop_log.csv",
+            "Pit Stops",
+            auto_refresh=True,
+            refresh_ms=5000,
+        )
         self.create_csv_tab("driver_swaps.csv", "Driver Swaps")
         self.create_csv_tab("standings_log.csv", "Standings Log")
 
@@ -294,7 +299,14 @@ class RaceLoggerGUI:
         wrap = tk.WORD if self.wrap_logs.get() else tk.NONE
         self.log_box.configure(wrap=wrap)
 
-    def create_csv_tab(self, csv_path: str, title: str) -> None:
+    def create_csv_tab(
+        self,
+        csv_path: str,
+        title: str,
+        *,
+        auto_refresh: bool = False,
+        refresh_ms: int = 5000,
+    ) -> None:
         frame = ttk.Frame(self.notebook, padding=10)
         self.notebook.add(frame, text=title)
         tree = ttk.Treeview(frame, show="headings")
@@ -335,7 +347,13 @@ class RaceLoggerGUI:
         ttk.Button(frame, text="Refresh", command=load).grid(
             row=1, column=0, columnspan=2, pady=5
         )
-        load()
+
+        def refresh_loop() -> None:
+            load()
+            if auto_refresh:
+                self.root.after(refresh_ms, refresh_loop)
+
+        refresh_loop()
 
     def view_logs(self):
         log_dir = Path("logs")
