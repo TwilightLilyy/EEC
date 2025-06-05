@@ -67,12 +67,14 @@ def test_pitstop_logger_writes_stint(tmp_path, monkeypatch):
                     "SessionTime": 0,
                     "CarIdxOnPitRoad": [False],
                     "CarIdxLap": [1],
+                    "CarIdxBestLapTime": [1.1],
                     "DriverInfo": {"Drivers": [{"TeamName": "TeamA", "UserName": "DriverA", "CarClassShortName": "GT3"}]},
                 },
                 {
                     "SessionTime": 60,
                     "CarIdxOnPitRoad": [True],
                     "CarIdxLap": [2],
+                    "CarIdxBestLapTime": [1.1],
                     "DriverInfo": {"Drivers": [{"TeamName": "TeamA", "UserName": "DriverA", "CarClassShortName": "GT3"}]},
                 },
             ]
