@@ -100,6 +100,19 @@ class RaceLoggerGUI:
         file_menu = tk.Menu(menubar, tearoff=0)
         file_menu.add_command(label="Quit", command=self.on_close)
         menubar.add_cascade(label="File", menu=file_menu)
+        self.auto_scroll = tk.BooleanVar(value=True)
+        self.wrap_logs = tk.BooleanVar(value=True)
+        options_menu = tk.Menu(menubar, tearoff=0)
+        options_menu.add_checkbutton(
+            label="Auto Scroll Logs",
+            variable=self.auto_scroll,
+        )
+        options_menu.add_checkbutton(
+            label="Wrap Log Text",
+            variable=self.wrap_logs,
+            command=self.update_wrap,
+        )
+        menubar.add_cascade(label="Options", menu=options_menu)
         root.config(menu=menubar)
 
         self.notebook = ttk.Notebook(root)
@@ -145,6 +158,7 @@ class RaceLoggerGUI:
             insertbackground="white",
         )
         self.log_box.grid(column=0, row=7, columnspan=2, pady=5)
+        self.update_wrap()
 
         # Additional tabs for CSV logs
         self.create_csv_tab("pitstop_log.csv", "Pit Stops")
@@ -275,6 +289,10 @@ class RaceLoggerGUI:
             if os.path.exists(f):
                 shutil.copy(f, target)
         messagebox.showinfo("Saved", f"Logs copied to {target}")
+
+    def update_wrap(self) -> None:
+        wrap = tk.WORD if self.wrap_logs.get() else tk.NONE
+        self.log_box.configure(wrap=wrap)
 
     def create_csv_tab(self, csv_path: str, title: str) -> None:
         frame = ttk.Frame(self.notebook, padding=10)
@@ -613,7 +631,8 @@ class RaceLoggerGUI:
                 line = self.log_queue.get_nowait()
                 self.log_box.configure(state="normal")
                 self.insert_with_ansi(line)
-                self.log_box.see("end")
+                if self.auto_scroll.get():
+                    self.log_box.see("end")
                 self.log_box.configure(state="disabled")
         except Empty:
             pass
