@@ -446,7 +446,7 @@ class RaceLoggerGUI:
 
         win = tk.Toplevel(self.root)
         win.title("Driver Times")
-        cols = ["Team", "Driver", "Total"]
+        cols = ["Team", "Driver", "Total", "Laps", "Avg Lap", "Best Lap"]
         tree = ttk.Treeview(win, columns=cols, show="headings")
         for c in cols:
             tree.heading(c, text=c)
@@ -482,6 +482,9 @@ class RaceLoggerGUI:
                             r.get("DriverName", r.get("Driver", "")),
                             r.get("Total Time (h:m:s)")
                             or fmt(r.get("Total Time (sec)", "")),
+                            r.get("Laps", ""),
+                            r.get("Avg Lap (sec)", ""),
+                            r.get("Best Lap (sec)", ""),
                         ],
                     )
             except Exception as e:

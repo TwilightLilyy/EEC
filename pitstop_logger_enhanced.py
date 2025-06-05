@@ -11,7 +11,8 @@ DRIVER_TOTAL_FILE = "driver_times.csv"
 
 DRIVER_HEADERS = [
     "TeamName", "DriverName",
-    "Total Time (sec)", "Total Time (h:m:s)"
+    "Total Time (sec)", "Total Time (h:m:s)",
+    "Laps", "Avg Lap (sec)", "Best Lap (sec)"
 ]
 
 HEADERS = [
@@ -74,10 +75,22 @@ except FileExistsError:
 try:
     with open(DRIVER_TOTAL_FILE, "r", newline="", encoding="utf-8") as f:
         rdr = csv.DictReader(f)
-        driver_total = {
-            (r["TeamName"], r["DriverName"]): float(r["Total Time (sec)"])
-            for r in rdr
-        }
+        driver_total = {}
+        for r in rdr:
+            key = (r.get("TeamName", ""), r.get("DriverName", ""))
+            try:
+                best = float(r.get("Best Lap (sec)", ""))
+            except Exception:
+                best = None
+            try:
+                laps = int(float(r.get("Laps", 0)))
+            except Exception:
+                laps = 0
+            try:
+                tot = float(r.get("Total Time (sec)", 0))
+            except Exception:
+                tot = 0.0
+            driver_total[key] = {"time": tot, "laps": laps, "best": best}
 except FileNotFoundError:
     open(DRIVER_TOTAL_FILE, "w", newline="").write(",".join(DRIVER_HEADERS) + "\n")
     driver_total = {}
@@ -94,6 +107,10 @@ while True:
             sess  = ir["SessionTime"]
             onpit = ir["CarIdxOnPitRoad"]
             laps  = ir["CarIdxLap"]
+            try:
+                bests = ir["CarIdxBestLapTime"]
+            except Exception:
+                bests = []
             drvs  = ir["DriverInfo"]["Drivers"]
 
             for idx, pit in enumerate(onpit):
@@ -111,6 +128,7 @@ while True:
                         "team": team,
                         "driver": drv,
                         "on_pit": False,
+                        "start_best": bests[idx] if idx < len(bests) else None,
                     }
 
                 if idx in stint:
@@ -138,12 +156,28 @@ while True:
 
                         # update per-driver totals
                         key = (team, drv)
-                        driver_total[key] = driver_total.get(key, 0) + dur_s
+                        lap_diff = int(lap) - int(stint[idx]["start_lap"])
+                        end_best = bests[idx] if idx < len(bests) else None
+                        start_best = stint[idx].get("start_best")
+                        stats = driver_total.get(key, {"time": 0.0, "laps": 0, "best": None})
+                        stats["time"] += dur_s
+                        stats["laps"] += lap_diff
+                        if (
+                            end_best is not None
+                            and start_best is not None
+                            and end_best > 0
+                            and end_best < start_best
+                        ):
+                            if stats["best"] is None or end_best < stats["best"]:
+                                stats["best"] = end_best
+                        driver_total[key] = stats
                         with open(DRIVER_TOTAL_FILE, "w", newline="", encoding="utf-8") as dt:
                             wr = csv.writer(dt)
                             wr.writerow(DRIVER_HEADERS)
-                            for (t, d), tot in driver_total.items():
-                                wr.writerow([t, d, tot, hms(tot)])
+                            for (t, d), s in driver_total.items():
+                                avg = s["time"] / s["laps"] if s["laps"] else ""
+                                best = s["best"] if s["best"] is not None else ""
+                                wr.writerow([t, d, s["time"], hms(s["time"]), s["laps"], avg, best])
 
                         if pd is not None:
                             write_overlay(CSV_FILE)
@@ -158,24 +192,44 @@ while True:
                             "team": team,
                             "driver": drv,
                             "on_pit": False,
+                            "start_best": bests[idx] if idx < len(bests) else None,
                         }
 
             # ── periodic update of driver times ──────────────────
             now = datetime.now()
             if time.time() - last_total_update >= 60:
-                cur_totals = dict(driver_total)
+                cur_totals = {k: dict(v) for k, v in driver_total.items()}
                 for idx, s in stint.items():
                     if s.get("on_pit") is False and "start_time" in s:
                         team = drvs[idx]["TeamName"] if idx < len(drvs) else f"Car {idx}"
                         drv  = drvs[idx]["UserName"] if idx < len(drvs) else f"Car {idx}"
-                        dur = (now - s["start_time"]).total_seconds()
                         key = (team, drv)
-                        cur_totals[key] = cur_totals.get(key, 0) + dur
+                        cur = cur_totals.setdefault(key, {"time": 0.0, "laps": 0, "best": None})
+                        dur = (now - s["start_time"]).total_seconds()
+                        cur["time"] += dur
+                        try:
+                            lap_now = int(laps[idx])
+                            lap_diff = lap_now - int(s.get("start_lap", lap_now))
+                        except Exception:
+                            lap_diff = 0
+                        cur["laps"] += lap_diff
+                        start_best = s.get("start_best")
+                        cur_best = bests[idx] if idx < len(bests) else None
+                        if (
+                            cur_best is not None
+                            and start_best is not None
+                            and cur_best > 0
+                            and cur_best < start_best
+                        ):
+                            if cur["best"] is None or cur_best < cur["best"]:
+                                cur["best"] = cur_best
                 with open(DRIVER_TOTAL_FILE, "w", newline="", encoding="utf-8") as dt:
                     wr = csv.writer(dt)
                     wr.writerow(DRIVER_HEADERS)
-                    for (t, d), tot in cur_totals.items():
-                        wr.writerow([t, d, tot, hms(tot)])
+                    for (t, d), s in cur_totals.items():
+                        avg = s["time"] / s["laps"] if s["laps"] else ""
+                        best = s["best"] if s["best"] is not None else ""
+                        wr.writerow([t, d, s["time"], hms(s["time"]), s["laps"], avg, best])
                 last_total_update = time.time()
         time.sleep(0.5)
     except KeyboardInterrupt:
@@ -185,13 +239,19 @@ while True:
                 team = info.get("team", f"Car {idx}")
                 drv = info.get("driver", f"Car {idx}")
                 dur_s = (now - info["start_time"]).total_seconds()
+                lap_diff = int(laps[idx]) - int(info.get("start_lap", laps[idx])) if idx < len(laps) else 0
                 key = (team, drv)
-                driver_total[key] = driver_total.get(key, 0) + dur_s
+                stats = driver_total.get(key, {"time": 0.0, "laps": 0, "best": None})
+                stats["time"] += dur_s
+                stats["laps"] += lap_diff
+                driver_total[key] = stats
         with open(DRIVER_TOTAL_FILE, "w", newline="", encoding="utf-8") as dt:
             wr = csv.writer(dt)
             wr.writerow(DRIVER_HEADERS)
-            for (t, d), tot in driver_total.items():
-                wr.writerow([t, d, tot, hms(tot)])
+            for (t, d), s in driver_total.items():
+                avg = s["time"] / s["laps"] if s["laps"] else ""
+                best = s["best"] if s["best"] is not None else ""
+                wr.writerow([t, d, s["time"], hms(s["time"]), s["laps"], avg, best])
         print("\nLogger stopped.")
         break
     except Exception as e:
