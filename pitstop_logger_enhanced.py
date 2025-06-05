@@ -10,8 +10,11 @@ OVERLAY_FILE = "live_standings_overlay.html"
 DRIVER_TOTAL_FILE = "driver_times.csv"
 
 DRIVER_HEADERS = [
-    "TeamName", "DriverName",
-    "Total Time (sec)", "Total Time (h:m:s)"
+    "TeamName",
+    "DriverName",
+    "Pit Stops",
+    "Total Time (sec)",
+    "Total Time (h:m:s)",
 ]
 
 HEADERS = [
@@ -74,13 +77,19 @@ except FileExistsError:
 try:
     with open(DRIVER_TOTAL_FILE, "r", newline="", encoding="utf-8") as f:
         rdr = csv.DictReader(f)
-        driver_total = {
-            (r["TeamName"], r["DriverName"]): float(r["Total Time (sec)"])
-            for r in rdr
-        }
+        driver_total = {}
+        driver_pits = {}
+        for r in rdr:
+            key = (r["TeamName"], r["DriverName"])
+            driver_total[key] = float(r.get("Total Time (sec)", 0))
+            try:
+                driver_pits[key] = int(r.get("Pit Stops", r.get("Pits", 0)))
+            except Exception:
+                driver_pits[key] = 0
 except FileNotFoundError:
     open(DRIVER_TOTAL_FILE, "w", newline="").write(",".join(DRIVER_HEADERS) + "\n")
     driver_total = {}
+    driver_pits = {}
 
 ir = irsdk.IRSDK(); ir.startup()
 stint = {}                           # carIdx → dict
@@ -139,11 +148,13 @@ while True:
                         # update per-driver totals
                         key = (team, drv)
                         driver_total[key] = driver_total.get(key, 0) + dur_s
+                        driver_pits[key] = driver_pits.get(key, 0) + 1
                         with open(DRIVER_TOTAL_FILE, "w", newline="", encoding="utf-8") as dt:
                             wr = csv.writer(dt)
                             wr.writerow(DRIVER_HEADERS)
                             for (t, d), tot in driver_total.items():
-                                wr.writerow([t, d, tot, hms(tot)])
+                                pits = driver_pits.get((t, d), 0)
+                                wr.writerow([t, d, pits, tot, hms(tot)])
 
                         if pd is not None:
                             write_overlay(CSV_FILE)
@@ -175,7 +186,8 @@ while True:
                     wr = csv.writer(dt)
                     wr.writerow(DRIVER_HEADERS)
                     for (t, d), tot in cur_totals.items():
-                        wr.writerow([t, d, tot, hms(tot)])
+                        pits = driver_pits.get((t, d), 0)
+                        wr.writerow([t, d, pits, tot, hms(tot)])
                 last_total_update = time.time()
         time.sleep(0.5)
     except KeyboardInterrupt:
@@ -191,7 +203,8 @@ while True:
             wr = csv.writer(dt)
             wr.writerow(DRIVER_HEADERS)
             for (t, d), tot in driver_total.items():
-                wr.writerow([t, d, tot, hms(tot)])
+                pits = driver_pits.get((t, d), 0)
+                wr.writerow([t, d, pits, tot, hms(tot)])
         print("\nLogger stopped.")
         break
     except Exception as e:

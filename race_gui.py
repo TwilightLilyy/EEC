@@ -446,7 +446,7 @@ class RaceLoggerGUI:
 
         win = tk.Toplevel(self.root)
         win.title("Driver Times")
-        cols = ["Team", "Driver", "Total"]
+        cols = ["Team", "Driver", "Pits", "Total"]
         tree = ttk.Treeview(win, columns=cols, show="headings")
         for c in cols:
             tree.heading(c, text=c)
@@ -480,6 +480,7 @@ class RaceLoggerGUI:
                         values=[
                             r.get("TeamName", r.get("Team", "")),
                             r.get("DriverName", r.get("Driver", "")),
+                            r.get("Pit Stops", r.get("Pits", "")),
                             r.get("Total Time (h:m:s)")
                             or fmt(r.get("Total Time (sec)", "")),
                         ],

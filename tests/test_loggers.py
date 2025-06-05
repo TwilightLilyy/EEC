@@ -105,3 +105,7 @@ def test_pitstop_logger_writes_stint(tmp_path, monkeypatch):
     assert len(rows) == 2
     # ensure the stint duration laps column is present
     assert rows[1][-1] == "1"
+
+    times_path = tmp_path / "driver_times.csv"
+    times = list(csv.DictReader(open(times_path)))
+    assert times[0]["Pit Stops"] == "1"
