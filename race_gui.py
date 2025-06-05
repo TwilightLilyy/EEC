@@ -456,15 +456,16 @@ class RaceLoggerGUI:
         win.title("Driver Times")
         cols = ["Team", "Driver", "Total"]
         tree = ttk.Treeview(win, columns=cols, show="headings")
-        for c in cols:
-            tree.heading(c, text=c)
-            tree.column(c, anchor="center")
         vsb = ttk.Scrollbar(win, orient="vertical", command=tree.yview)
         tree.configure(yscrollcommand=vsb.set)
         tree.grid(row=0, column=0, sticky="nsew")
         vsb.grid(row=0, column=1, sticky="ns")
         win.rowconfigure(0, weight=1)
         win.columnconfigure(0, weight=1)
+
+        sort_col = None
+        sort_reverse = False
+        rows_cache = []
 
         def fmt(sec: str) -> str:
             try:
@@ -476,28 +477,68 @@ class RaceLoggerGUI:
             s = int(val % 60)
             return f"{h}:{m:02d}:{s:02d}"
 
-        def load():
+        team_var = tk.StringVar(value="All")
+
+        def refresh_tree() -> None:
             tree.delete(*tree.get_children())
+            team = team_var.get()
+            rows = rows_cache
+            if team and team != "All":
+                rows = [r for r in rows if r.get("TeamName", r.get("Team", "")) == team]
+            if sort_col is not None:
+                def key(r):
+                    if sort_col == "Total":
+                        try:
+                            return float(r.get("Total Time (sec)", 0))
+                        except Exception:
+                            return 0.0
+                    return r.get(sort_col + "Name", r.get(sort_col, "")).lower()
+                rows = sorted(rows, key=key, reverse=sort_reverse)
+            for r in rows:
+                tree.insert(
+                    "",
+                    "end",
+                    values=[
+                        r.get("TeamName", r.get("Team", "")),
+                        r.get("DriverName", r.get("Driver", "")),
+                        r.get("Total Time (h:m:s)") or fmt(r.get("Total Time (sec)", "")),
+                    ],
+                )
+
+        def load() -> None:
+            nonlocal rows_cache
             try:
                 with csv_path.open("r", newline="", encoding="utf-8", errors="replace") as f:
-                    rows = list(csv.DictReader(f))
-                for r in rows:
-                    tree.insert(
-                        "",
-                        "end",
-                        values=[
-                            r.get("TeamName", r.get("Team", "")),
-                            r.get("DriverName", r.get("Driver", "")),
-                            r.get("Total Time (h:m:s)")
-                            or fmt(r.get("Total Time (sec)", "")),
-                        ],
-                    )
+                    rows_cache = list(csv.DictReader(f))
+                teams = sorted({r.get("TeamName", r.get("Team", "")) for r in rows_cache})
+                team_combo["values"] = ["All"] + teams
+                if team_var.get() not in teams:
+                    team_var.set("All")
+                refresh_tree()
             except Exception as e:
                 messagebox.showerror("Driver Times", f"Error reading {csv_path}: {e}")
 
-        ttk.Button(win, text="Refresh", command=load).grid(
-            row=1, column=0, columnspan=2, pady=5
-        )
+        def sort_by(col: str) -> None:
+            nonlocal sort_col, sort_reverse
+            if sort_col == col:
+                sort_reverse = not sort_reverse
+            else:
+                sort_col = col
+                sort_reverse = False
+            refresh_tree()
+
+        for c in cols:
+            tree.heading(c, text=c, command=lambda c=c: sort_by(c))
+            tree.column(c, anchor="center")
+
+        controls = ttk.Frame(win)
+        controls.grid(row=1, column=0, columnspan=2, pady=5, sticky="ew")
+        ttk.Label(controls, text="Team:").pack(side="left")
+        team_combo = ttk.Combobox(controls, textvariable=team_var, state="readonly")
+        team_combo.pack(side="left", padx=5)
+        team_combo.bind("<<ComboboxSelected>>", lambda e: refresh_tree())
+        ttk.Button(controls, text="Refresh", command=load).pack(side="left", padx=5)
+
         load()
 
     # ── ChatGPT export ──────────────────────────────────────────
