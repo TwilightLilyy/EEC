@@ -79,6 +79,11 @@ def test_setup_style_applies_dark_theme(monkeypatch):
 
     monkeypatch.setattr("race_gui.ttk.Style", DummyStyle)
 
+    def fake_set_theme(theme, root=None):
+        calls["set_theme"] = (theme, root)
+
+    monkeypatch.setattr("race_gui.sv_ttk", types.SimpleNamespace(set_theme=fake_set_theme))
+
     root = DummyRoot()
     gui = types.SimpleNamespace(root=root)
 
@@ -86,5 +91,5 @@ def test_setup_style_applies_dark_theme(monkeypatch):
 
     assert gui.bg == "#23272e"
     assert calls["root_configure"].get("bg") == "#23272e"
-    assert calls["theme_use"] == "clam"
+    assert calls["set_theme"] == ("dark", root)
 
