@@ -13,7 +13,7 @@ from queue import Queue, Empty
 import csv
 import re
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Any
 
 try:
@@ -177,6 +177,7 @@ class RaceLoggerGUI:
         )
         self.create_csv_tab("driver_swaps.csv", "Driver Swaps")
         self.create_standings_log_tab("standings_log.csv", "Standings Log")
+        self.create_stint_tracker_tab()
 
         # ── ANSI colour setup for log output ────────────────────
         self._ansi_re = re.compile(r"\x1b\[([0-9;]+)m")
@@ -581,6 +582,37 @@ class RaceLoggerGUI:
 
         refresh_loop()
 
+    # ── Stint Tracker tab ───────────────────────────────────────
+    def create_stint_tracker_tab(self) -> None:
+        frame = ttk.Frame(self.notebook, padding=10)
+        self.notebook.add(frame, text="Stint Tracker")
+
+        cols = [
+            "Car",
+            "Driver",
+            "Team",
+            "Class",
+            "Stint Laps",
+            "Since Last Pit",
+            "Until Next Pit",
+            "Pits Left",
+        ]
+        self.stint_tree = ttk.Treeview(frame, columns=cols, show="headings")
+        vsb = ttk.Scrollbar(frame, orient="vertical", command=self.stint_tree.yview)
+        self.stint_tree.configure(yscrollcommand=vsb.set)
+        self.stint_tree.grid(row=0, column=0, sticky="nsew")
+        vsb.grid(row=0, column=1, sticky="ns")
+        frame.rowconfigure(0, weight=1)
+        frame.columnconfigure(0, weight=1)
+
+        for c in cols:
+            self.stint_tree.heading(c, text=c, command=lambda c=c: self.sort_stint_tree(c))
+            self.stint_tree.column(c, anchor="center")
+
+        self.stint_sort_col = None
+        self.stint_sort_reverse = False
+        self.update_stint_table()
+
     def view_logs(self):
         log_dir = Path("logs")
         file_map = {f.name: f for f in log_dir.glob("*.txt")}
@@ -802,6 +834,143 @@ class RaceLoggerGUI:
         ttk.Button(controls, text="Refresh", command=load).pack(side="left", padx=5)
 
         load()
+
+    # ── Stint Tracker helpers ──────────────────────────────────
+    def sort_stint_tree(self, col: str) -> None:
+        if getattr(self, "stint_sort_col", None) == col:
+            self.stint_sort_reverse = not self.stint_sort_reverse
+        else:
+            self.stint_sort_col = col
+            self.stint_sort_reverse = False
+
+        def conv(val: str) -> float:
+            if val.count(":"):
+                parts = [int(p) for p in val.split(":")]
+                if len(parts) == 2:
+                    return parts[0] * 60 + parts[1]
+                if len(parts) == 3:
+                    return parts[0] * 3600 + parts[1] * 60 + parts[2]
+            try:
+                return float(val)
+            except Exception:
+                return 0.0
+
+        data = [
+            (conv(self.stint_tree.set(k, col)), k)
+            for k in self.stint_tree.get_children("")
+        ]
+        data.sort(reverse=self.stint_sort_reverse)
+        for index, (_, k) in enumerate(data):
+            self.stint_tree.move(k, "", index)
+
+    def update_stint_table(self) -> None:
+        tree = getattr(self, "stint_tree", None)
+        if tree is None:
+            return
+
+        tree.delete(*tree.get_children())
+        pit_path = Path("pitstop_log.csv")
+        stand_path = Path("standings_log.csv")
+
+        pit_rows = []
+        if pit_path.exists():
+            with open(pit_path, newline="", encoding="utf-8", errors="replace") as f:
+                pit_rows = list(csv.DictReader(f))
+
+        stand_rows = []
+        if stand_path.exists():
+            with open(stand_path, newline="", encoding="utf-8", errors="replace") as f:
+                stand_rows = list(csv.DictReader(f))
+
+        latest_stand: dict[str, dict[str, str]] = {}
+        for r in stand_rows:
+            car = r.get("CarIdx")
+            if not car:
+                continue
+            if car not in latest_stand or r.get("Time", "") > latest_stand[car].get("Time", ""):
+                latest_stand[car] = r
+
+        last_pit: dict[str, dict[str, str]] = {}
+        race_start = None
+        for r in pit_rows:
+            car = r.get("CarIdx")
+            if not car:
+                continue
+            try:
+                ts = datetime.fromisoformat(r.get("Stint End Timestamp"))
+            except Exception:
+                continue
+            if race_start is None:
+                try:
+                    race_start = datetime.fromisoformat(r.get("Stint Start Timestamp"))
+                except Exception:
+                    pass
+            if car not in last_pit or ts > datetime.fromisoformat(last_pit[car]["Stint End Timestamp"]):
+                last_pit[car] = r
+
+        if race_start is None:
+            race_start = datetime.now()
+        race_end = race_start + timedelta(hours=24)
+
+        avg_dur: dict[str, float] = {}
+        counts: dict[str, int] = {}
+        for r in pit_rows:
+            car = r.get("CarIdx")
+            try:
+                d = float(r.get("Stint Duration (sec)", 0))
+            except Exception:
+                continue
+            avg_dur[car] = avg_dur.get(car, 0.0) + d
+            counts[car] = counts.get(car, 0) + 1
+        for car in avg_dur:
+            avg_dur[car] /= counts.get(car, 1)
+
+        now = datetime.now()
+        for car, info in latest_stand.items():
+            driver = info.get("UserName", info.get("Driver", ""))
+            team = info.get("TeamName", info.get("Team", ""))
+            cls = info.get("CarClassID", info.get("Class", ""))
+            try:
+                cur_lap = int(info.get("Lap", 0))
+            except Exception:
+                cur_lap = 0
+
+            lp = last_pit.get(car)
+            last_lap = int(lp.get("Stint End Lap", 0)) if lp else cur_lap
+            try:
+                last_end = datetime.fromisoformat(lp.get("Stint End Timestamp")) if lp else race_start
+            except Exception:
+                last_end = race_start
+
+            stint_laps = max(0, cur_lap - last_lap)
+            since_sec = (now - last_end).total_seconds()
+
+            expected = avg_dur.get(car, 3600.0)
+            until_sec = max(0, expected - since_sec)
+            pits_left = max(0, int((race_end - now).total_seconds() / expected))
+
+            def fmt(sec: float) -> str:
+                h = int(sec // 3600)
+                m = int((sec % 3600) // 60)
+                s = int(sec % 60)
+                return f"{h}:{m:02d}:{s:02d}" if h else f"{m}:{s:02d}"
+
+            tree.insert(
+                "",
+                "end",
+                values=[
+                    car,
+                    driver,
+                    team,
+                    cls,
+                    stint_laps,
+                    fmt(since_sec),
+                    fmt(until_sec),
+                    pits_left,
+                ],
+            )
+
+        self.root.after(3000, self.update_stint_table)
 
     # ── ChatGPT export ──────────────────────────────────────────
     def export_logs(self):
