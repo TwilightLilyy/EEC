@@ -82,36 +82,45 @@ print(f"[{iso_stamp()}] 🚀  Started {len(procs)} child processes.")
 def stamp(): return datetime.now().strftime("%H:%M:%S")
 
 def tail_pitlog(file: Path, sleep=0.5):
-    while not (file.exists() and file.stat().st_size):
-        time.sleep(1)
+    """Tail pitstop_log.csv and print new pit entries."""
+    while True:
+        while not (file.exists() and file.stat().st_size):
+            time.sleep(1)
 
-    with file.open("r", newline="", encoding="utf-8", errors="replace") as f:
-        csv.reader(f).__next__()          # skip header
-        f.seek(0, os.SEEK_END)            # move to EOF
+        with file.open("r", newline="", encoding="utf-8", errors="replace") as f:
+            csv.reader(f).__next__()          # skip header
+            f.seek(0, os.SEEK_END)            # move to EOF
 
-        while True:
-            line = f.readline()
-            if not line:
-                time.sleep(sleep)
-                continue
+            while True:
+                line = f.readline()
+                if not line:
+                    # Handle log reset/truncation
+                    try:
+                        if f.tell() > file.stat().st_size:
+                            break
+                    except FileNotFoundError:
+                        break
+                    time.sleep(sleep)
+                    continue
 
-            row = next(csv.reader([line]))
-            if len(row) == 13:            # NEW schema
-                (car, cls, team, driver,
-                 *_,
-                 dur_sec, dur_hms, dur_laps) = row
-            elif len(row) == 12:          # OLD schema
-                (car, team, driver,
-                 *_,
-                 dur_sec, dur_hms, dur_laps) = row
-                cls = "Unknown"
-            else:
-                continue                  # malformed → skip
+                row = next(csv.reader([line]))
+                if len(row) == 13:            # NEW schema
+                    (car, cls, team, driver,
+                     *_,
+                     dur_sec, dur_hms, dur_laps) = row
+                elif len(row) == 12:          # OLD schema
+                    (car, team, driver,
+                     *_,
+                     dur_sec, dur_hms, dur_laps) = row
+                    cls = "Unknown"
+                else:
+                    continue                  # malformed → skip
 
-            colour = colour_for(cls)
+                colour = colour_for(cls)
 
-            print(f"{colour}[{stamp()}] 🛠  PIT – {team.strip()} / {driver.strip()} "
-                f"({dur_laps} laps in {dur_hms}) [{cls}]{Style.RESET_ALL}")
+                print(f"{colour}[{stamp()}] 🛠  PIT – {team.strip()} / {driver.strip()} "
+                    f"({dur_laps} laps in {dur_hms}) [{cls}]{Style.RESET_ALL}")
+
 
 # ─────────────────────────────────────────────────────────────
 def tail_driver_swaps(file: Path, sleep=0.5):
@@ -119,50 +128,54 @@ def tail_driver_swaps(file: Path, sleep=0.5):
     Tail standings_log.csv and emit a console line whenever CarIdx
     changes driver.  Also append that event to driver_swaps.csv.
     """
-    # ▸ Ensure the swap-file has a header  ─────────────────────
-    if not DRIVER_SWAP_CSV.exists():
-        DRIVER_SWAP_CSV.write_text(
-            "Timestamp,CarIdx,Team,DriverOut,DriverIn,Lap\n",
-            encoding="utf-8"
-        )
+    header = "Timestamp,CarIdx,Team,DriverOut,DriverIn,Lap\n"
+    while True:
+        # Ensure the swap file has a header each iteration in case it was reset
+        if not DRIVER_SWAP_CSV.exists() or DRIVER_SWAP_CSV.stat().st_size == 0:
+            DRIVER_SWAP_CSV.write_text(header, encoding="utf-8")
 
-    while not (file.exists() and file.stat().st_size):
-        time.sleep(1)
+        while not (file.exists() and file.stat().st_size):
+            time.sleep(1)
 
-    with file.open("r", newline="", encoding="utf-8", errors="replace") as f:
-        rdr = csv.reader(f); next(rdr, None)        # skip header
-        f.seek(0, os.SEEK_END)                      # jump to EOF
+        with file.open("r", newline="", encoding="utf-8", errors="replace") as f:
+            rdr = csv.reader(f); next(rdr, None)        # skip header
+            f.seek(0, os.SEEK_END)                      # jump to EOF
 
-        while True:
-            line = f.readline()
-            if not line:
-                time.sleep(sleep)
-                continue
+            while True:
+                line = f.readline()
+                if not line:
+                    try:
+                        if f.tell() > file.stat().st_size:
+                            break  # file truncated → reopen
+                    except FileNotFoundError:
+                        break
+                    time.sleep(sleep)
+                    continue
 
-            row = next(csv.reader([line]))
-            if len(row) < 8:                        # need at least Lap col
-                continue
+                row = next(csv.reader([line]))
+                if len(row) < 8:                        # need at least Lap col
+                    continue
 
-            ts, car, team, driver = row[:4]
-            lap                   = row[7]          # Lap column in the log
-            try:
-                car = int(car)
-            except ValueError:
-                continue
+                ts, car, team, driver = row[:4]
+                lap                   = row[7]          # Lap column in the log
+                try:
+                    car = int(car)
+                except ValueError:
+                    continue
 
-            prev = _current_driver.get(car)
-            if prev and driver and driver != prev:
-                # ── 1) console shout ─────────────────────────
-                colour = colour_for("swap")         # yellow by default
-                print(f"{colour}[{stamp()}] 🔄  DRIVER SWAP – "
-                      f"{team.strip()}  Car {car:>3}: "
-                      f"{prev} → {driver} (Lap {lap}){Style.RESET_ALL}")
+                prev = _current_driver.get(car)
+                if prev and driver and driver != prev:
+                    # ── 1) console shout ─────────────────────────
+                    colour = colour_for("swap")         # yellow by default
+                    print(f"{colour}[{stamp()}] 🔄  DRIVER SWAP – "
+                          f"{team.strip()}  Car {car:>3}: "
+                          f"{prev} → {driver} (Lap {lap}){Style.RESET_ALL}")
 
-                # ── 2) CSV append ───────────────────────────
-                with DRIVER_SWAP_CSV.open("a", newline="", encoding="utf-8") as w:
-                    csv.writer(w).writerow([ts, car, team, prev, driver, lap])
+                    # ── 2) CSV append ───────────────────────────
+                    with DRIVER_SWAP_CSV.open("a", newline="", encoding="utf-8") as w:
+                        csv.writer(w).writerow([ts, car, team, prev, driver, lap])
 
-            _current_driver[car] = driver
+                _current_driver[car] = driver
 
 # ─────────────────────────────────────────────────────────────
 
