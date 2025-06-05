@@ -295,9 +295,21 @@ class RaceLoggerGUI:
     def reset_logs(self):
         if not messagebox.askyesno("Confirm", "Delete existing log files?"):
             return
+        base = Path(sys.argv[0]).resolve().parent
         for f in LOG_FILES:
-            if os.path.exists(f):
-                open(f, "w").close()
+            paths = [
+                Path(f),
+                Path.cwd() / f,
+                base / f,
+                base.parent / f,
+            ]
+            for p in paths:
+                if p.exists():
+                    try:
+                        p.open("w").close()
+                    except Exception:
+                        pass
+                    break
         messagebox.showinfo("Reset", "Logs cleared")
 
     def save_logs(self):
