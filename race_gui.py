@@ -10,6 +10,7 @@ import shutil
 import sys
 from pathlib import Path
 from queue import Queue, Empty
+from collections import deque
 import csv
 import re
 import json
@@ -56,6 +57,15 @@ ANSI_COLOUR_MAP = {
     "96": "cyan",
     "37": "white",
     "97": "white",
+}
+
+EVENT_TYPES = {
+    "overtake": {"label": "Overtakes", "colour": "blue"},
+    "pitstop": {"label": "Pit Stops", "colour": "green"},
+    "driver_swap": {"label": "Driver Swaps", "colour": "cyan"},
+    "fastest_lap": {"label": "Fastest Laps", "colour": "magenta"},
+    "penalty": {"label": "Penalties", "colour": "red"},
+    "yellow": {"label": "Yellow / SC", "colour": "yellow"},
 }
 
 
@@ -179,6 +189,34 @@ class RaceLoggerGUI:
         self.create_standings_log_tab("standings_log.csv", "Standings Log")
         self.create_stint_tracker_tab()
 
+        # Live race feed tab
+        self.event_buffers = {k: deque(maxlen=3) for k in EVENT_TYPES}
+        self.feed_tab = ttk.Frame(self.notebook, padding=10)
+        self.notebook.add(self.feed_tab, text="Live Race Feed")
+        self.feed_text = ScrolledText(
+            self.feed_tab,
+            width=80,
+            height=20,
+            state="disabled",
+            background=self.log_box_bg,
+            foreground=self.fg,
+            insertbackground="white",
+        )
+        self.feed_text.pack(fill="both", expand=True)
+        self.feed_paused = tk.BooleanVar(value=False)
+        controls = ttk.Frame(self.feed_tab)
+        controls.pack(pady=5)
+        ttk.Checkbutton(
+            controls, text="Pause Updates", variable=self.feed_paused
+        ).pack(side="left", padx=5)
+        ttk.Button(controls, text="Clear Feed", command=self.clear_feed).pack(
+            side="left", padx=5
+        )
+        for etype, cfg in EVENT_TYPES.items():
+            self.feed_text.tag_config(etype, foreground=cfg["colour"])
+            self.feed_text.tag_config(f"header-{etype}", foreground=cfg["colour"], font=("TkDefaultFont", 9, "bold"))
+
+
         # ── ANSI colour setup for log output ────────────────────
         self._ansi_re = re.compile(r"\x1b\[([0-9;]+)m")
         self._current_tags: list[str] = []
@@ -201,6 +239,7 @@ class RaceLoggerGUI:
         )
         self.update_thread.start()
         self.root.after(100, self.update_log_box)
+        self.root.after(3000, self.update_feed)
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
 
     def setup_style(self) -> None:
@@ -1038,12 +1077,58 @@ class RaceLoggerGUI:
         if pos < len(text):
             self.log_box.insert("end", text[pos:], tuple(self._current_tags))
 
+    # ── live race feed handling ─────────────────────────────────
+    def add_event(self, event_type: str, message: str) -> None:
+        if event_type not in self.event_buffers:
+            return
+        ts = datetime.now().strftime("%H:%M:%S")
+        self.event_buffers[event_type].appendleft(f"{ts} - {message}")
+
+    def parse_event(self, line: str) -> None:
+        l = line.lower()
+        if "overtook" in l:
+            self.add_event("overtake", line.strip())
+        if "pitted" in l:
+            self.add_event("pitstop", line.strip())
+        if "driver swap" in l or "swapped" in l:
+            self.add_event("driver_swap", line.strip())
+        if "fastest lap" in l:
+            self.add_event("fastest_lap", line.strip())
+        if "penalty" in l or "drive-through" in l:
+            self.add_event("penalty", line.strip())
+        if "yellow flag" in l or "safety car" in l:
+            self.add_event("yellow", line.strip())
+
+    def clear_feed(self) -> None:
+        for buf in self.event_buffers.values():
+            buf.clear()
+        self.update_feed()
+
+    def update_feed(self) -> None:
+        if self.feed_paused.get():
+            self.root.after(3000, self.update_feed)
+            return
+        self.feed_text.configure(state="normal")
+        self.feed_text.delete("1.0", tk.END)
+        for etype, cfg in EVENT_TYPES.items():
+            entries = list(self.event_buffers[etype])
+            if not entries:
+                continue
+            self.feed_text.insert(tk.END, cfg["label"] + "\n", f"header-{etype}")
+            for e in entries:
+                self.feed_text.insert(tk.END, f"  {e}\n", etype)
+            self.feed_text.insert(tk.END, "\n")
+        self.feed_text.configure(state="disabled")
+        self.feed_text.see("end")
+        self.root.after(3000, self.update_feed)
+
     def update_log_box(self):
         try:
             while True:
                 line = self.log_queue.get_nowait()
                 self.log_box.configure(state="normal")
                 self.insert_with_ansi(line)
+                self.parse_event(line)
                 if self.auto_scroll.get():
                     self.log_box.see("end")
                 self.log_box.configure(state="disabled")
@@ -1068,3 +1153,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
