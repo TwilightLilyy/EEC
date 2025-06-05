@@ -176,7 +176,7 @@ class RaceLoggerGUI:
             refresh_ms=5000,
         )
         self.create_csv_tab("driver_swaps.csv", "Driver Swaps")
-        self.create_csv_tab("standings_log.csv", "Standings Log")
+        self.create_standings_log_tab("standings_log.csv", "Standings Log")
 
         # ── ANSI colour setup for log output ────────────────────
         self._ansi_re = re.compile(r"\x1b\[([0-9;]+)m")
@@ -478,6 +478,97 @@ class RaceLoggerGUI:
                 pass
 
         tree.bind("<ButtonRelease-1>", save_widths)
+
+        ttk.Button(frame, text="Refresh", command=load).grid(
+            row=1, column=0, columnspan=2, pady=5
+        )
+
+        def refresh_loop() -> None:
+            load()
+            if auto_refresh:
+                self.root.after(refresh_ms, refresh_loop)
+
+        refresh_loop()
+
+    def create_standings_log_tab(
+        self,
+        csv_path: str,
+        title: str,
+        *,
+        auto_refresh: bool = False,
+        refresh_ms: int = 5000,
+    ) -> None:
+        """CSV viewer for the raw standings log with class sorting."""
+        frame = ttk.Frame(self.notebook, padding=10)
+        self.notebook.add(frame, text=title)
+        tree = ttk.Treeview(frame, show="headings")
+        vsb = ttk.Scrollbar(frame, orient="vertical", command=tree.yview)
+        tree.configure(yscrollcommand=vsb.set)
+        tree.grid(row=0, column=0, sticky="nsew")
+        vsb.grid(row=0, column=1, sticky="ns")
+        frame.rowconfigure(0, weight=1)
+        frame.columnconfigure(0, weight=1)
+
+        CLASS_COLOURS = {
+            1: "#f3e36b",
+            2: "#174fa3",
+            3: "#d9534f",
+            4: "#24c080",
+            5: "#d878d8",
+        }
+
+        def load() -> None:
+            tree.delete(*tree.get_children())
+            path = Path(csv_path)
+            if not path.exists():
+                base = Path(sys.argv[0]).resolve().parent
+                for p in (Path.cwd() / csv_path, base / csv_path, base.parent / csv_path):
+                    if p.exists():
+                        path = p
+                        break
+            if not path.exists():
+                return
+            with open(path, newline="", encoding="utf-8", errors="replace") as f:
+                reader = csv.DictReader(f)
+                if not reader.fieldnames:
+                    return
+                tree["columns"] = reader.fieldnames
+                for c in reader.fieldnames:
+                    tree.heading(c, text=c)
+                    tree.column(c, anchor="center")
+
+                rows = list(reader)
+                rows = filter_rows(rows)
+
+                class_leaders: dict[str, int] = {}
+                for r in rows:
+                    cls = r.get("CarClassID", "")
+                    try:
+                        pos = int(r.get("Position", 0))
+                    except Exception:
+                        pos = 0
+                    if cls not in class_leaders or pos < class_leaders[cls]:
+                        class_leaders[cls] = pos
+                order = {
+                    c: i + 1 for i, c in enumerate(sorted(class_leaders, key=class_leaders.get))
+                }
+
+                rows.sort(
+                    key=lambda r: (
+                        order.get(r.get("CarClassID", ""), len(order) + 1),
+                        int(r.get("Position", 0)),
+                    )
+                )
+
+                for r in rows:
+                    vals = [r.get(c, "") for c in reader.fieldnames]
+                    cls_order = order.get(r.get("CarClassID", ""), 0)
+                    tag = f"class-{cls_order}"
+                    if tag not in tree.tag_names():
+                        colour = CLASS_COLOURS.get(cls_order, "")
+                        if colour:
+                            tree.tag_configure(tag, background=colour)
+                    tree.insert("", "end", values=vals, tags=(tag,))
 
         ttk.Button(frame, text="Refresh", command=load).grid(
             row=1, column=0, columnspan=2, pady=5
