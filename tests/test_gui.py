@@ -50,3 +50,38 @@ def test_filter_rows_removes_pace_and_zero_lap_entries():
     assert len(filtered) == 1
     assert filtered[0]["Driver"] == "DriverA"
 
+
+def test_setup_style_applies_dark_theme(monkeypatch):
+    calls = {}
+
+    class DummyRoot:
+        def configure(self, **kwargs):
+            calls["root_configure"] = kwargs
+
+        def option_add(self, opt, value):
+            calls["option_add"] = (opt, value)
+
+    class DummyStyle:
+        def __init__(self, root):
+            calls["style_root"] = root
+
+        def theme_use(self, theme):
+            calls["theme_use"] = theme
+
+        def configure(self, *_args, **_kwargs):
+            pass
+
+        def map(self, *_args, **_kwargs):
+            pass
+
+    monkeypatch.setattr("race_gui.ttk.Style", DummyStyle)
+
+    root = DummyRoot()
+    gui = types.SimpleNamespace(root=root)
+
+    RaceLoggerGUI.setup_style(gui)
+
+    assert gui.bg == "#23272e"
+    assert calls["root_configure"].get("bg") == "#23272e"
+    assert calls["theme_use"] == "clam"
+
