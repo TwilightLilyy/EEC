@@ -186,32 +186,15 @@ class RaceLoggerGUI:
         self.create_standings_log_tab("standings_log.csv", "Standings Log")
         self.create_stint_tracker_tab()
 
-        # Live race feed tab
+        # Live race feed data
         self.event_buffers = {k: deque(maxlen=3) for k in EVENT_TYPES}
-        self.feed_tab = ttk.Frame(self.notebook, padding=10)
-        self.notebook.add(self.feed_tab, text="Live Race Feed")
-        self.feed_text = ScrolledText(
-            self.feed_tab,
-            width=80,
-            height=20,
-            state="disabled",
-            background=self.log_box_bg,
-            foreground=self.fg,
-            insertbackground="white",
-        )
-        self.feed_text.pack(fill="both", expand=True)
+        self.feed_window = None
+        self.feed_text = None
         self.feed_paused = tk.BooleanVar(value=False)
-        controls = ttk.Frame(self.feed_tab)
-        controls.pack(pady=5)
-        ttk.Checkbutton(
-            controls, text="Pause Updates", variable=self.feed_paused
-        ).pack(side="left", padx=5)
-        ttk.Button(controls, text="Clear Feed", command=self.clear_feed).pack(
-            side="left", padx=5
+
+        ttk.Button(frm, text="View Live Feed…", command=self.open_feed_window).grid(
+            column=0, row=3, columnspan=2, pady=5, sticky="ew"
         )
-        for etype, cfg in EVENT_TYPES.items():
-            self.feed_text.tag_config(etype, foreground=cfg["colour"])
-            self.feed_text.tag_config(f"header-{etype}", foreground=cfg["colour"], font=("TkDefaultFont", 9, "bold"))
 
 
         # ── ANSI colour setup for log output ────────────────────
@@ -238,6 +221,50 @@ class RaceLoggerGUI:
         self.root.after(100, self.update_log_box)
         self.root.after(3000, self.update_feed)
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
+
+    def open_feed_window(self) -> None:
+        if self.feed_window is not None and self.feed_window.winfo_exists():
+            self.feed_window.lift()
+            return
+
+        win = tk.Toplevel(self.root)
+        win.title("Live Race Feed")
+        self.feed_window = win
+
+        self.feed_text = ScrolledText(
+            win,
+            width=80,
+            height=20,
+            state="disabled",
+            background=self.log_box_bg,
+            foreground=self.fg,
+            insertbackground="white",
+        )
+        self.feed_text.pack(fill="both", expand=True)
+
+        controls = ttk.Frame(win)
+        controls.pack(pady=5)
+        ttk.Checkbutton(
+            controls, text="Pause Updates", variable=self.feed_paused
+        ).pack(side="left", padx=5)
+        ttk.Button(controls, text="Clear Feed", command=self.clear_feed).pack(
+            side="left", padx=5
+        )
+
+        for etype, cfg in EVENT_TYPES.items():
+            self.feed_text.tag_config(etype, foreground=cfg["colour"])
+            self.feed_text.tag_config(
+                f"header-{etype}",
+                foreground=cfg["colour"],
+                font=("TkDefaultFont", 9, "bold"),
+            )
+
+        def on_close() -> None:
+            self.feed_window = None
+            self.feed_text = None
+            win.destroy()
+
+        win.protocol("WM_DELETE_WINDOW", on_close)
 
     def setup_style(self) -> None:
         style = ttk.Style(self.root)
@@ -1203,6 +1230,9 @@ class RaceLoggerGUI:
         self.update_feed()
 
     def update_feed(self) -> None:
+        if self.feed_text is None:
+            self.root.after(3000, self.update_feed)
+            return
         if self.feed_paused.get():
             self.root.after(3000, self.update_feed)
             return
@@ -1240,6 +1270,8 @@ class RaceLoggerGUI:
                 self.stop_logging()
             else:
                 return
+        if self.feed_window is not None and self.feed_window.winfo_exists():
+            self.feed_window.destroy()
         self.root.destroy()
 
 
