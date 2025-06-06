@@ -4,3 +4,8 @@ live_standings_overlay.html
 .venv/
 __pycache__/
 tests/__pycache__/
+SpecMaps/enkidu.mip
+SpecMaps/enkidu.tga
+SpecMaps/gilgamesh.mip
+SpecMaps/gilgamesh.tga
+SpecMaps/gilgameshbase.tga
