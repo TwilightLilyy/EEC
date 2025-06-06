@@ -181,8 +181,13 @@ class RaceLoggerGUI:
         ttk.Button(frm, text="View Drive Times…", command=self.view_driver_times).grid(
             column=0, row=5, columnspan=2, pady=5, sticky="ew"
         )
+        ttk.Button(
+            frm,
+            text="View Series Standings…",
+            command=self.view_series_standings,
+        ).grid(column=0, row=6, columnspan=2, pady=5, sticky="ew")
         ttk.Button(frm, text="Export to ChatGPT", command=self.export_logs).grid(
-            column=0, row=6, columnspan=2, pady=5, sticky="ew"
+            column=0, row=7, columnspan=2, pady=5, sticky="ew"
         )
 
         self.log_box = ScrolledText(
@@ -194,7 +199,7 @@ class RaceLoggerGUI:
             foreground=self.fg,
             insertbackground="white",
         )
-        self.log_box.grid(column=0, row=7, columnspan=2, pady=5)
+        self.log_box.grid(column=0, row=8, columnspan=2, pady=5)
         self.update_wrap()
 
         # Additional tabs for CSV logs
@@ -778,6 +783,53 @@ class RaceLoggerGUI:
                     tree.insert("", "end", values=vals)
             except Exception as e:
                 messagebox.showerror("Standings", f"Error reading {csv_path}: {e}")
+
+        ttk.Button(win, text="Refresh", command=load).grid(
+            row=1, column=0, columnspan=2, pady=5
+        )
+        load()
+
+    def view_series_standings(self) -> None:
+        """Display the championship points table."""
+        csv_path = find_log_file("series_standings.csv")
+        if not csv_path.exists():
+            messagebox.showinfo(
+                "Series Standings", "No series standings file found"
+            )
+            return
+
+        win = tk.Toplevel(self.root)
+        win.title("Series Standings")
+
+        tree = ttk.Treeview(win, show="headings")
+        vsb = ttk.Scrollbar(win, orient="vertical", command=tree.yview)
+        tree.configure(yscrollcommand=vsb.set)
+        tree.grid(row=0, column=0, sticky="nsew")
+        vsb.grid(row=0, column=1, sticky="ns")
+        win.rowconfigure(0, weight=1)
+        win.columnconfigure(0, weight=1)
+
+        def load() -> None:
+            tree.delete(*tree.get_children())
+            try:
+                with csv_path.open("r", newline="", encoding="utf-8", errors="replace") as f:
+                    reader = csv.DictReader(f)
+                    if not reader.fieldnames:
+                        return
+                    tree["columns"] = reader.fieldnames
+                    for c in reader.fieldnames:
+                        tree.heading(c, text=c)
+                        tree.column(c, anchor="center")
+                    for row in reader:
+                        tree.insert(
+                            "",
+                            "end",
+                            values=[row.get(c, "") for c in reader.fieldnames],
+                        )
+            except Exception as e:
+                messagebox.showerror(
+                    "Series Standings", f"Error reading {csv_path}: {e}"
+                )
 
         ttk.Button(win, text="Refresh", command=load).grid(
             row=1, column=0, columnspan=2, pady=5

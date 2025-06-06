@@ -170,3 +170,97 @@ def test_view_pitstops_uses_toplevel(monkeypatch, tmp_path):
 
     assert calls.get("title") == "Pit Stops"
 
+
+def test_view_series_standings_uses_toplevel(monkeypatch, tmp_path):
+    calls = {}
+
+    csv_file = tmp_path / "series_standings.csv"
+    csv_file.write_text("Team,Points\nA,10\n")
+
+    class DummyTop:
+        def __init__(self, root):
+            calls["root"] = root
+
+        def title(self, t):
+            calls["title"] = t
+
+        def rowconfigure(self, *a, **k):
+            pass
+
+        def columnconfigure(self, *a, **k):
+            pass
+
+    class DummyWidget:
+        def __init__(self, *a, **k):
+            pass
+
+        def grid(self, *a, **k):
+            pass
+
+        def pack(self, *a, **k):
+            pass
+
+        def rowconfigure(self, *a, **k):
+            pass
+
+        def columnconfigure(self, *a, **k):
+            pass
+
+        def configure(self, *a, **k):
+            pass
+
+        def heading(self, *a, **k):
+            pass
+
+        def column(self, *a, **k):
+            return {"width": 100}
+
+        def bind(self, *a, **k):
+            pass
+
+        def yview(self, *a, **k):
+            pass
+
+        def set(self, *a, **k):
+            pass
+
+    class DummyTree(DummyWidget):
+        def __init__(self, *a, **k):
+            super().__init__(*a, **k)
+            self.opts = {}
+
+        def delete(self, *a, **k):
+            pass
+
+        def get_children(self, *a, **k):
+            return []
+
+        def __setitem__(self, k, v):
+            self.opts[k] = v
+
+        def __getitem__(self, k):
+            return self.opts.get(k)
+
+        def insert(self, *a, **k):
+            pass
+
+    def fake_find_log_file(name: str):
+        if name == "series_standings.csv":
+            return csv_file
+        return Path(name)
+
+    monkeypatch.setattr("race_gui.find_log_file", fake_find_log_file)
+    monkeypatch.setattr("race_gui.tk.Toplevel", DummyTop)
+    monkeypatch.setattr("race_gui.ttk.Treeview", DummyTree)
+    monkeypatch.setattr("race_gui.ttk.Scrollbar", DummyWidget)
+    monkeypatch.setattr("race_gui.ttk.Button", DummyWidget)
+    monkeypatch.setattr(
+        "race_gui.messagebox",
+        types.SimpleNamespace(showinfo=lambda *a, **k: None, showerror=lambda *a, **k: None),
+    )
+
+    gui = types.SimpleNamespace(root=object())
+    RaceLoggerGUI.view_series_standings(gui)
+
+    assert calls.get("title") == "Series Standings"
+
