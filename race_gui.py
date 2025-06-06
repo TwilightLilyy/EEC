@@ -156,6 +156,9 @@ class RaceLoggerGUI:
         ttk.Button(frm, text="Save Logs…", command=self.save_logs).grid(
             column=1, row=2, pady=5, sticky="ew"
         )
+        ttk.Button(frm, text="View Pit Stops…", command=self.view_pitstops).grid(
+            column=0, row=3, columnspan=2, pady=5, sticky="ew"
+        )
         ttk.Button(frm, text="View Standings…", command=self.view_standings).grid(
             column=0, row=4, columnspan=2, pady=5, sticky="ew"
         )
@@ -179,12 +182,6 @@ class RaceLoggerGUI:
         self.update_wrap()
 
         # Additional tabs for CSV logs
-        self.create_pitstop_tab(
-            "pitstop_log.csv",
-            "Pit Stops",
-            auto_refresh=True,
-            refresh_ms=5000,
-        )
         self.create_csv_tab("driver_swaps.csv", "Driver Swaps")
         self.create_standings_log_tab("standings_log.csv", "Standings Log")
         self.create_stint_tracker_tab()
@@ -899,6 +896,107 @@ class RaceLoggerGUI:
         team_combo.bind("<<ComboboxSelected>>", lambda e: refresh_tree())
         ttk.Button(controls, text="Refresh", command=load).pack(side="left", padx=5)
 
+        load()
+
+    def view_pitstops(self):
+        base = Path(sys.argv[0]).resolve().parent
+        csv_path = base / "pitstop_log.csv"
+        if not csv_path.exists():
+            csv_path = base.parent / "pitstop_log.csv"
+        if not csv_path.exists():
+            csv_path = Path("pitstop_log.csv")
+        if not csv_path.exists():
+            messagebox.showinfo("Pit Stops", "No pit stop file found")
+            return
+
+        win = tk.Toplevel(self.root)
+        win.title("Pit Stops")
+        frame = ttk.Frame(win, padding=10)
+        frame.pack(fill="both", expand=True)
+
+        tree = ttk.Treeview(frame, show="headings")
+        vsb = ttk.Scrollbar(frame, orient="vertical", command=tree.yview)
+        tree.configure(yscrollcommand=vsb.set)
+        tree.grid(row=0, column=0, sticky="nsew")
+        vsb.grid(row=0, column=1, sticky="ns")
+        frame.rowconfigure(0, weight=1)
+        frame.columnconfigure(0, weight=1)
+
+        width_file = Path("pitstop_view_widths.json")
+        widths = {}
+        if width_file.exists():
+            try:
+                with open(width_file, "r", encoding="utf-8") as wf:
+                    widths = json.load(wf)
+            except Exception:
+                widths = {}
+
+        col_map = {
+            "Class": "Class",
+            "TeamName": "Team",
+            "DriverName": "Driver",
+            "Stint Start Timestamp": "Start Time",
+            "Stint End Timestamp": "End Time",
+            "Stint Start SessionTime": "Start Session",
+            "Stint End SessionTime": "End Session",
+            "Stint Start Lap": "Start Lap",
+            "Stint End Lap": "End Lap",
+            "Stint Duration (min:sec)": "Duration",
+            "Stint Duration (Laps)": "Stint Laps",
+        }
+        display_cols = list(col_map.keys())
+
+        def fmt_iso(ts: str) -> str:
+            try:
+                dt = datetime.fromisoformat(ts)
+                return dt.strftime("%Y-%m-%d %H:%M:%S")
+            except Exception:
+                return ts
+
+        def fmt_num(val: str) -> str:
+            try:
+                num = float(val)
+            except Exception:
+                return val
+            return f"{num:.3f}".rstrip("0").rstrip(".")
+
+        def load() -> None:
+            tree.delete(*tree.get_children())
+            try:
+                with csv_path.open(newline="", encoding="utf-8", errors="replace") as f:
+                    reader = csv.DictReader(f)
+                    if not reader.fieldnames:
+                        return
+                    cols = [c for c in display_cols if c in reader.fieldnames]
+                    tree["columns"] = cols
+                    for c in cols:
+                        tree.heading(c, text=col_map[c])
+                        tree.column(c, anchor="center", width=widths.get(c, 100), stretch=True)
+                    for row in reader:
+                        vals = []
+                        for c in cols:
+                            v = row.get(c, "")
+                            if c in {"Stint Start Timestamp", "Stint End Timestamp"}:
+                                v = fmt_iso(v)
+                            elif c in {"Stint Start SessionTime", "Stint End SessionTime", "Stint Duration (sec)"}:
+                                v = fmt_num(v)
+                            vals.append(v)
+                        tree.insert("", "end", values=vals)
+            except Exception as e:
+                messagebox.showerror("Pit Stops", f"Error reading {csv_path}: {e}")
+
+        def save_widths(_: Any = None) -> None:
+            data = {c: tree.column(c)["width"] for c in tree["columns"]}
+            try:
+                with open(width_file, "w", encoding="utf-8") as wf:
+                    json.dump(data, wf)
+            except Exception:
+                pass
+
+        tree.bind("<ButtonRelease-1>", save_widths)
+        ttk.Button(frame, text="Refresh", command=load).grid(
+            row=1, column=0, columnspan=2, pady=5
+        )
         load()
 
     # ── Stint Tracker helpers ──────────────────────────────────
