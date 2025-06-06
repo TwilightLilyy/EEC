@@ -1,10 +1,17 @@
 # race_data_runner.py
 import argparse
-import subprocess, signal, sys, time, os, threading, shutil
-import csv, itertools
-from watchfiles import watch
+import subprocess
+import signal
+import sys
+import time
+import os
+import threading
+import shutil
+import csv
+import itertools
 from pathlib import Path
 from datetime import datetime
+from typing import Any
 
 # Ensure all relative paths resolve to the directory this file lives in
 BASE_DIR = Path(__file__).resolve().parent
@@ -14,12 +21,60 @@ os.chdir(BASE_DIR)
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Race data runner")
     parser.add_argument("--db", default="eec_log.db", help="SQLite database file")
+    parser.add_argument(
+        "--auto-install",
+        action="store_true",
+        help="Automatically install missing dependencies",
+    )
     args, _ = parser.parse_known_args()
     return args
 
 
-ARGS = parse_args()
-DB_PATH = Path(ARGS.db)
+ARGS: argparse.Namespace
+DB_PATH: Path
+watch: Any
+
+
+def ensure_watchfiles(auto_install: bool = False) -> Any:
+    """Return the :func:`watch` function from the watchfiles package.
+
+    Attempts installation when ``auto_install`` is ``True`` and the module is
+    missing.
+
+    >>> import types, sys
+    >>> mod = types.SimpleNamespace(watch=lambda: None)
+    >>> sys.modules['watchfiles'] = mod
+    >>> ensure_watchfiles() is mod.watch
+    True
+    >>> del sys.modules['watchfiles']
+    >>> try:
+    ...     ensure_watchfiles()
+    ... except SystemExit as exc:
+    ...     assert exc.code == 1
+    """
+    try:
+        from watchfiles import watch as watch_func
+        return watch_func
+    except ModuleNotFoundError:
+        if auto_install:
+            print("Error: The 'watchfiles' package is not installed.")
+            print("Attempting automatic installation...")
+            result = subprocess.run(
+                [sys.executable, "-m", "pip", "install", "watchfiles>=0.21.0"]
+            )
+            if result.returncode == 0:
+                try:
+                    from watchfiles import watch as watch_func
+                    return watch_func
+                except ModuleNotFoundError:
+                    pass
+            sys.exit(1)
+        print(
+            "Error: The 'watchfiles' package is not installed.\n"
+            "Run python -m pip install watchfiles and try again."
+        )
+        sys.exit(1)
+
 try:
     from colorama import init as _init, Fore, Style
     try:
@@ -39,13 +94,15 @@ except Exception:  # colorama not installed
             return ""
 
     Fore = Style = _Dummy()
+
     def _init(*args, **kwargs):
         pass
+
 from collections import defaultdict
 
-PITLOG = Path("pitstop_log.csv")   # same name the logger writes
-STANDINGS_LOG = Path("standings_log.csv")   # the file ai_standings_logger writes
-DRIVER_SWAP_CSV = Path("driver_swaps.csv")
+PITLOG: Path = Path("pitstop_log.csv")   # same name the logger writes
+STANDINGS_LOG: Path = Path("standings_log.csv")   # the file ai_standings_logger writes
+DRIVER_SWAP_CSV: Path = Path("driver_swaps.csv")
 
 
 # Ordered palette for class colours (fastest → slowest)
@@ -58,8 +115,25 @@ _PALETTE = [
 ]
 CLASS_COLOUR: dict[str, str] = {}          # filled on the fly
 
+
 _SWAPS_COLOUR = Style.BRIGHT + Fore.YELLOW
 _current_driver: dict[int, str] = defaultdict(str)
+
+
+def build_scripts(db_path: Path) -> list[tuple[str, list[str]]]:
+    """Return the command list for child processes."""
+    return [
+        (
+            "AI Logger",
+            ["python", str(BASE_DIR / "ai_standings_logger.py"), "--db", str(db_path)],
+        ),
+        (
+            "Pit Logger",
+            ["python", str(BASE_DIR / "pitstop_logger_enhanced.py"), "--db", str(db_path)],
+        ),
+        ("Standings Sorter", ["python", str(BASE_DIR / "standings_sorter.py")]),
+        # add more here as needed
+    ]
 
 def colour_for(cls: str) -> str:
     """Return a consistent ANSI colour for each class name."""
@@ -69,34 +143,29 @@ def colour_for(cls: str) -> str:
     return CLASS_COLOUR[cls]
 
 
-SCRIPTS = [
-    (
-        "AI Logger",
-        ["python", str(BASE_DIR / "ai_standings_logger.py"), "--db", str(DB_PATH)],
-    ),
-    (
-        "Pit Logger",
-        ["python", str(BASE_DIR / "pitstop_logger_enhanced.py"), "--db", str(DB_PATH)],
-    ),
-    ("Standings Sorter", ["python", str(BASE_DIR / "standings_sorter.py")]),
-    # add more here as needed
-]
-
-LOG_DIR = Path("logs"); LOG_DIR.mkdir(exist_ok=True)
+LOG_DIR = Path("logs")
+LOG_DIR.mkdir(exist_ok=True)
 
 def iso_stamp() -> str:
     """Return current local time in ISO-8601 to-the-second."""
     return datetime.now().isoformat(timespec="seconds")
 
-def launch(name, cmd):
+
+def launch(name: str, cmd: list[str]) -> subprocess.Popen:
     logfile = LOG_DIR / f"{name.replace(' ', '_').lower()}.txt"
     return subprocess.Popen(
-        cmd, stdout=open(logfile, "w"), stderr=subprocess.STDOUT,
-        text=True
+        cmd,
+        stdout=open(logfile, "w"),
+        stderr=subprocess.STDOUT,
+        text=True,
     )
 
-procs = {name: launch(name, cmd) for name, cmd in SCRIPTS}
-print(f"[{iso_stamp()}] 🚀  Started {len(procs)} child processes.")
+
+def start_processes(scripts: list[tuple[str, list[str]]]) -> dict[str, subprocess.Popen]:
+    """Launch all child processes and return a mapping of names to processes."""
+    procs = {name: launch(name, cmd) for name, cmd in scripts}
+    print(f"[{iso_stamp()}] 🚀  Started {len(procs)} child processes.")
+    return procs
 
 def stamp(): return datetime.now().strftime("%H:%M:%S")
 
@@ -205,7 +274,7 @@ def tail_driver_swaps(file: Path):
 # ─────────────────────────────────────────────────────────────
 
 
-def watchdog(seconds=600, directory=Path(".")):
+def watchdog(seconds: int = 600, directory: Path = Path(".")) -> None:
     while True:
         for f in directory.glob("*.csv"):
             age = time.time() - f.stat().st_mtime
@@ -213,22 +282,37 @@ def watchdog(seconds=600, directory=Path(".")):
                 print(f"[{stamp()}] ⚠️  {f} stale ({age:.0f}s)")
         time.sleep(seconds)
 
-# start the watchdog (no args needed – it defaults to current dir)
-threading.Thread(target=watchdog,     daemon=True).start()
-threading.Thread(target=tail_pitlog,  args=(PITLOG,), daemon=True).start()
-threading.Thread(target=tail_driver_swaps, args=(STANDINGS_LOG,), daemon=True).start()
 
-try:
-    while True:
-        dead = [n for n, p in procs.items() if p.poll() is not None]
-        for n in dead:
-            print(f"[{stamp()}] 🔁  Restarting {n} (exit {procs[n].returncode})")
-            procs[n] = launch(n, dict(SCRIPTS)[n])
-        time.sleep(2)
-except KeyboardInterrupt:
-    print(f"\n[{stamp()}] 🛑  Shutting down…")
-    for p in procs.values():
-        p.send_signal(signal.SIGINT)
-    for p in procs.values():
-        p.wait()
-    sys.exit(0)
+def main() -> int:
+    """Entry point for the race data runner."""
+
+    global ARGS, DB_PATH, watch
+    ARGS = parse_args()
+    DB_PATH = Path(ARGS.db)
+    watch = ensure_watchfiles(ARGS.auto_install)
+
+    scripts = build_scripts(DB_PATH)
+    procs = start_processes(scripts)
+
+    threading.Thread(target=watchdog, daemon=True).start()
+    threading.Thread(target=tail_pitlog, args=(PITLOG,), daemon=True).start()
+    threading.Thread(target=tail_driver_swaps, args=(STANDINGS_LOG,), daemon=True).start()
+
+    try:
+        while True:
+            dead = [n for n, p in procs.items() if p.poll() is not None]
+            for n in dead:
+                print(f"[{stamp()}] 🔁  Restarting {n} (exit {procs[n].returncode})")
+                procs[n] = launch(n, dict(scripts)[n])
+            time.sleep(2)
+    except KeyboardInterrupt:
+        print(f"\n[{stamp()}] 🛑  Shutting down…")
+        for p in procs.values():
+            p.send_signal(signal.SIGINT)
+        for p in procs.values():
+            p.wait()
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
