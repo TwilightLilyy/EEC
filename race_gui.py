@@ -1420,7 +1420,10 @@ class RaceLoggerGUI:
         l = line.lower()
         if "overtook" in l:
             self.add_event("overtake", line.strip())
-        if "pitted" in l:
+        if "pitted" in l or "pit -" in l or "pit \u2013" in l:
+            # Tail logs emit lines like "PIT – Team / Driver" using an en dash.
+            # Include both the plain hyphen and en dash variants so the feed
+            # catches them regardless of terminal font or encoding.
             self.add_event("pitstop", line.strip())
         if "driver swap" in l or "swapped" in l:
             self.add_event("driver_swap", line.strip())
