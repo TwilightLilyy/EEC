@@ -158,6 +158,13 @@ class RaceLoggerGUI:
 
         self.status_lbl = ttk.Label(frm, text="iRacing: ?")
         self.status_lbl.grid(column=0, row=0, sticky="w")
+        self.log_status_frame = ttk.Frame(frm)
+        self.log_status_frame.grid(column=1, row=0, sticky="w")
+        self.log_status_lbls: dict[str, ttk.Label] = {}
+        for i, f in enumerate(LOG_FILES):
+            lbl = ttk.Label(self.log_status_frame, text=f"{f}: ?")
+            lbl.grid(column=0, row=i, sticky="w")
+            self.log_status_lbls[f] = lbl
         self.start_btn = ttk.Button(
             frm, text="Start Logging", command=self.start_logging
         )
@@ -385,6 +392,16 @@ class RaceLoggerGUI:
                     except Exception:
                         pass
             self.status_lbl.config(text=f"iRacing: {status}")
+            now = time.time()
+            for name, lbl in self.log_status_lbls.items():
+                path = find_log_file(name)
+                if path.exists():
+                    age = now - path.stat().st_mtime
+                    running = self.proc is not None and age < 10
+                    state = "active" if running else "stale"
+                    lbl.config(text=f"{path.name}: {int(age)}s ({state})")
+                else:
+                    lbl.config(text=f"{name}: missing")
             time.sleep(2)
 
     # ── log management helpers ──────────────────────────────────
