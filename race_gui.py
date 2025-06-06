@@ -129,6 +129,7 @@ class RaceLoggerGUI:
         self.output_thread = None
         self.teams_file = Path(eec_teams.__file__).resolve()
         self.team_drivers = self.load_team_drivers()
+        self.db_path = Path("eec_log.db")
 
         menubar = tk.Menu(root)
         file_menu = tk.Menu(menubar, tearoff=0)
@@ -335,7 +336,7 @@ class RaceLoggerGUI:
         if not runner.exists():
             runner = Path(sys.argv[0]).resolve().parent.parent / "race_data_runner.py"
         self.proc = subprocess.Popen(
-            ["python", str(runner)],
+            ["python", str(runner), "--db", str(self.db_path)],
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,
