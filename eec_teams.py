@@ -2,21 +2,83 @@
 
 TEAM_DRIVERS: dict[str, list[str]] = {
     "Warriors of Light": [
-        "Alisaie Leveilleur",
-        "Alphinaud Leveilleur",
+        "Celestia Astraethi",
+        "Iryq",
+        "Jadato",
+        "Liokki",
+        "Pele",
+        "Luna",
     ],
-    "Scions of the Seventh Dawn": [
-        "Thancred Waters",
-        "Y'shtola Rhul",
-        "Urianger Augurelt",
+    "7th Dawn Motorsports": [
+        "Alphinaud",
+        "Alisaie",
+        "Estinein",
+        "G'raha",
+        "Minfilia",
+        "Tataru",
     ],
-    "Students of Baldesion": [
-        "Krile Baldesion",
-        "G'raha Tia",
+    "Circle of Racing": [
+        "Moenbryda",
+        "Urianger",
+        "Y'shtola",
+        "Thancred",
+        "Lyse",
+        "Papalymo",
     ],
-    "Manderville Enterprises": [
+    "Manderville": [
         "Hildibrand Manderville",
+        "Nashu Mhakaracca",
+        "Greg",
+        "Enkidu",
         "Godbert Manderville",
+        "Julyan Manderville",
+    ],
+    "Blue Wing Racing": [
+        "Emet-Selch",
+        "Hythlodaeus",
+        "Venat",
+        "Elidibus",
+        "Meteion",
+        "Hermes",
+    ],
+    "Final Laps": [
+        "Livingway",
+        "Puddingway",
+        "Ameliance",
+        "Fourchenault",
+        "Watcher",
+        "Matoya",
+    ],
+    "Dawntrack": [
+        "Krile",
+        "Erenville",
+        "Wuk Lamat",
+        "Sphene",
+        "Bakool Ja Ja",
+        "Koana",
+    ],
+    "Warriors of Darkness": [
+        "Ardbert",
+        "Cylva",
+        "Renda-Rae",
+        "Lamitt",
+        "Branden",
+        "Nyelbert",
+    ],
+    "Steppe Sport": [
+        "Sadu Dotharl",
+        "Magnai Oronir",
+        "Gosetsu",
+        "Hien",
+        "Cirina Mol",
+        "Yugiri",
+    ],
+    "Scuderia Shadow": [
+        "Gaius",
+        "Zenos",
+        "Ryne",
+        "Gaia",
+        "Feo Ul",
     ],
 }
 
