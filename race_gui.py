@@ -685,6 +685,10 @@ class RaceLoggerGUI:
         self.stint_sort_reverse = False
         self.update_stint_table()
 
+        ttk.Button(frame, text="Refresh", command=self.update_stint_table).grid(
+            row=1, column=0, columnspan=2, pady=5
+        )
+
         def on_close() -> None:
             self.stint_tree = None
             self.stint_win = None
