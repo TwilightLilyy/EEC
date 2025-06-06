@@ -2,6 +2,7 @@ import sys
 from pathlib import Path
 import signal
 import types
+from datetime import datetime
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from race_gui import RaceLoggerGUI, filter_rows
@@ -346,4 +347,53 @@ def test_view_stint_tracker_uses_toplevel(monkeypatch):
     RaceLoggerGUI.view_stint_tracker(gui)
 
     assert calls.get("title") == "Stint Tracker"
+
+
+def test_update_stint_table_works_without_pits(tmp_path, monkeypatch):
+    stand_csv = tmp_path / "standings_log.csv"
+    stand_csv.write_text(
+        "Time,CarIdx,TeamName,UserName,CarClassID,Lap\n"
+        "2024-01-01T00:00:00,1,TeamA,DriverA,GT3,10\n"
+    )
+
+    def fake_find_log_file(name: str):
+        if name == "standings_log.csv":
+            return stand_csv
+        return tmp_path / name
+
+    monkeypatch.setattr("race_gui.find_log_file", fake_find_log_file)
+
+    inserted = []
+
+    class DummyTree:
+        def delete(self, *a, **k):
+            pass
+
+        def get_children(self):
+            return []
+
+        def insert(self, *a, **k):
+            inserted.append(k.get("values"))
+
+    class DummyRoot:
+        def after(self, *a, **k):
+            pass
+
+    gui = types.SimpleNamespace(root=DummyRoot(), stint_tree=DummyTree())
+    gui.update_stint_table = lambda: None
+
+    fixed_now = datetime(2024, 1, 1, 0, 10, 0)
+
+    class DummyDateTime(datetime):
+        @classmethod
+        def now(cls):
+            return fixed_now
+
+    monkeypatch.setattr("race_gui.datetime", DummyDateTime)
+
+    RaceLoggerGUI.update_stint_table(gui)
+
+    assert inserted
+    assert inserted[0][0] == "1"
+    assert inserted[0][5] == "10:00"
 

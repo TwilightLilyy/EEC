@@ -1125,6 +1125,16 @@ class RaceLoggerGUI:
                 last_pit[car] = r
 
         if race_start is None:
+            start_times = []
+            for r in stand_rows:
+                try:
+                    start_times.append(datetime.fromisoformat(r.get("Time")))
+                except Exception:
+                    continue
+            if start_times:
+                race_start = min(start_times)
+
+        if race_start is None:
             race_start = datetime.now()
         race_end = race_start + timedelta(hours=24)
 
