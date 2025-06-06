@@ -19,6 +19,7 @@ def test_ensure_watchfiles_installed(tmp_path, monkeypatch):
 def test_runner_missing_watchfiles(tmp_path):
     env = os.environ.copy()
     env["PYTHONPATH"] = str(tmp_path)
+    env["EEC_AUTO_INSTALL"] = "0"
     proc = subprocess.run([sys.executable, "-S", "race_data_runner.py"], capture_output=True, text=True, env=env)
     assert proc.returncode == 1
     assert "watchfiles' package is not installed" in proc.stdout

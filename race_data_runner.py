@@ -38,8 +38,9 @@ watch: Any
 def ensure_watchfiles(auto_install: bool = False) -> Any:
     """Return the :func:`watch` function from the watchfiles package.
 
-    Attempts installation when ``auto_install`` is ``True`` and the module is
-    missing.
+    Attempts installation when ``auto_install`` is ``True`` or the
+    ``EEC_AUTO_INSTALL`` environment variable is set to ``"1"`` and the module
+    is missing.
 
     >>> import types, sys
     >>> mod = types.SimpleNamespace(watch=lambda: None)
@@ -52,6 +53,8 @@ def ensure_watchfiles(auto_install: bool = False) -> Any:
     ... except SystemExit as exc:
     ...     assert exc.code == 1
     """
+    env_auto = os.getenv("EEC_AUTO_INSTALL", "1") == "1"
+    auto_install = auto_install or env_auto
     try:
         from watchfiles import watch as watch_func
         return watch_func
@@ -71,7 +74,7 @@ def ensure_watchfiles(auto_install: bool = False) -> Any:
             sys.exit(1)
         print(
             "Error: The 'watchfiles' package is not installed.\n"
-            "Run python -m pip install watchfiles and try again."
+            "Run python -m pip install watchfiles or start with --auto-install."
         )
         sys.exit(1)
 
