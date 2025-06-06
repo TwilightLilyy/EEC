@@ -1,4 +1,8 @@
+import argparse
 import irsdk, csv, time
+from typing import Optional
+
+import eec_db
 try:
     import pandas as pd
 except Exception:
@@ -69,6 +73,24 @@ def write_overlay(csv_path, html_path=OVERLAY_FILE):
                  f"<td align='center'style='padding:0 0 0 18px;'>{r['Stint Duration (min:sec)']}</td></tr>")
     html += "</table></body></html>"
     open(html_path, "w", encoding="utf-8").write(html)
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Enhanced pit-stop logger")
+    parser.add_argument("--output", default=CSV_FILE, help="CSV output file")
+    parser.add_argument(
+        "--driver-total", default=DRIVER_TOTAL_FILE, help="Driver totals CSV"
+    )
+    parser.add_argument("--db", help="SQLite database path")
+    args, _ = parser.parse_known_args()
+    return args
+
+
+args = parse_args()
+CSV_FILE = args.output
+DRIVER_TOTAL_FILE = args.driver_total
+DB_PATH = args.db
+conn = eec_db.init_db(DB_PATH) if DB_PATH else None
 
 # ── initialise CSVs ───────────────────────────────────────────
 try:
@@ -144,6 +166,8 @@ while True:
                         ]
                         with open(CSV_FILE, "a", newline="") as f:
                             csv.writer(f).writerow(row)
+                        if conn:
+                            eec_db.insert(conn, "pitstops", row)
                         print(f"[{iso_now()}] STINT END – "
                             f"{team} / {drv}: {row[-1]} laps, {row[-2]}.")
 
@@ -160,7 +184,15 @@ while True:
                             for (t, d), s in driver_total.items():
                                 avg = s["time"] / s["laps"] if s["laps"] else 0
                                 wr.writerow([t, d, s["time"], hms(s["time"]), s["laps"], f"{avg:.3f}",
-                                             f"{s['best']:.3f}" if s["best"] != float("inf") else ""]) 
+                                             f"{s['best']:.3f}" if s["best"] != float("inf") else ""])
+                        if conn:
+                            conn.execute("DELETE FROM driver_totals")
+                            for (t, d), s in driver_total.items():
+                                conn.execute(
+                                    "INSERT INTO driver_totals VALUES (?,?,?,?,?)",
+                                    (t, d, s["time"], s["laps"], s["best"]),
+                                )
+                            conn.commit()
 
                         if pd is not None:
                             write_overlay(CSV_FILE)
@@ -201,7 +233,15 @@ while True:
                     for (t, d), s in cur_totals.items():
                         avg = s["time"] / s["laps"] if s["laps"] else 0
                         wr.writerow([t, d, s["time"], hms(s["time"]), s["laps"], f"{avg:.3f}",
-                                     f"{s['best']:.3f}" if s["best"] != float("inf") else ""]) 
+                                     f"{s['best']:.3f}" if s["best"] != float("inf") else ""])
+                if conn:
+                    conn.execute("DELETE FROM driver_totals")
+                    for (t, d), s in cur_totals.items():
+                        conn.execute(
+                            "INSERT INTO driver_totals VALUES (?,?,?,?,?)",
+                            (t, d, s["time"], s["laps"], s["best"]),
+                        )
+                    conn.commit()
                 last_total_update = time.time()
         time.sleep(0.5)
     except KeyboardInterrupt:
@@ -226,8 +266,21 @@ while True:
                 avg = s["time"] / s["laps"] if s["laps"] else 0
                 wr.writerow([t, d, s["time"], hms(s["time"]), s["laps"], f"{avg:.3f}",
                              f"{s['best']:.3f}" if s["best"] != float("inf") else ""])
+        if conn:
+            conn.execute("DELETE FROM driver_totals")
+            for (t, d), s in driver_total.items():
+                conn.execute(
+                    "INSERT INTO driver_totals VALUES (?,?,?,?,?)",
+                    (t, d, s["time"], s["laps"], s["best"]),
+                )
+            conn.commit()
         print("\nLogger stopped.")
         break
     except Exception as e:
         print("Error:", e)
         time.sleep(1)
+        if conn:
+            conn.close()
+        break
+if conn:
+    conn.close()

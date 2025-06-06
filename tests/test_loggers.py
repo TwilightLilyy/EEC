@@ -1,5 +1,6 @@
 import runpy
 import sys
+import sqlite3
 import types
 import csv
 import time
@@ -46,6 +47,8 @@ def test_ai_standings_logger_writes_csv(tmp_path, monkeypatch):
 
     monkeypatch.chdir(tmp_path)
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    db_path = tmp_path / "test.db"
+    monkeypatch.setattr(sys, "argv", ["ai_standings_logger.py", "--db", str(db_path)])
     module = runpy.run_module("ai_standings_logger", run_name="__main__")
 
     csv_path = tmp_path / "standings_log.csv"
@@ -54,6 +57,10 @@ def test_ai_standings_logger_writes_csv(tmp_path, monkeypatch):
     assert len(rows) == 2
     assert rows[1][2] == "TeamA"
     assert rows[1][3] == "DriverA"
+    conn = sqlite3.connect(db_path)
+    db_rows = list(conn.execute("SELECT * FROM standings"))
+    conn.close()
+    assert len(db_rows) == 1
 
 
 def test_pitstop_logger_writes_stint(tmp_path, monkeypatch):
@@ -99,6 +106,8 @@ def test_pitstop_logger_writes_stint(tmp_path, monkeypatch):
 
     monkeypatch.chdir(tmp_path)
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    db_path = tmp_path / "test2.db"
+    monkeypatch.setattr(sys, "argv", ["pitstop_logger_enhanced.py", "--db", str(db_path)])
     module = runpy.run_module("pitstop_logger_enhanced", run_name="__main__")
 
     csv_path = tmp_path / "pitstop_log.csv"
@@ -107,3 +116,7 @@ def test_pitstop_logger_writes_stint(tmp_path, monkeypatch):
     assert len(rows) == 2
     # ensure the stint duration laps column is present
     assert rows[1][-1] == "1"
+    conn = sqlite3.connect(db_path)
+    db_rows = list(conn.execute("SELECT * FROM pitstops"))
+    conn.close()
+    assert len(db_rows) == 1

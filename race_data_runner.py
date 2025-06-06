@@ -1,4 +1,5 @@
 # race_data_runner.py
+import argparse
 import subprocess, signal, sys, time, os, threading, shutil
 import csv, itertools
 from pathlib import Path
@@ -7,6 +8,17 @@ from datetime import datetime
 # Ensure all relative paths resolve to the directory this file lives in
 BASE_DIR = Path(__file__).resolve().parent
 os.chdir(BASE_DIR)
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Race data runner")
+    parser.add_argument("--db", default="eec_log.db", help="SQLite database file")
+    args, _ = parser.parse_known_args()
+    return args
+
+
+ARGS = parse_args()
+DB_PATH = Path(ARGS.db)
 try:
     from colorama import init as _init, Fore, Style
     try:
@@ -57,8 +69,14 @@ def colour_for(cls: str) -> str:
 
 
 SCRIPTS = [
-    ("AI Logger",        ["python", str(BASE_DIR / "ai_standings_logger.py")]),
-    ("Pit Logger",       ["python", str(BASE_DIR / "pitstop_logger_enhanced.py")]),
+    (
+        "AI Logger",
+        ["python", str(BASE_DIR / "ai_standings_logger.py"), "--db", str(DB_PATH)],
+    ),
+    (
+        "Pit Logger",
+        ["python", str(BASE_DIR / "pitstop_logger_enhanced.py"), "--db", str(DB_PATH)],
+    ),
     ("Standings Sorter", ["python", str(BASE_DIR / "standings_sorter.py")]),
     # add more here as needed
 ]

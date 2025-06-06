@@ -9,6 +9,9 @@ import argparse
 import csv
 import time
 from datetime import datetime
+from typing import Optional
+
+import eec_db
 
 import irsdk
 
@@ -34,10 +37,12 @@ DEFAULT_CSV_PATH = "standings_log.csv"
 DEFAULT_INTERVAL = 5
 
 
-def log_standings(csv_path: str, interval: int) -> None:
+def log_standings(csv_path: str, interval: int, db_path: Optional[str] = None) -> None:
     """Main logging loop."""
     ir = irsdk.IRSDK()
     ir.startup()
+
+    conn = eec_db.init_db(db_path) if db_path else None
 
     print("Waiting for iRacing session…")
     while not (ir.is_initialized and ir.is_connected):
@@ -98,6 +103,25 @@ def log_standings(csv_path: str, interval: int) -> None:
                             pit_count[idx],
                         ]
                     )
+                    if conn:
+                        eec_db.insert(
+                            conn,
+                            "standings",
+                            [
+                                ts,
+                                idx,
+                                team_name,
+                                user_name,
+                                cls_id,
+                                safe(pos),
+                                safe(cpos),
+                                safe(laps),
+                                safe(best),
+                                safe(last),
+                                int(bool(in_pit)),
+                                pit_count[idx],
+                            ],
+                        )
             print(f"[{ts}] Logged {len(drvs)} cars.")
             time.sleep(interval)
     except KeyboardInterrupt:
@@ -109,6 +133,8 @@ def log_standings(csv_path: str, interval: int) -> None:
             ir.shutdown()
         except Exception:
             pass
+        if conn:
+            conn.close()
 
 
 def parse_args() -> argparse.Namespace:
@@ -124,13 +150,17 @@ def parse_args() -> argparse.Namespace:
         default=DEFAULT_INTERVAL,
         help="Polling interval in seconds (default: %(default)s)",
     )
+    parser.add_argument(
+        "--db",
+        help="SQLite database path",
+    )
     args, _ = parser.parse_known_args()
     return args
 
 
 def main() -> None:
     args = parse_args()
-    log_standings(args.output, args.interval)
+    log_standings(args.output, args.interval, args.db)
 
 
 if __name__ == "__main__":
