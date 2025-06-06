@@ -181,13 +181,16 @@ class RaceLoggerGUI:
         ttk.Button(frm, text="View Drive Times…", command=self.view_driver_times).grid(
             column=0, row=5, columnspan=2, pady=5, sticky="ew"
         )
+        ttk.Button(frm, text="View Stint Tracker…", command=self.view_stint_tracker).grid(
+            column=0, row=6, columnspan=2, pady=5, sticky="ew"
+        )
         ttk.Button(
             frm,
             text="View Series Standings…",
             command=self.view_series_standings,
-        ).grid(column=0, row=6, columnspan=2, pady=5, sticky="ew")
+        ).grid(column=0, row=7, columnspan=2, pady=5, sticky="ew")
         ttk.Button(frm, text="Export to ChatGPT", command=self.export_logs).grid(
-            column=0, row=7, columnspan=2, pady=5, sticky="ew"
+            column=0, row=8, columnspan=2, pady=5, sticky="ew"
         )
 
         self.log_box = ScrolledText(
@@ -199,14 +202,16 @@ class RaceLoggerGUI:
             foreground=self.fg,
             insertbackground="white",
         )
-        self.log_box.grid(column=0, row=8, columnspan=2, pady=5)
+        self.log_box.grid(column=0, row=9, columnspan=2, pady=5)
         self.update_wrap()
 
         # Additional tabs for CSV logs
         self.create_csv_tab("driver_swaps.csv", "Driver Swaps")
         self.create_standings_log_tab("standings_log.csv", "Standings Log")
-        self.create_stint_tracker_tab()
         self.create_team_editor_tab()
+
+        # Start stint tracker update loop
+        self.update_stint_table()
 
         # Live race feed data
         self.event_buffers = {k: deque(maxlen=3) for k in EVENT_TYPES}
@@ -641,10 +646,18 @@ class RaceLoggerGUI:
 
         refresh_loop()
 
-    # ── Stint Tracker tab ───────────────────────────────────────
-    def create_stint_tracker_tab(self) -> None:
-        frame = ttk.Frame(self.notebook, padding=10)
-        self.notebook.add(frame, text="Stint Tracker")
+    # ── Stint Tracker overlay ───────────────────────────────────
+    def view_stint_tracker(self) -> None:
+        if getattr(self, "stint_win", None) and self.stint_win.winfo_exists():
+            self.stint_win.lift()
+            return
+
+        win = tk.Toplevel(self.root)
+        win.title("Stint Tracker")
+        self.stint_win = win
+
+        frame = ttk.Frame(win, padding=10)
+        frame.pack(fill="both", expand=True)
 
         cols = [
             "Car",
@@ -671,6 +684,13 @@ class RaceLoggerGUI:
         self.stint_sort_col = None
         self.stint_sort_reverse = False
         self.update_stint_table()
+
+        def on_close() -> None:
+            self.stint_tree = None
+            self.stint_win = None
+            win.destroy()
+
+        win.protocol("WM_DELETE_WINDOW", on_close)
 
     def view_logs(self):
         log_dir = Path("logs")
