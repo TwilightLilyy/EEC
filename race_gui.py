@@ -371,21 +371,13 @@ class RaceLoggerGUI:
     def reset_logs(self):
         if not messagebox.askyesno("Confirm", "Delete existing log files?"):
             return
-        base = Path(sys.argv[0]).resolve().parent
         for f in LOG_FILES:
-            paths = [
-                Path(f),
-                Path.cwd() / f,
-                base / f,
-                base.parent / f,
-            ]
-            for p in paths:
-                if p.exists():
-                    try:
-                        p.open("w").close()
-                    except Exception:
-                        pass
-                    break
+            path = find_log_file(f)
+            if path.exists():
+                try:
+                    path.open("w").close()
+                except Exception:
+                    pass
         messagebox.showinfo("Reset", "Logs cleared")
 
     def save_logs(self):
@@ -883,12 +875,7 @@ class RaceLoggerGUI:
         load()
 
     def view_pitstops(self):
-        base = Path(sys.argv[0]).resolve().parent
-        csv_path = base / "pitstop_log.csv"
-        if not csv_path.exists():
-            csv_path = base.parent / "pitstop_log.csv"
-        if not csv_path.exists():
-            csv_path = Path("pitstop_log.csv")
+        csv_path = find_log_file("pitstop_log.csv")
         if not csv_path.exists():
             messagebox.showinfo("Pit Stops", "No pit stop file found")
             return
