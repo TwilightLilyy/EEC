@@ -19,13 +19,22 @@ function formatNumber(value) {
     return str;
 }
 
+function showPlaceholder(message) {
+    const tbody = document.querySelector('#standingsTable tbody');
+    tbody.innerHTML = `<tr class="placeholder"><td colspan="${TABLE_COLS.length}">${message}</td></tr>`;
+}
+
 async function fetchAndRenderStandings() {
     try {
         const response = await fetch('sorted_standings.csv?_=' + new Date().getTime());
         const csv = await response.text();
 
         const lines = csv.trim().split('\n');
-        if (lines.length < 2) return; // No data
+        if (lines.length < 2) {
+            standingsData = [];
+            showPlaceholder('No standings yet – waiting for logger');
+            return;
+        }
 
         const headers = lines[0].split(',').map(h => h.trim());
 
@@ -77,11 +86,16 @@ async function fetchAndRenderStandings() {
             rows.push(row);
         }
         standingsData = rows;
+        if (rows.length === 0) {
+            showPlaceholder('No valid data yet – session may not have started');
+            return;
+        }
         renderStandings();
 
     } catch (e) {
         // Optionally show error in overlay or log to console
         // console.error(e);
+        showPlaceholder('Error loading standings');
     }
 }
 
