@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk, messagebox, filedialog
+from tkinter import ttk, messagebox, filedialog, simpledialog
 from tkinter.scrolledtext import ScrolledText
 import subprocess
 import signal
@@ -16,6 +16,8 @@ import re
 import json
 from datetime import datetime, timedelta
 from typing import Any
+
+import eec_teams
 
 try:
     import irsdk
@@ -125,6 +127,8 @@ class RaceLoggerGUI:
         self.proc = None
         self.log_queue: Queue[str] = Queue()
         self.output_thread = None
+        self.teams_file = Path(eec_teams.__file__).resolve()
+        self.team_drivers = self.load_team_drivers()
 
         menubar = tk.Menu(root)
         file_menu = tk.Menu(menubar, tearoff=0)
@@ -197,6 +201,7 @@ class RaceLoggerGUI:
         self.create_csv_tab("driver_swaps.csv", "Driver Swaps")
         self.create_standings_log_tab("standings_log.csv", "Standings Log")
         self.create_stint_tracker_tab()
+        self.create_team_editor_tab()
 
         # Live race feed data
         self.event_buffers = {k: deque(maxlen=3) for k in EVENT_TYPES}
@@ -1106,6 +1111,161 @@ class RaceLoggerGUI:
             )
 
         self.root.after(3000, self.update_stint_table)
+
+    # ── Team editor helpers ─────────────────────────────────────
+    def load_team_drivers(self) -> dict[str, list[str]]:
+        """Load team roster from eec_teams module."""
+        try:
+            import importlib
+            importlib.reload(eec_teams)
+            return {k: list(v) for k, v in eec_teams.TEAM_DRIVERS.items()}
+        except Exception:
+            return {}
+
+    def save_team_drivers(self) -> None:
+        """Write the team roster back to eec_teams.py."""
+        try:
+            import pprint
+            data = pprint.pformat(
+                self.team_drivers,
+                indent=4,
+                width=120,
+                sort_dicts=True,
+            )
+            with open(self.teams_file, "w", encoding="utf-8") as fh:
+                fh.write('"""EEC team roster used for championship calculations."""\n\n')
+                fh.write("TEAM_DRIVERS: dict[str, list[str]] = ")
+                fh.write(data)
+                fh.write("\n\n__all__ = [\"TEAM_DRIVERS\"]\n")
+        except Exception as e:
+            messagebox.showerror("Teams", f"Error saving teams: {e}")
+
+    def create_team_editor_tab(self) -> None:
+        frame = ttk.Frame(self.notebook, padding=10)
+        self.notebook.add(frame, text="Teams")
+
+        self.team_list = tk.Listbox(frame, exportselection=False)
+        self.team_list.grid(row=0, column=0, rowspan=4, sticky="nsew", padx=5, pady=5)
+        self.driver_list = tk.Listbox(frame, exportselection=False)
+        self.driver_list.grid(row=0, column=1, rowspan=4, sticky="nsew", padx=5, pady=5)
+        frame.rowconfigure(0, weight=1)
+        frame.columnconfigure(0, weight=1)
+        frame.columnconfigure(1, weight=1)
+
+        def refresh_drivers(_event=None) -> None:
+            self.driver_list.delete(0, tk.END)
+            sel = self.team_list.curselection()
+            if not sel:
+                return
+            team = self.team_list.get(sel[0])
+            for d in self.team_drivers.get(team, []):
+                self.driver_list.insert(tk.END, d)
+
+        def refresh() -> None:
+            self.team_list.delete(0, tk.END)
+            for t in sorted(self.team_drivers):
+                self.team_list.insert(tk.END, t)
+            refresh_drivers()
+
+        def add_team() -> None:
+            name = simpledialog.askstring("Add Team", "Team name:", parent=self.root)
+            if not name:
+                return
+            if name in self.team_drivers:
+                messagebox.showerror("Teams", "Team already exists")
+                return
+            self.team_drivers[name] = []
+            self.save_team_drivers()
+            refresh()
+
+        def edit_team() -> None:
+            sel = self.team_list.curselection()
+            if not sel:
+                return
+            old = self.team_list.get(sel[0])
+            name = simpledialog.askstring(
+                "Edit Team", "Team name:", initialvalue=old, parent=self.root
+            )
+            if not name or name == old:
+                return
+            self.team_drivers[name] = self.team_drivers.pop(old)
+            self.save_team_drivers()
+            refresh()
+            idx = list(sorted(self.team_drivers)).index(name)
+            self.team_list.selection_set(idx)
+            refresh_drivers()
+
+        def del_team() -> None:
+            sel = self.team_list.curselection()
+            if not sel:
+                return
+            team = self.team_list.get(sel[0])
+            if not messagebox.askyesno("Delete", f"Delete team '{team}'?"):
+                return
+            self.team_drivers.pop(team, None)
+            self.save_team_drivers()
+            refresh()
+
+        def add_driver() -> None:
+            sel = self.team_list.curselection()
+            if not sel:
+                messagebox.showinfo("Teams", "Select a team first")
+                return
+            team = self.team_list.get(sel[0])
+            name = simpledialog.askstring("Add Driver", "Driver name:", parent=self.root)
+            if not name:
+                return
+            self.team_drivers.setdefault(team, []).append(name)
+            self.save_team_drivers()
+            refresh_drivers()
+
+        def edit_driver() -> None:
+            sel_t = self.team_list.curselection()
+            sel_d = self.driver_list.curselection()
+            if not sel_t or not sel_d:
+                return
+            team = self.team_list.get(sel_t[0])
+            old = self.driver_list.get(sel_d[0])
+            name = simpledialog.askstring(
+                "Edit Driver", "Driver name:", initialvalue=old, parent=self.root
+            )
+            if not name or name == old:
+                return
+            drivers = self.team_drivers.get(team, [])
+            try:
+                idx = drivers.index(old)
+            except ValueError:
+                return
+            drivers[idx] = name
+            self.save_team_drivers()
+            refresh_drivers()
+
+        def del_driver() -> None:
+            sel_t = self.team_list.curselection()
+            sel_d = self.driver_list.curselection()
+            if not sel_t or not sel_d:
+                return
+            team = self.team_list.get(sel_t[0])
+            drv = self.driver_list.get(sel_d[0])
+            if not messagebox.askyesno("Delete", f"Delete driver '{drv}'?"):
+                return
+            try:
+                self.team_drivers[team].remove(drv)
+            except Exception:
+                pass
+            self.save_team_drivers()
+            refresh_drivers()
+
+        self.team_list.bind("<<ListboxSelect>>", refresh_drivers)
+
+        ttk.Button(frame, text="Add Team", command=add_team).grid(row=4, column=0, sticky="ew", padx=5, pady=2)
+        ttk.Button(frame, text="Edit Team", command=edit_team).grid(row=5, column=0, sticky="ew", padx=5, pady=2)
+        ttk.Button(frame, text="Delete Team", command=del_team).grid(row=6, column=0, sticky="ew", padx=5, pady=2)
+        ttk.Button(frame, text="Add Driver", command=add_driver).grid(row=4, column=1, sticky="ew", padx=5, pady=2)
+        ttk.Button(frame, text="Edit Driver", command=edit_driver).grid(row=5, column=1, sticky="ew", padx=5, pady=2)
+        ttk.Button(frame, text="Delete Driver", command=del_driver).grid(row=6, column=1, sticky="ew", padx=5, pady=2)
+
+        refresh()
 
     # ── ChatGPT export ──────────────────────────────────────────
     def export_logs(self):
