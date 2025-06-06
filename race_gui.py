@@ -207,7 +207,11 @@ class RaceLoggerGUI:
 
         # Additional tabs for CSV logs
         self.create_csv_tab("driver_swaps.csv", "Driver Swaps")
-        self.create_standings_log_tab("standings_log.csv", "Standings Log")
+        # Auto-refresh the standings log viewer so it stays in sync with the
+        # running logger.
+        self.create_standings_log_tab(
+            "standings_log.csv", "Standings Log", auto_refresh=True
+        )
         self.create_team_editor_tab()
 
         # Start stint tracker update loop
