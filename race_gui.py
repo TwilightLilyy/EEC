@@ -98,6 +98,18 @@ def filter_rows(rows):
     return filtered
 
 
+def find_log_file(name: str) -> Path:
+    """Return the first existing path for a log file."""
+    path = Path(name)
+    if path.exists():
+        return path
+    base = Path(sys.argv[0]).resolve().parent
+    for p in (Path.cwd() / name, base / name, base.parent / name):
+        if p.exists():
+            return p
+    return path
+
+
 class RaceLoggerGUI:
     def __init__(self, root: tk.Tk):
         self.root = root
@@ -409,13 +421,7 @@ class RaceLoggerGUI:
 
         def load() -> None:
             tree.delete(*tree.get_children())
-            path = Path(csv_path)
-            if not path.exists():
-                base = Path(sys.argv[0]).resolve().parent
-                for p in (Path.cwd() / csv_path, base / csv_path, base.parent / csv_path):
-                    if p.exists():
-                        path = p
-                        break
+            path = find_log_file(csv_path)
             if not path.exists():
                 return
             # Some log files may contain characters that are not valid UTF-8.
@@ -504,13 +510,7 @@ class RaceLoggerGUI:
 
         def load() -> None:
             tree.delete(*tree.get_children())
-            path = Path(csv_path)
-            if not path.exists():
-                base = Path(sys.argv[0]).resolve().parent
-                for p in (Path.cwd() / csv_path, base / csv_path, base.parent / csv_path):
-                    if p.exists():
-                        path = p
-                        break
+            path = find_log_file(csv_path)
             if not path.exists():
                 return
             with open(path, newline="", encoding="utf-8", errors="replace") as f:
@@ -583,13 +583,7 @@ class RaceLoggerGUI:
 
         def load() -> None:
             tree.delete(*tree.get_children())
-            path = Path(csv_path)
-            if not path.exists():
-                base = Path(sys.argv[0]).resolve().parent
-                for p in (Path.cwd() / csv_path, base / csv_path, base.parent / csv_path):
-                    if p.exists():
-                        path = p
-                        break
+            path = find_log_file(csv_path)
             if not path.exists():
                 return
             with open(path, newline="", encoding="utf-8", errors="replace") as f:
@@ -713,12 +707,7 @@ class RaceLoggerGUI:
         load()
 
     def view_standings(self):
-        base = Path(sys.argv[0]).resolve().parent
-        csv_path = base / "sorted_standings.csv"
-        if not csv_path.exists():
-            csv_path = base.parent / "sorted_standings.csv"
-        if not csv_path.exists():
-            csv_path = Path("sorted_standings.csv")
+        csv_path = find_log_file("sorted_standings.csv")
         if not csv_path.exists():
             messagebox.showinfo("Standings", "No standings file found")
             return
@@ -799,12 +788,7 @@ class RaceLoggerGUI:
         load()
 
     def view_driver_times(self):
-        base = Path(sys.argv[0]).resolve().parent
-        csv_path = base / "driver_times.csv"
-        if not csv_path.exists():
-            csv_path = base.parent / "driver_times.csv"
-        if not csv_path.exists():
-            csv_path = Path("driver_times.csv")
+        csv_path = find_log_file("driver_times.csv")
         if not csv_path.exists():
             messagebox.showinfo("Driver Times", "No driver time file found")
             return
@@ -1033,8 +1017,8 @@ class RaceLoggerGUI:
             return
 
         tree.delete(*tree.get_children())
-        pit_path = Path("pitstop_log.csv")
-        stand_path = Path("standings_log.csv")
+        pit_path = find_log_file("pitstop_log.csv")
+        stand_path = find_log_file("standings_log.csv")
 
         pit_rows = []
         if pit_path.exists():
