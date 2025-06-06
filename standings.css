@@ -138,3 +138,9 @@ tr.class-5.group-header td {
     font-size: 1.23em;
     vertical-align: middle;
 }
+
+tr.placeholder td {
+    text-align: center;
+    padding: 1em;
+    font-style: italic;
+}
