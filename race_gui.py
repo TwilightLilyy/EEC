@@ -220,6 +220,9 @@ class RaceLoggerGUI:
         self.create_standings_log_tab(
             "standings_log.csv", "Standings Log", auto_refresh=True
         )
+        # New tabs for pit stop log and stint tracker
+        self.create_pitstop_tab("pitstop_log.csv", "Pit Stops", auto_refresh=True)
+        self.create_stint_tab()
         self.create_team_editor_tab()
 
         # Start stint tracker update loop
@@ -479,6 +482,39 @@ class RaceLoggerGUI:
                 self.root.after(refresh_ms, refresh_loop)
 
         refresh_loop()
+
+    def create_stint_tab(self) -> None:
+        """Create a tab showing current stint information."""
+        frame = ttk.Frame(self.notebook, padding=10)
+        self.notebook.add(frame, text="Stint Tracker")
+
+        cols = [
+            "Car",
+            "Driver",
+            "Team",
+            "Class",
+            "Stint Laps",
+            "Since Last Pit",
+            "Until Next Pit",
+            "Pits Left",
+        ]
+        self.stint_tab_tree = ttk.Treeview(frame, columns=cols, show="headings")
+        vsb = ttk.Scrollbar(frame, orient="vertical", command=self.stint_tab_tree.yview)
+        self.stint_tab_tree.configure(yscrollcommand=vsb.set)
+        self.stint_tab_tree.grid(row=0, column=0, sticky="nsew")
+        vsb.grid(row=0, column=1, sticky="ns")
+        frame.rowconfigure(0, weight=1)
+        frame.columnconfigure(0, weight=1)
+
+        for c in cols:
+            self.stint_tab_tree.heading(c, text=c)
+            self.stint_tab_tree.column(c, anchor="center")
+
+        ttk.Button(frame, text="Refresh", command=self.update_stint_table).grid(
+            row=1, column=0, columnspan=2, pady=5
+        )
+
+        self.update_stint_table()
 
     def create_pitstop_tab(
         self,
@@ -979,14 +1015,14 @@ class RaceLoggerGUI:
 
     def view_pitstops(self):
         csv_path = find_log_file("pitstop_log.csv")
-        if not csv_path.exists():
-            messagebox.showinfo("Pit Stops", "No pit stop file found")
-            return
 
         win = tk.Toplevel(self.root)
         win.title("Pit Stops")
         frame = ttk.Frame(win, padding=10)
         frame.pack(fill="both", expand=True)
+
+        if not csv_path.exists():
+            messagebox.showinfo("Pit Stops", "No pit stop file found")
 
         tree = ttk.Treeview(frame, show="headings")
         vsb = ttk.Scrollbar(frame, orient="vertical", command=tree.yview)
@@ -1036,6 +1072,8 @@ class RaceLoggerGUI:
 
         def load() -> None:
             tree.delete(*tree.get_children())
+            if not csv_path.exists():
+                return
             try:
                 with csv_path.open(newline="", encoding="utf-8", errors="replace") as f:
                     reader = csv.DictReader(f)
@@ -1102,11 +1140,18 @@ class RaceLoggerGUI:
             self.stint_tree.move(k, "", index)
 
     def update_stint_table(self) -> None:
-        tree = getattr(self, "stint_tree", None)
-        if tree is None:
+        trees = []
+        t1 = getattr(self, "stint_tree", None)
+        t2 = getattr(self, "stint_tab_tree", None)
+        if t1 is not None:
+            trees.append(t1)
+        if t2 is not None and t2 is not t1:
+            trees.append(t2)
+        if not trees:
             return
 
-        tree.delete(*tree.get_children())
+        for t in trees:
+            t.delete(*t.get_children())
         pit_path = find_log_file("pitstop_log.csv")
         stand_path = find_log_file("standings_log.csv")
 
@@ -1173,6 +1218,8 @@ class RaceLoggerGUI:
         for car in avg_dur:
             avg_dur[car] /= counts.get(car, 1)
 
+        rows = []
+
         now = datetime.now()
         for car, info in latest_stand.items():
             driver = info.get("UserName", info.get("Driver", ""))
@@ -1203,20 +1250,20 @@ class RaceLoggerGUI:
                 s = int(sec % 60)
                 return f"{h}:{m:02d}:{s:02d}" if h else f"{m}:{s:02d}"
 
-            tree.insert(
-                "",
-                "end",
-                values=[
-                    car,
-                    driver,
-                    team,
-                    cls,
-                    stint_laps,
-                    fmt(since_sec),
-                    fmt(until_sec),
-                    pits_left,
-                ],
-            )
+            rows.append([
+                car,
+                driver,
+                team,
+                cls,
+                stint_laps,
+                fmt(since_sec),
+                fmt(until_sec),
+                pits_left,
+            ])
+
+        for t in trees:
+            for vals in rows:
+                t.insert("", "end", values=vals)
 
         self.root.after(3000, self.update_stint_table)
 
