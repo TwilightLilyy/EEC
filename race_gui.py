@@ -211,6 +211,8 @@ class RaceLoggerGUI:
         self.root.title("EEC Logger")
         # Ensure the window is large enough when it first appears
         self.root.minsize(800, 600)
+        if hasattr(self.root, "geometry"):
+            self.root.geometry("1100x800")
 
         self.theme = self.setup_style(classic_theme)
         icon_path = Path(__file__).resolve().parent / "Logos" / "App" / "EECApp.png"
@@ -410,15 +412,21 @@ class RaceLoggerGUI:
         if not classic and sv_ttk is not None:
             try:
                 sv_ttk.set_theme("dark", self.root)
+                if hasattr(style, "layout") and not style.layout("TButton"):
+                    raise RuntimeError("sv_ttk theme resources missing")
                 theme = style.theme_use()
             except Exception:
-                pass
+                try:
+                    style.theme_use("clam")
+                except Exception:
+                    pass
+                theme = "clam"
         else:
             try:
                 style.theme_use("clam")
             except Exception:
                 pass
-            theme = style.theme_use()
+            theme = "clam"
         self.bg = "#23272e"
         self.fg = "#e7e7ff"
         accent = "#3c445c"

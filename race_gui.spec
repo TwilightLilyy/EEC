@@ -3,6 +3,7 @@
 
 import os
 import sys
+from PyInstaller.utils.hooks import collect_data_files
 
 
 PYTHON_EXE = sys._base_executable
@@ -12,7 +13,7 @@ a = Analysis(
     ['race_gui.py'],
     pathex=[],
     binaries=[(PYTHON_EXE, PYTHON_NAME)],
-    datas=[],
+    datas=collect_data_files("sv_ttk"),
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
