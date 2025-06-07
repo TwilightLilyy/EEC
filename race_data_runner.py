@@ -11,8 +11,12 @@ from pathlib import Path
 from datetime import datetime
 from typing import Any
 
-# Ensure all relative paths resolve to the directory this file lives in
-BASE_DIR = Path(__file__).resolve().parent
+# Ensure all relative paths resolve to the project directory
+if getattr(sys, "frozen", False):
+    # Running inside a PyInstaller bundle
+    BASE_DIR = Path(sys._MEIPASS)
+else:
+    BASE_DIR = Path(__file__).resolve().parent
 os.chdir(BASE_DIR)
 
 
