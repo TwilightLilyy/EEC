@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eec"
+version = "0.1.0"
+description = "Utilities for logging and displaying data from iRacing AI races"
+requires-python = ">=3.9"
+dependencies = [
+    "pandas",
+    "colorama",
+    "pyirsdk",
+    "sv_ttk",
+    "watchfiles>=0.21.0",
+]
+
+[project.scripts]
+race-gui = "race_gui:main"
+race-data-runner = "race_data_runner:main"
+
+[tool.setuptools]
+py-modules = [
+    "ai_standings_logger",
+    "codebase_cleaner",
+    "eec_calendar",
+    "eec_db",
+    "eec_teams",
+    "ensure_dependencies",
+    "pitstop_logger_enhanced",
+    "race_data_runner",
+    "race_gui",
+    "roster_ui",
+    "standings_sorter",
+    "teams_tab",
+]

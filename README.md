@@ -32,12 +32,21 @@ dependencies from `requirements.txt`:
 The optional `openai` package can be installed afterwards if you plan to
 use the ChatGPT export feature in the GUI.
 
+After activating the environment install the project in editable mode so the
+command line entry points are available:
+
+```bash
+pip install -e .
+```
+
+This provides the `race-data-runner` and `race-gui` commands used below.
+
 ## Usage
 
 Run the race data runner which spawns the loggers and sorter:
 
 ```bash
-python race_data_runner.py
+race-data-runner
 ```
 
 This creates CSV log files in the repository directory and writes console output to the `logs/` folder. The `standings.html` file reads `sorted_standings.csv` and together with `standings.js` and `standings.css` provides a live overlay you can open in a browser or streaming tool.
@@ -51,7 +60,7 @@ The window also provides a simple *File* menu with a *Quit* action to close the 
 Run it with:
 
 ```bash
-python race_gui.py
+race-gui
 ```
 
 ### Building an executable
