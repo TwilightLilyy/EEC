@@ -505,17 +505,39 @@ class RaceLoggerGUI:
         if self.proc:
             messagebox.showinfo("Logger", "Already running")
             return
-        try:
-            import race_data_runner as _runner_mod
-            runner = Path(_runner_mod.__file__).resolve()
-        except Exception:
-            runner = Path(__file__).resolve().parent / "race_data_runner.py"
-            if not runner.exists():
-                runner = Path(__file__).resolve().parent.parent / "race_data_runner.py"
+
+        runner = None
+        if getattr(sys, "frozen", False):
+            mei = Path(getattr(sys, "_MEIPASS", Path(sys.executable).parent))
+            candidate = mei / "race_data_runner.py"
+            if candidate.exists():
+                runner = candidate
+        if runner is None:
+            try:
+                import race_data_runner as _runner_mod
+                runner = Path(_runner_mod.__file__).resolve()
+            except Exception:
+                candidate = Path(__file__).resolve().parent / "race_data_runner.py"
+                if candidate.exists():
+                    runner = candidate
+                else:
+                    candidate = Path(__file__).resolve().parent.parent / "race_data_runner.py"
+                    if candidate.exists():
+                        runner = candidate
+
+        if not runner or not runner.exists():
+            messagebox.showerror(
+                "Logger",
+                "Could not locate race_data_runner.py.\n"
+                "Please reinstall or run from source.",
+            )
+            return
 
         python = _find_python()
-        cmd = [python, str(runner), "--db", str(self.db_path)]
-        print(f"[INFO] Launching {runner.name} --db {self.db_path}")
+        cmd = [python, str(runner), "--db", str(self.db_path), "--auto-install"]
+        print(
+            f"[INFO] Launching {runner.name} --db {self.db_path} --auto-install"
+        )
         self.proc = subprocess.Popen(
             cmd,
             stdout=subprocess.PIPE,
