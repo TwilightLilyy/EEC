@@ -19,6 +19,8 @@ from typing import Any
 import argparse
 import logging
 import atexit
+import platform
+import traceback
 
 import eec_teams
 
@@ -26,15 +28,21 @@ try:
     import irsdk
 except ImportError:
     irsdk = None
+OPENAI_IMPORT_ERROR: Exception | None = None
 try:
     import openai
-except ImportError:
+except Exception as exc:
+    OPENAI_IMPORT_ERROR = exc
     openai = None
 
+SVTTK_IMPORT_ERROR: Exception | None = None
 try:
     import sv_ttk
-except Exception:
+except Exception as exc:
+    SVTTK_IMPORT_ERROR = exc
     sv_ttk = None
+
+OPENAI_ENABLED = True
 
 LOG_PATH = Path(__file__).with_name("race_gui.log")
 
@@ -173,11 +181,11 @@ def estimate_remaining_pits(
 
 
 class RaceLoggerGUI:
-    def __init__(self, root: tk.Tk):
+    def __init__(self, root: tk.Tk, *, classic_theme: bool = False):
         self.root = root
         self.root.title("EEC Logger")
 
-        self.setup_style()
+        self.theme = self.setup_style(classic_theme)
         icon_path = Path(__file__).resolve().parent / "Logos" / "App" / "EECApp.png"
         if icon_path.exists():
             try:
@@ -368,11 +376,14 @@ class RaceLoggerGUI:
 
         win.protocol("WM_DELETE_WINDOW", on_close)
 
-    def setup_style(self) -> None:
+    def setup_style(self, classic: bool = False) -> str:
+        """Configure ttk styles and return the applied theme name."""
         style = ttk.Style(self.root)
-        if sv_ttk is not None:
+        theme = "default"
+        if not classic and sv_ttk is not None:
             try:
                 sv_ttk.set_theme("dark", self.root)
+                theme = style.theme_use()
             except Exception:
                 pass
         else:
@@ -380,6 +391,7 @@ class RaceLoggerGUI:
                 style.theme_use("clam")
             except Exception:
                 pass
+            theme = style.theme_use()
         self.bg = "#23272e"
         self.fg = "#e7e7ff"
         accent = "#3c445c"
@@ -396,6 +408,7 @@ class RaceLoggerGUI:
         )
         style.map("TNotebook.Tab", background=[("selected", accent)])
         self.log_box_bg = "#111111"
+        return theme
 
     # ── logging subprocess management ────────────────────────────
     def start_logging(self):
@@ -1473,8 +1486,8 @@ class RaceLoggerGUI:
 
     # ── ChatGPT export ──────────────────────────────────────────
     def export_logs(self):
-        if openai is None:
-            messagebox.showerror("Export", "openai package not installed")
+        if not OPENAI_ENABLED or openai is None:
+            messagebox.showinfo("Export", "OpenAI features disabled")
             return
         api_key = os.environ.get("OPENAI_API_KEY")
         if not api_key:
@@ -1622,6 +1635,16 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         action="store_true",
         help="open interactive shell before starting the GUI",
     )
+    parser.add_argument(
+        "--classic-theme",
+        action="store_true",
+        help="force default theme even when sv_ttk is installed",
+    )
+    parser.add_argument(
+        "--no-openai",
+        action="store_true",
+        help="disable OpenAI features",
+    )
     return parser.parse_args(argv)
 
 
@@ -1644,7 +1667,15 @@ def setup_excepthook(logger: logging.Logger) -> None:
     """Redirect uncaught exceptions to the logger."""
 
     def handle(exc_type, exc, tb) -> None:
+        msg = "".join(traceback.format_exception(exc_type, exc, tb))
         logger.error("Uncaught exception", exc_info=(exc_type, exc, tb))
+        print(msg, file=sys.stderr)
+        root = getattr(tk, "_default_root", None)
+        if root is not None:
+            try:
+                messagebox.showerror("Error", str(exc))
+            except Exception:
+                pass
         sys.__excepthook__(exc_type, exc, tb)
 
     sys.excepthook = handle
@@ -1664,9 +1695,12 @@ def check_environment(logger: logging.Logger) -> None:
 
 def check_dependencies(logger: logging.Logger) -> None:
     """Warn about missing optional dependencies."""
-    for name, mod in {"irsdk": irsdk, "openai": openai, "sv_ttk": sv_ttk}.items():
-        if mod is None:
-            logger.warning("Module '%s' not installed. Try: pip install %s", name, name)
+    if OPENAI_IMPORT_ERROR is not None:
+        logger.warning("module 'openai' not installed – OpenAI features disabled")
+    if SVTTK_IMPORT_ERROR is not None:
+        logger.warning("module 'sv_ttk' not installed – falling back to default theme")
+    if irsdk is None:
+        logger.warning("module 'irsdk' not installed")
 
 
 def open_log_file(path: Path) -> None:
@@ -1707,6 +1741,11 @@ def main(argv: list[str] | None = None) -> int:
         )
     )
 
+    global OPENAI_ENABLED
+    if args.no_openai:
+        OPENAI_ENABLED = False
+        logger.info("OpenAI disabled by flag")
+
     logger.debug("argv: %s", sys.argv)
     logger.debug("PID: %d", os.getpid())
 
@@ -1734,17 +1773,43 @@ def main(argv: list[str] | None = None) -> int:
         root = tk.Tk()
         if prev_root is not None or tk._default_root is None:
             raise RuntimeError("Unexpected number of Tk root instances")
+        if hasattr(root, "deiconify"):
+            root.deiconify()
+        if hasattr(root, "lift"):
+            root.lift()
+        if hasattr(root, "update_idletasks"):
+            root.update_idletasks()
+        mapped = getattr(root, "winfo_ismapped", lambda: True)
+        updater = getattr(root, "update", lambda: None)
+        start = time.time()
+        while not mapped() and time.time() - start < 1:
+            updater()
+        if not mapped():
+            raise RuntimeError("GUI failed to map")
     logger.debug("QApplication created")
 
     if os.environ.get("EEC_DUMMY_TK"):
         gui = None
+        theme = "default"
     else:
-        gui = RaceLoggerGUI(root)
+        try:
+            gui = RaceLoggerGUI(root, classic_theme=args.classic_theme)
+        except TypeError:  # tests may monkeypatch RaceLoggerGUI
+            gui = RaceLoggerGUI(root)  # type: ignore[arg-type]
+        theme = getattr(gui, "theme", "default") if gui else "default"
         logger.debug("Window created")
+    logger.info(
+        "PID %d – theme %s – Python %s – Tk %s",
+        os.getpid(),
+        theme,
+        platform.python_version(),
+        root.tk.call("info", "patchlevel") if hasattr(root, "tk") else "0",
+    )
 
     start_event = threading.Event()
     start_heartbeat(start_event)
     root.after(0, start_event.set)
+    time.sleep(0.1)
 
     if args.debug_shell:
         import code
