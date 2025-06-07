@@ -1,5 +1,7 @@
 import argparse
 import irsdk, csv, time
+import shutil
+from pathlib import Path
 
 import eec_db
 try:
@@ -30,6 +32,24 @@ HEADERS = [
     "Stint Start Lap", "Stint End Lap",
     "Stint Duration (sec)", "Stint Duration (min:sec)", "Stint Duration (Laps)"
 ]
+
+
+def rollover_logs() -> dict:
+    """Archive the current CSV files and return a fresh driver_total dict."""
+    dest_dir = Path("RaceLogs")
+    dest_dir.mkdir(exist_ok=True)
+    ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+    try:
+        shutil.move(CSV_FILE, dest_dir / f"{Path(CSV_FILE).stem}_{ts}.csv")
+    except FileNotFoundError:
+        pass
+    try:
+        shutil.move(DRIVER_TOTAL_FILE, dest_dir / f"{Path(DRIVER_TOTAL_FILE).stem}_{ts}.csv")
+    except FileNotFoundError:
+        pass
+    open(CSV_FILE, "w", newline="").write(",".join(HEADERS) + "\n")
+    open(DRIVER_TOTAL_FILE, "w", newline="").write(",".join(DRIVER_HEADERS) + "\n")
+    return {}
 
 def iso_now():
     return datetime.now().isoformat(timespec="seconds")
@@ -115,12 +135,18 @@ except FileNotFoundError:
 ir = irsdk.IRSDK(); ir.startup()
 stint = {}                           # carIdx → dict
 last_total_update = time.time()
+prev_session = ir["SessionNum"]
 
 print("Enhanced pit-stop logger running… Ctrl-C to stop.")
 while True:
     try:
         if ir.is_initialized and ir.is_connected:
             ir.freeze_var_buffer_latest()
+            session_num = ir["SessionNum"]
+            if session_num != prev_session:
+                driver_total = rollover_logs()
+                stint.clear()
+                prev_session = session_num
             sess  = ir["SessionTime"]
             onpit = ir["CarIdxOnPitRoad"]
             laps  = ir["CarIdxLap"]

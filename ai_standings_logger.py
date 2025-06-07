@@ -9,7 +9,9 @@ import argparse
 import csv
 import time
 from datetime import datetime
+from pathlib import Path
 from typing import Optional
+import shutil
 
 import eec_db
 
@@ -37,6 +39,20 @@ DEFAULT_CSV_PATH = "standings_log.csv"
 DEFAULT_INTERVAL = 5
 
 
+def rollover_log(path: str) -> None:
+    """Move the current log to ``RaceLogs`` with a timestamp and start fresh."""
+    dest_dir = Path("RaceLogs")
+    dest_dir.mkdir(exist_ok=True)
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    dest = dest_dir / f"{Path(path).stem}_{timestamp}.csv"
+    try:
+        shutil.move(path, dest)
+    except FileNotFoundError:
+        pass
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        csv.writer(f).writerow(HEADER)
+
+
 def log_standings(csv_path: str, interval: int, db_path: Optional[str] = None) -> None:
     """Main logging loop."""
     ir = irsdk.IRSDK()
@@ -55,10 +71,18 @@ def log_standings(csv_path: str, interval: int, db_path: Optional[str] = None) -
 
     pit_count: dict[int, int] = {}
     last_pit_state: dict[int, bool] = {}
+    prev_session = ir["SessionNum"]
 
     try:
         while True:
             ts = datetime.now().isoformat(timespec="seconds")
+            session_num = ir["SessionNum"]
+            if session_num != prev_session:
+                rollover_log(csv_path)
+                pit_count.clear()
+                last_pit_state.clear()
+                prev_session = session_num
+
             laps = ir["CarIdxLap"]
             pos = ir["CarIdxPosition"]
             cpos = ir["CarIdxClassPosition"]
