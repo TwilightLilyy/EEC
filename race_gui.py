@@ -22,7 +22,6 @@ import subprocess
 import signal
 import threading
 import time
-import select
 import os
 import shutil
 from pathlib import Path
@@ -51,6 +50,16 @@ from codebase_cleaner import (
     acquire_single_instance_lock,
     focus_running_window,
 )
+
+# Acquire the single instance lock as soon as possible so additional
+# processes launched during the heavy import phase fail fast on Windows
+# where imports can be slow.
+_EARLY_LOCK = None
+if __name__ == "__main__":  # pragma: no cover - exercised via subprocess tests
+    _EARLY_LOCK = acquire_single_instance_lock()
+    if _EARLY_LOCK is None:
+        focus_running_window()
+        sys.exit(0)
 
 import eec_teams
 import importlib
@@ -1742,22 +1751,24 @@ class RaceLoggerGUI:
         if not self.proc:
             return
 
-        streams = []
-        if self.proc.stdout:
-            streams.append(self.proc.stdout)
-        if self.proc.stderr:
-            streams.append(self.proc.stderr)
+        def reader(stream):
+            for line in iter(stream.readline, ""):
+                if not line:
+                    break
+                if "Error:" in line or "Traceback" in line:
+                    line = f"\x1b[31m{line.rstrip()}\x1b[0m\n"
+                self.log_queue.put(line)
 
-        while streams:
-            ready, _, _ = select.select(streams, [], [], 0.1)
-            for stream in ready:
-                line = stream.readline()
-                if line:
-                    if "Error:" in line or "Traceback" in line:
-                        line = f"\x1b[31m{line.rstrip()}\x1b[0m\n"
-                    self.log_queue.put(line)
-                else:
-                    streams.remove(stream)
+        threads = []
+        if self.proc.stdout:
+            threads.append(threading.Thread(target=reader, args=(self.proc.stdout,), daemon=True))
+        if self.proc.stderr:
+            threads.append(threading.Thread(target=reader, args=(self.proc.stderr,), daemon=True))
+
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
 
     def _apply_ansi_codes(self, codes: list[str]) -> None:
         for c in codes:
@@ -2107,7 +2118,7 @@ def main(argv: list[str] | None = None) -> int:
 if __name__ == "__main__":
     import threading
     threading.Thread(target=_run_version_check, daemon=True).start()
-    lock = acquire_single_instance_lock()
+    lock = _EARLY_LOCK or acquire_single_instance_lock()
     if lock is None:
         focus_running_window()
         sys.exit(0)
