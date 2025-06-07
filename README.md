@@ -13,6 +13,7 @@ A collection of utilities for logging and displaying data from iRacing AI races.
 - **standings_sorter.py** – produces `sorted_standings.csv` so the overlay can show the latest order per class.
 - **race_data_runner.py** – helper script that launches all of the above and restarts them if they stop.
 - **roster_ui.py** – displays team rosters in a scrollable window. Use `--refresh-ms` to set the auto-refresh interval.
+- **minimal_logger_gui.py** – small window with start/stop buttons that launches `race_data_runner.py` in the background.
 
 ## Requirements
 
@@ -80,6 +81,16 @@ Run it with:
 
 ```bash
 race-gui
+```
+
+### Minimal logger GUI
+
+For a very small interface with just *Start* and *Stop* buttons you can launch
+`minimal_logger_gui.py`.  It simply runs `race_data_runner.py` in the
+background and shows whether it is active.
+
+```bash
+python minimal_logger_gui.py
 ```
 
 ### Building an executable
