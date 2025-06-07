@@ -1,6 +1,5 @@
 import argparse
 import irsdk, csv, time
-from typing import Optional
 
 import eec_db
 try:

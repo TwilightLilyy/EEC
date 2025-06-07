@@ -47,7 +47,6 @@ def test_main_failure(monkeypatch, tmp_path, capsys):
 
     monkeypatch.setattr(race_gui.tk, '_default_root', None)
     monkeypatch.setattr(race_gui.tk, 'Tk', boom)
-    monkeypatch.setattr(race_gui, 'open_log_file', lambda *_: None)
 
     with pytest.raises(RuntimeError):
         race_gui.main([])
