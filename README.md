@@ -34,8 +34,6 @@ dependencies from `requirements.txt`:
 ```
 
 
-The optional `openai` package can be installed afterwards if you plan to
-use the ChatGPT export feature in the GUI.
 
 After activating the environment install the project in editable mode so the
 command line entry points are available:
@@ -74,7 +72,7 @@ This creates CSV log files in the repository directory and writes console output
 Logos and spec maps under `Logos/` and `SpecMaps/` contain the Final Fantasy XIV themed assets used for the championship.
 
 ## GUI
-A basic Tkinter interface is provided in `race_gui.py`.  It lets you start and stop the logging utilities, shows the current iRacing connection status and has buttons to reset or save the log files.  Tabs are available to view the `driver_swaps.csv` and `standings_log.csv` files directly, while buttons open the `pitstop_log.csv`, `driver_times.csv` and `series_standings.csv` logs in their own windows.  The driver time view allows filtering by team and sorting by clicking the column headers.  If the optional `openai` package is installed and an `OPENAI_API_KEY` environment variable is set, the GUI can send the logs to ChatGPT and store the resulting analysis in a text file.  A **Live Race Feed** tab displays the latest overtakes, pit stops, driver swaps, fastest laps and penalties and refreshes automatically. A **View Live Feed…** button opens a new window showing the latest overtakes, pit stops, driver swaps, fastest laps and penalties which refreshes automatically.
+A basic Tkinter interface is provided in `race_gui.py`.  It lets you start and stop the logging utilities, shows the current iRacing connection status and has buttons to reset or save the log files.  Tabs are available to view the `driver_swaps.csv` and `standings_log.csv` files directly, while buttons open the `pitstop_log.csv`, `driver_times.csv` and `series_standings.csv` logs in their own windows.  The driver time view allows filtering by team and sorting by clicking the column headers.  A **Live Race Feed** tab displays the latest overtakes, pit stops, driver swaps, fastest laps and penalties and refreshes automatically. A **View Live Feed…** button opens a new window showing the latest overtakes, pit stops, driver swaps, fastest laps and penalties which refreshes automatically.
 The window also provides a simple *File* menu with a *Quit* action to close the application. A modern dark theme from the `sv_ttk` package is applied and the `Logos/App/EECApp.png` image will be used as the window icon when available. Ensure `sv_ttk` is installed for the modern look – the GUI attempts to install it automatically when missing.
 
 Run it with:

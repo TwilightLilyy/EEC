@@ -28,14 +28,6 @@ import shutil
 from pathlib import Path
 from queue import Queue, Empty
 from collections import deque
-
-VERSION_DONE = threading.Event()
-VERSION_OK = False
-
-def _run_version_check() -> None:
-    global VERSION_OK
-    VERSION_OK = check_latest_version(__version__)
-    VERSION_DONE.set()
 import csv
 import re
 import json
@@ -47,7 +39,6 @@ import atexit
 import platform
 import traceback
 from codebase_cleaner import (
-    check_latest_version,
     acquire_single_instance_lock,
     focus_running_window,
 )
@@ -64,12 +55,6 @@ try:
     import irsdk
 except ImportError:
     irsdk = None
-OPENAI_IMPORT_ERROR: Exception | None = None
-try:
-    import openai
-except Exception as exc:
-    OPENAI_IMPORT_ERROR = exc
-    openai = None
 
 SVTTK_IMPORT_ERROR: Exception | None = None
 try:
@@ -77,8 +62,6 @@ try:
 except Exception as exc:
     SVTTK_IMPORT_ERROR = exc
     sv_ttk = None
-
-OPENAI_ENABLED = True
 
 LOG_PATH = Path(__file__).with_name("race_gui.log")
 
@@ -350,9 +333,6 @@ class RaceLoggerGUI:
             frm, text="Start Logging", command=self.start_logging
         )
         self.start_btn.grid(column=0, row=1, pady=5, sticky="ew")
-        if not VERSION_DONE.is_set() or not VERSION_OK:
-            self.start_btn.config(state="disabled")
-            self.root.after(200, self._check_version_ready)
         self.stop_btn = ttk.Button(
             frm, text="Stop Logging", command=self.stop_logging, state="disabled"
         )
@@ -381,10 +361,6 @@ class RaceLoggerGUI:
             text="View Series Standings…",
             command=self.view_series_standings,
         ).grid(column=0, row=7, columnspan=2, pady=5, sticky="ew")
-        ttk.Button(frm, text="Export to ChatGPT", command=self.export_logs).grid(
-            column=0, row=8, columnspan=2, pady=5, sticky="ew"
-        )
-
         self.log_box = ScrolledText(
             frm,
             width=80,
@@ -695,13 +671,6 @@ class RaceLoggerGUI:
             if os.path.exists(f):
                 shutil.copy(f, target)
         messagebox.showinfo("Saved", f"Logs copied to {target}")
-
-    def _check_version_ready(self) -> None:
-        if VERSION_DONE.is_set():
-            if VERSION_OK:
-                self.start_btn.config(state="normal")
-            return
-        self.root.after(200, self._check_version_ready)
 
     def update_wrap(self) -> None:
         wrap = tk.WORD if self.wrap_logs.get() else tk.NONE
@@ -1703,39 +1672,6 @@ class RaceLoggerGUI:
 
         refresh()
 
-    # ── ChatGPT export ──────────────────────────────────────────
-    def export_logs(self):
-        if not OPENAI_ENABLED or openai is None:
-            messagebox.showinfo("Export", "OpenAI features disabled")
-            return
-        api_key = os.environ.get("OPENAI_API_KEY")
-        if not api_key:
-            messagebox.showerror("Export", "OPENAI_API_KEY not set")
-            return
-        openai.api_key = api_key
-        data = []
-        for f in LOG_FILES:
-            if os.path.exists(f):
-                with open(f, "r", encoding="utf-8", errors="ignore") as fh:
-                    data.append(f"## {f}\n" + fh.read())
-        prompt = "\n".join(data)[:12000]  # limit size
-        try:
-            resp = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
-                messages=[{"role": "user", "content": prompt}],
-                max_tokens=300,
-            )
-            res_text = resp["choices"][0]["message"]["content"]
-            info = filedialog.asksaveasfilename(
-                title="Save analysis", defaultextension=".txt"
-            )
-            if info:
-                with open(info, "w", encoding="utf-8") as out:
-                    out.write(res_text)
-                messagebox.showinfo("Export", f"Analysis saved to {info}")
-        except Exception as e:
-            messagebox.showerror("Export", f"Error: {e}")
-
     # ── log output handling ─────────────────────────────────────
     def read_output(self):
         """Read subprocess stdout and stderr and push to the log queue."""
@@ -1884,11 +1820,6 @@ def parse_cli(argv: list[str] | None = None) -> argparse.Namespace:
         help="force the classic Tk theme even when sv_ttk is installed",
     )
     parser.add_argument(
-        "--no-openai",
-        action="store_true",
-        help="disable all OpenAI features",
-    )
-    parser.add_argument(
         "--db",
         metavar="PATH",
         default="eec_log.db",
@@ -1959,8 +1890,6 @@ def check_environment(logger: logging.Logger) -> None:
 
 def check_dependencies(logger: logging.Logger) -> None:
     """Ensure optional dependencies are available and log warnings."""
-    if OPENAI_IMPORT_ERROR is not None:
-        logger.warning("module 'openai' not installed – OpenAI features disabled")
     if SVTTK_IMPORT_ERROR is not None and ensure_package is not None:
         logger.warning("module 'sv_ttk' not installed – attempting automatic installation")
         try:
@@ -2010,10 +1939,6 @@ def main(argv: list[str] | None = None) -> int:
         )
     )
 
-    global OPENAI_ENABLED
-    if args.no_openai:
-        OPENAI_ENABLED = False
-        logger.info("OpenAI disabled by flag")
 
     logger.debug("argv: %s", sys.argv)
     logger.debug("PID: %d", os.getpid())
@@ -2034,7 +1959,7 @@ def main(argv: list[str] | None = None) -> int:
                 func()
 
             def mainloop(self) -> None:
-                pass
+                time.sleep(2)
 
         root = DummyRoot()
     else:
@@ -2105,8 +2030,6 @@ def main(argv: list[str] | None = None) -> int:
 
 
 if __name__ == "__main__":
-    import threading
-    threading.Thread(target=_run_version_check, daemon=True).start()
     lock = acquire_single_instance_lock()
     if lock is None:
         focus_running_window()

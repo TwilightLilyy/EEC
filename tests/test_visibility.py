@@ -84,33 +84,3 @@ def test_theme_fallback(monkeypatch, tmp_path):
     assert 'theme default' in log_path.read_text()
 
 
-def test_disable_openai(monkeypatch, tmp_path):
-    logger, log_path = make_logger(tmp_path)
-
-    class DummyRoot:
-        def after(self, _delay, func):
-            func()
-        def mainloop(self):
-            pass
-        def deiconify(self):
-            pass
-        def lift(self):
-            pass
-        def update_idletasks(self):
-            pass
-        def winfo_ismapped(self):
-            return True
-        def update(self):
-            pass
-
-    def make_root():
-        root = DummyRoot()
-        race_gui.tk._default_root = root
-        return root
-
-    monkeypatch.setattr(race_gui.tk, '_default_root', None)
-    monkeypatch.setattr(race_gui.tk, 'Tk', make_root)
-    monkeypatch.setattr(race_gui, 'RaceLoggerGUI', lambda *_a, **_k: types.SimpleNamespace(theme='default'))
-    code = race_gui.main(['--no-openai'])
-    assert code == 0
-    assert 'OpenAI disabled' in log_path.read_text()
