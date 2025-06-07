@@ -211,19 +211,33 @@ def estimate_remaining_pits(
 def _find_python() -> str:
     """Return the preferred Python executable for launching child scripts."""
     exe = sys.executable
-    if getattr(sys, "frozen", False):
-        candidate = Path(exe).with_name(
-            "python.exe" if os.name == "nt" else "python"
-        )
+
+    # In development mode ``sys.executable`` is already the right interpreter
+    if not getattr(sys, "frozen", False):
+        return exe
+
+    name = "python.exe" if os.name == "nt" else "python"
+
+    # PyInstaller distributions may bundle an interpreter next to the GUI
+    candidate = Path(exe).with_name(name)
+    if candidate.exists():
+        return str(candidate)
+
+    # Some builds unpack the interpreter inside ``sys._MEIPASS``
+    meipass = getattr(sys, "_MEIPASS", None)
+    if meipass:
+        candidate = Path(meipass) / name
         if candidate.exists():
             return str(candidate)
-        # Fall back to a Python interpreter on PATH. When running a PyInstaller
-        # build without an embedded interpreter ``sys.executable`` points back
-        # to the GUI executable which would simply relaunch itself.
-        for name in ("python", "python3"):
-            found = shutil.which(name)
-            if found:
-                return found
+
+    # Fall back to an interpreter from the PATH
+    for alt in ("python", "python3"):
+        found = shutil.which(alt)
+        if found:
+            return found
+
+    # As a last resort return ``sys.executable`` even though it may point back
+    # to the frozen executable itself
     return exe
 
 
@@ -416,6 +430,10 @@ class RaceLoggerGUI:
         self.root.after(100, self.update_log_box)
         self.root.after(3000, self.update_feed)
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
+        self.monitor_thread = threading.Thread(
+            target=self.monitor_logging, daemon=True
+        )
+        self.monitor_thread.start()
 
     def open_feed_window(self) -> None:
         if self.feed_window is not None and self.feed_window.winfo_exists():
@@ -506,35 +524,56 @@ class RaceLoggerGUI:
         if self.proc:
             messagebox.showinfo("Logger", "Already running")
             return
+
+        logger = logging.getLogger("race_gui")
+        runner: Path
+
         try:
-            import race_data_runner as _runner_mod
-            runner = Path(_runner_mod.__file__).resolve()
+            if getattr(sys, "frozen", False):
+                base = Path(sys._MEIPASS)
+                runner = base / "race_data_runner.py"
+                if not runner.exists():
+                    base = Path(__file__).resolve().parent
+                    runner = base / "race_data_runner.py"
+                    if not runner.exists():
+                        runner = base.parent / "race_data_runner.py"
+            else:
+                import race_data_runner as _runner_mod
+                runner = Path(_runner_mod.__file__).resolve()
         except Exception:
+            logger.exception("Failed to locate race_data_runner.py")
             base = Path(__file__).resolve().parent
             runner = base / "race_data_runner.py"
             if not runner.exists():
                 runner = base.parent / "race_data_runner.py"
-            if getattr(sys, "frozen", False) and not runner.exists():
-                runner = Path(sys._MEIPASS) / "race_data_runner.py"
+
         if not runner.exists():
-            messagebox.showerror(
-                "Logger",
-                f"race_data_runner.py not found: {runner}",
-            )
+            msg = f"race_data_runner.py not found: {runner}"
+            logger.error(msg)
+            messagebox.showerror("Logger", msg)
+            self.proc = None
             return
 
         python = _find_python()
         cmd = [python, str(runner), "--db", str(self.db_path), "--auto-install"]
         print(f"[INFO] Launching {runner.name} --db {self.db_path}")
-        self.proc = subprocess.Popen(
-            cmd,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True,
-            bufsize=1,
-            encoding="utf-8",
-            errors="replace",
-        )
+
+        try:
+            self.proc = subprocess.Popen(
+                cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                bufsize=1,
+                encoding="utf-8",
+                errors="replace",
+            )
+        except Exception as exc:
+            logger.exception("Failed to launch race_data_runner")
+            messagebox.showerror("Logger", f"Failed to launch runner: {exc}")
+            self.proc = None
+            return
+
         self.output_thread = threading.Thread(target=self.read_output, daemon=True)
         self.output_thread.start()
         self.start_btn.config(state="disabled")
@@ -557,6 +596,20 @@ class RaceLoggerGUI:
         self.output_thread = None
         self.start_btn.config(state="normal")
         self.stop_btn.config(state="disabled")
+
+    def monitor_logging(self):
+        logger = logging.getLogger("race_gui")
+        while True:
+            if self.proc:
+                ret = self.proc.poll()
+                if ret is not None:
+                    logger.warning(
+                        "Logger process exited with code %s, restarting", ret
+                    )
+                    self.proc = None
+                    self.output_thread = None
+                    self.start_logging()
+            time.sleep(10)
 
     # ── connection status loop ──────────────────────────────────
     def update_status_loop(self):
