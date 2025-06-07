@@ -22,3 +22,6 @@ SpecMaps/grahabase.tga
 SpecMaps/grahaspec.mip
 SpecMaps/grahaspec.tga
 Install-RaceGUI.bat
+logs/ai_logger.txt
+logs/pit_logger.txt
+logs/standings_sorter.txt
