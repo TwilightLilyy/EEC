@@ -1687,9 +1687,15 @@ def start_heartbeat(start_event: threading.Event) -> None:
 
     def beat() -> None:
         start_event.wait()
+        # Print once immediately when the GUI enters the event loop to
+        # avoid timing races in short-lived tests where the event is
+        # cleared before the thread gets scheduled again.
+        print("GUI_HEARTBEAT", flush=True)
         while start_event.is_set():
-            print("GUI_HEARTBEAT", flush=True)
             time.sleep(2)
+            if not start_event.is_set():
+                break
+            print("GUI_HEARTBEAT", flush=True)
 
     threading.Thread(target=beat, daemon=True).start()
 
