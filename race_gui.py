@@ -1985,7 +1985,8 @@ def start_heartbeat(start_event: threading.Event) -> None:
         # cleared before the thread gets scheduled again.
         print("GUI_HEARTBEAT", flush=True)
         while start_event.is_set():
-            time.sleep(2)
+            # Delay between heartbeats to reduce log noise
+            time.sleep(60)
             if not start_event.is_set():
                 break
             print("GUI_HEARTBEAT", flush=True)
