@@ -5,6 +5,7 @@ import subprocess
 import signal
 import threading
 import time
+import select
 import os
 import shutil
 import sys
@@ -528,7 +529,7 @@ class RaceLoggerGUI:
         self.proc = subprocess.Popen(
             cmd,
             stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
+            stderr=subprocess.PIPE,
             text=True,
             bufsize=1,
             encoding="utf-8",
@@ -1644,9 +1645,26 @@ class RaceLoggerGUI:
 
     # ── log output handling ─────────────────────────────────────
     def read_output(self):
-        if self.proc and self.proc.stdout:
-            for line in self.proc.stdout:
-                self.log_queue.put(line)
+        """Read subprocess stdout and stderr and push to the log queue."""
+        if not self.proc:
+            return
+
+        streams = []
+        if self.proc.stdout:
+            streams.append(self.proc.stdout)
+        if self.proc.stderr:
+            streams.append(self.proc.stderr)
+
+        while streams:
+            ready, _, _ = select.select(streams, [], [], 0.1)
+            for stream in ready:
+                line = stream.readline()
+                if line:
+                    if "Error:" in line or "Traceback" in line:
+                        line = f"\x1b[31m{line.rstrip()}\x1b[0m\n"
+                    self.log_queue.put(line)
+                else:
+                    streams.remove(stream)
 
     def _apply_ansi_codes(self, codes: list[str]) -> None:
         for c in codes:
