@@ -5,6 +5,7 @@ import subprocess
 import signal
 import threading
 import time
+import select
 import os
 import shutil
 import sys
@@ -210,19 +211,33 @@ def estimate_remaining_pits(
 def _find_python() -> str:
     """Return the preferred Python executable for launching child scripts."""
     exe = sys.executable
-    if getattr(sys, "frozen", False):
-        candidate = Path(exe).with_name(
-            "python.exe" if os.name == "nt" else "python"
-        )
+
+    # In development mode ``sys.executable`` is already the right interpreter
+    if not getattr(sys, "frozen", False):
+        return exe
+
+    name = "python.exe" if os.name == "nt" else "python"
+
+    # PyInstaller distributions may bundle an interpreter next to the GUI
+    candidate = Path(exe).with_name(name)
+    if candidate.exists():
+        return str(candidate)
+
+    # Some builds unpack the interpreter inside ``sys._MEIPASS``
+    meipass = getattr(sys, "_MEIPASS", None)
+    if meipass:
+        candidate = Path(meipass) / name
         if candidate.exists():
             return str(candidate)
-        # Fall back to a Python interpreter on PATH. When running a PyInstaller
-        # build without an embedded interpreter ``sys.executable`` points back
-        # to the GUI executable which would simply relaunch itself.
-        for name in ("python", "python3"):
-            found = shutil.which(name)
-            if found:
-                return found
+
+    # Fall back to an interpreter from the PATH
+    for alt in ("python", "python3"):
+        found = shutil.which(alt)
+        if found:
+            return found
+
+    # As a last resort return ``sys.executable`` even though it may point back
+    # to the frozen executable itself
     return exe
 
 
@@ -415,6 +430,10 @@ class RaceLoggerGUI:
         self.root.after(100, self.update_log_box)
         self.root.after(3000, self.update_feed)
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
+        self.monitor_thread = threading.Thread(
+            target=self.monitor_logging, daemon=True
+        )
+        self.monitor_thread.start()
 
     def open_feed_window(self) -> None:
         if self.feed_window is not None and self.feed_window.winfo_exists():
@@ -506,45 +525,61 @@ def start_logging(self):
         messagebox.showinfo("Logger", "Already running")
         return
 
+    logger = logging.getLogger("race_gui")
     runner = None
-    if getattr(sys, "frozen", False):
-        mei = Path(getattr(sys, "_MEIPASS", Path(sys.executable).parent))
-        candidate = mei / "race_data_runner.py"
-        if candidate.exists():
-            runner = candidate
-    if runner is None:
-        try:
-            import race_data_runner as _runner_mod
-            runner = Path(_runner_mod.__file__).resolve()
-        except Exception:
-            candidate = Path(__file__).resolve().parent / "race_data_runner.py"
+
+    try:
+        if getattr(sys, "frozen", False):
+            base = Path(getattr(sys, "_MEIPASS", Path(sys.executable).parent))
+            candidate = base / "race_data_runner.py"
             if candidate.exists():
                 runner = candidate
             else:
-                candidate = Path(__file__).resolve().parent.parent / "race_data_runner.py"
-                if candidate.exists():
-                    runner = candidate
+                # Try additional fallback locations
+                fallback1 = Path(__file__).resolve().parent / "race_data_runner.py"
+                fallback2 = fallback1.parent / "race_data_runner.py"
+                if fallback1.exists():
+                    runner = fallback1
+                elif fallback2.exists():
+                    runner = fallback2
+        else: 
+            import race_data_runner as _runner_mod
+            runner = Path(_runner_mod.__file__).resolve()
+    except Exception:
+        logger.exception("Failed to locate race_data_runner.py")
+        base = Path(__file__).resolve().parent
+        fallback = base / "race_data_runner.py"
+        if fallback.exists():
+            runner = fallback
+        else:
+            runner = base.parent / "race_data_runner.py"
 
     if not runner or not runner.exists():
-        messagebox.showerror(
-            "Logger",
-            "Could not locate race_data_runner.py.\n"
-            "Please reinstall or run from source.",
-        )
+        msg = "Could not locate race_data_runner.py.\nPlease reinstall or run from source."
+        logger.error(msg)
+        messagebox.showerror("Logger", msg)
         return
 
     python = _find_python()
     cmd = [python, str(runner), "--db", str(self.db_path), "--auto-install"]
-    print(f"[INFO] Launching {runner.name} --db {self.db_path} --auto-install")
-    self.proc = subprocess.Popen(
-        cmd,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        text=True,
-        bufsize=1,
-        encoding="utf-8",
-        errors="replace",
-    )
+    print(f"[INFO] Launching {runner.name} --db {self.db_path}")
+
+    try:
+        self.proc = subprocess.Popen(
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            bufsize=1,
+            encoding="utf-8",
+            errors="replace",
+        )
+    except Exception as exc:
+        logger.exception("Failed to launch race_data_runner")
+        messagebox.showerror("Logger", f"Failed to launch runner: {exc}")
+        self.proc = None
+        return
+
     self.output_thread = threading.Thread(target=self.read_output, daemon=True)
     self.output_thread.start()
     self.start_btn.config(state="disabled")
@@ -568,6 +603,20 @@ def start_logging(self):
         self.output_thread = None
         self.start_btn.config(state="normal")
         self.stop_btn.config(state="disabled")
+
+    def monitor_logging(self):
+        logger = logging.getLogger("race_gui")
+        while True:
+            if self.proc:
+                ret = self.proc.poll()
+                if ret is not None:
+                    logger.warning(
+                        "Logger process exited with code %s, restarting", ret
+                    )
+                    self.proc = None
+                    self.output_thread = None
+                    self.start_logging()
+            time.sleep(10)
 
     # ── connection status loop ──────────────────────────────────
     def update_status_loop(self):
@@ -1656,9 +1705,26 @@ def start_logging(self):
 
     # ── log output handling ─────────────────────────────────────
     def read_output(self):
-        if self.proc and self.proc.stdout:
-            for line in self.proc.stdout:
-                self.log_queue.put(line)
+        """Read subprocess stdout and stderr and push to the log queue."""
+        if not self.proc:
+            return
+
+        streams = []
+        if self.proc.stdout:
+            streams.append(self.proc.stdout)
+        if self.proc.stderr:
+            streams.append(self.proc.stderr)
+
+        while streams:
+            ready, _, _ = select.select(streams, [], [], 0.1)
+            for stream in ready:
+                line = stream.readline()
+                if line:
+                    if "Error:" in line or "Traceback" in line:
+                        line = f"\x1b[31m{line.rstrip()}\x1b[0m\n"
+                    self.log_queue.put(line)
+                else:
+                    streams.remove(stream)
 
     def _apply_ansi_codes(self, codes: list[str]) -> None:
         for c in codes:
