@@ -415,6 +415,10 @@ class RaceLoggerGUI:
         self.root.after(100, self.update_log_box)
         self.root.after(3000, self.update_feed)
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
+        self.monitor_thread = threading.Thread(
+            target=self.monitor_logging, daemon=True
+        )
+        self.monitor_thread.start()
 
     def open_feed_window(self) -> None:
         if self.feed_window is not None and self.feed_window.winfo_exists():
@@ -556,6 +560,20 @@ class RaceLoggerGUI:
         self.output_thread = None
         self.start_btn.config(state="normal")
         self.stop_btn.config(state="disabled")
+
+    def monitor_logging(self):
+        logger = logging.getLogger("race_gui")
+        while True:
+            if self.proc:
+                ret = self.proc.poll()
+                if ret is not None:
+                    logger.warning(
+                        "Logger process exited with code %s, restarting", ret
+                    )
+                    self.proc = None
+                    self.output_thread = None
+                    self.start_logging()
+            time.sleep(10)
 
     # ── connection status loop ──────────────────────────────────
     def update_status_loop(self):
