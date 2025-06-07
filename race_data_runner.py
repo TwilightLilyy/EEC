@@ -60,8 +60,8 @@ def ensure_watchfiles(auto_install: bool = False) -> Any:
         return watch_func
     except ModuleNotFoundError:
         if auto_install:
-            print("Error: The 'watchfiles' package is not installed.")
-            print("Attempting automatic installation...")
+            print("Error: The 'watchfiles' package is not installed.", flush=True)
+            print("Attempting automatic installation...", flush=True)
             result = subprocess.run(
                 [sys.executable, "-m", "pip", "install", "watchfiles>=0.21.0"]
             )
@@ -74,7 +74,8 @@ def ensure_watchfiles(auto_install: bool = False) -> Any:
             sys.exit(1)
         print(
             "Error: The 'watchfiles' package is not installed.\n"
-            "Run python -m pip install watchfiles or start with --auto-install."
+            "Run python -m pip install watchfiles or start with --auto-install.",
+            flush=True,
         )
         sys.exit(1)
 
@@ -167,7 +168,7 @@ def launch(name: str, cmd: list[str]) -> subprocess.Popen:
 def start_processes(scripts: list[tuple[str, list[str]]]) -> dict[str, subprocess.Popen]:
     """Launch all child processes and return a mapping of names to processes."""
     procs = {name: launch(name, cmd) for name, cmd in scripts}
-    print(f"[{iso_stamp()}] 🚀  Started {len(procs)} child processes.")
+    print(f"[{iso_stamp()}] 🚀  Started {len(procs)} child processes.", flush=True)
     return procs
 
 def stamp(): return datetime.now().strftime("%H:%M:%S")
@@ -212,7 +213,8 @@ def tail_pitlog(file: Path):
                     colour = colour_for(cls)
                     print(
                         f"{colour}[{stamp()}] 🛠  PIT – {team.strip()} / {driver.strip()} "
-                        f"({dur_laps} laps in {dur_hms}) [{cls}]{Style.RESET_ALL}"
+                        f"({dur_laps} laps in {dur_hms}) [{cls}]{Style.RESET_ALL}",
+                        flush=True,
                     )
                 pos = f.tell()
 
@@ -266,7 +268,8 @@ def tail_driver_swaps(file: Path):
                         print(
                             f"{colour}[{stamp()}] 🔄  DRIVER SWAP – "
                             f"{team.strip()}  Car {car:>3}: "
-                            f"{prev} → {driver} (Lap {lap}){Style.RESET_ALL}"
+                            f"{prev} → {driver} (Lap {lap}){Style.RESET_ALL}",
+                            flush=True,
                         )
                         with DRIVER_SWAP_CSV.open("a", newline="", encoding="utf-8") as w:
                             csv.writer(w).writerow([ts, car, team, prev, driver, lap])
@@ -282,7 +285,7 @@ def watchdog(seconds: int = 600, directory: Path = Path(".")) -> None:
         for f in directory.glob("*.csv"):
             age = time.time() - f.stat().st_mtime
             if age > seconds:
-                print(f"[{stamp()}] ⚠️  {f} stale ({age:.0f}s)")
+                print(f"[{stamp()}] ⚠️  {f} stale ({age:.0f}s)", flush=True)
         time.sleep(seconds)
 
 
@@ -305,11 +308,14 @@ def main() -> int:
         while True:
             dead = [n for n, p in procs.items() if p.poll() is not None]
             for n in dead:
-                print(f"[{stamp()}] 🔁  Restarting {n} (exit {procs[n].returncode})")
+                print(
+                    f"[{stamp()}] 🔁  Restarting {n} (exit {procs[n].returncode})",
+                    flush=True,
+                )
                 procs[n] = launch(n, dict(scripts)[n])
             time.sleep(2)
     except KeyboardInterrupt:
-        print(f"\n[{stamp()}] 🛑  Shutting down…")
+        print(f"\n[{stamp()}] 🛑  Shutting down…", flush=True)
         for p in procs.values():
             p.send_signal(signal.SIGINT)
         for p in procs.values():

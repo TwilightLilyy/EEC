@@ -106,7 +106,12 @@ def find_log_file(name: str) -> Path:
     if path.exists():
         return path
     base = Path(sys.argv[0]).resolve().parent
-    for p in (Path.cwd() / name, base / name, base.parent / name):
+    for p in (
+        Path.cwd() / name,
+        Path.cwd() / "RaceLogs" / name,
+        base / name,
+        base.parent / name,
+    ):
         if p.exists():
             return p
     return path
