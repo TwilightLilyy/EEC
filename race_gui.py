@@ -117,6 +117,17 @@ def find_log_file(name: str) -> Path:
     return path
 
 
+def read_csv_file(path: Path) -> tuple[list[str], list[dict[str, str]]]:
+    """Return field names and rows from a CSV file safely."""
+    with open(path, newline="", encoding="utf-8", errors="replace") as f:
+        data = f.read()
+    lines = data.splitlines()
+    reader = csv.DictReader(lines)
+    if not reader.fieldnames:
+        return [], []
+    return reader.fieldnames, list(reader)
+
+
 class RaceLoggerGUI:
     def __init__(self, root: tk.Tk):
         self.root = root
@@ -464,18 +475,15 @@ class RaceLoggerGUI:
             # Some log files may contain characters that are not valid UTF-8.
             # Using errors="replace" avoids a crash when decoding such files by
             # substituting invalid bytes with the Unicode replacement character.
-            with open(path, newline="", encoding="utf-8", errors="replace") as f:
-                reader = csv.DictReader(f)
-                if not reader.fieldnames:
-                    return
-                tree["columns"] = reader.fieldnames
-                for c in reader.fieldnames:
-                    tree.heading(c, text=c)
-                    tree.column(c, anchor="center")
-                for row in reader:
-                    tree.insert(
-                        "", "end", values=[row.get(c, "") for c in reader.fieldnames]
-                    )
+            fields, rows = read_csv_file(path)
+            if not fields:
+                return
+            tree["columns"] = fields
+            for c in fields:
+                tree.heading(c, text=c)
+                tree.column(c, anchor="center")
+            for row in rows:
+                tree.insert("", "end", values=[row.get(c, "") for c in fields])
 
         ttk.Button(frame, text="Refresh", command=load).grid(
             row=1, column=0, columnspan=2, pady=5
@@ -583,25 +591,24 @@ class RaceLoggerGUI:
             path = find_log_file(csv_path)
             if not path.exists():
                 return
-            with open(path, newline="", encoding="utf-8", errors="replace") as f:
-                reader = csv.DictReader(f)
-                if not reader.fieldnames:
-                    return
-                cols = [c for c in display_cols if c in reader.fieldnames]
-                tree["columns"] = cols
+            fields, rows = read_csv_file(path)
+            if not fields:
+                return
+            cols = [c for c in display_cols if c in fields]
+            tree["columns"] = cols
+            for c in cols:
+                tree.heading(c, text=col_map[c])
+                tree.column(c, anchor="center", width=widths.get(c, 100), stretch=True)
+            for row in rows:
+                vals = []
                 for c in cols:
-                    tree.heading(c, text=col_map[c])
-                    tree.column(c, anchor="center", width=widths.get(c, 100), stretch=True)
-                for row in reader:
-                    vals = []
-                    for c in cols:
-                        v = row.get(c, "")
-                        if c in {"Stint Start Timestamp", "Stint End Timestamp"}:
-                            v = fmt_iso(v)
-                        elif c in {"Stint Start SessionTime", "Stint End SessionTime", "Stint Duration (sec)"}:
-                            v = fmt_num(v)
-                        vals.append(v)
-                    tree.insert("", "end", values=vals)
+                    v = row.get(c, "")
+                    if c in {"Stint Start Timestamp", "Stint End Timestamp"}:
+                        v = fmt_iso(v)
+                    elif c in {"Stint Start SessionTime", "Stint End SessionTime", "Stint Duration (sec)"}:
+                        v = fmt_num(v)
+                    vals.append(v)
+                tree.insert("", "end", values=vals)
 
         def save_widths(_: Any = None) -> None:
             data = {c: tree.column(c)["width"] for c in tree["columns"]}
@@ -656,47 +663,45 @@ class RaceLoggerGUI:
             path = find_log_file(csv_path)
             if not path.exists():
                 return
-            with open(path, newline="", encoding="utf-8", errors="replace") as f:
-                reader = csv.DictReader(f)
-                if not reader.fieldnames:
-                    return
-                tree["columns"] = reader.fieldnames
-                for c in reader.fieldnames:
-                    tree.heading(c, text=c)
-                    tree.column(c, anchor="center")
+            fields, rows = read_csv_file(path)
+            if not fields:
+                return
+            tree["columns"] = fields
+            for c in fields:
+                tree.heading(c, text=c)
+                tree.column(c, anchor="center")
 
-                rows = list(reader)
-                rows = filter_rows(rows)
+            rows = filter_rows(rows)
 
-                class_leaders: dict[str, int] = {}
-                for r in rows:
-                    cls = r.get("CarClassID", "")
-                    try:
-                        pos = int(r.get("Position", 0))
-                    except Exception:
-                        pos = 0
-                    if cls not in class_leaders or pos < class_leaders[cls]:
-                        class_leaders[cls] = pos
-                order = {
-                    c: i + 1 for i, c in enumerate(sorted(class_leaders, key=class_leaders.get))
-                }
+            class_leaders: dict[str, int] = {}
+            for r in rows:
+                cls = r.get("CarClassID", "")
+                try:
+                    pos = int(r.get("Position", 0))
+                except Exception:
+                    pos = 0
+                if cls not in class_leaders or pos < class_leaders[cls]:
+                    class_leaders[cls] = pos
+            order = {
+                c: i + 1 for i, c in enumerate(sorted(class_leaders, key=class_leaders.get))
+            }
 
-                rows.sort(
-                    key=lambda r: (
-                        order.get(r.get("CarClassID", ""), len(order) + 1),
-                        int(r.get("Position", 0)),
-                    )
+            rows.sort(
+                key=lambda r: (
+                    order.get(r.get("CarClassID", ""), len(order) + 1),
+                    int(r.get("Position", 0)),
                 )
+            )
 
-                for r in rows:
-                    vals = [r.get(c, "") for c in reader.fieldnames]
-                    cls_order = order.get(r.get("CarClassID", ""), 0)
-                    tag = f"class-{cls_order}"
-                    if tag not in tree.tag_names():
-                        colour = CLASS_COLOURS.get(cls_order, "")
-                        if colour:
-                            tree.tag_configure(tag, background=colour)
-                    tree.insert("", "end", values=vals, tags=(tag,))
+            for r in rows:
+                vals = [r.get(c, "") for c in fields]
+                cls_order = order.get(r.get("CarClassID", ""), 0)
+                tag = f"class-{cls_order}"
+                if tag not in tree.tag_names():
+                    colour = CLASS_COLOURS.get(cls_order, "")
+                    if colour:
+                        tree.tag_configure(tag, background=colour)
+                tree.insert("", "end", values=vals, tags=(tag,))
 
         ttk.Button(frame, text="Refresh", command=load).grid(
             row=1, column=0, columnspan=2, pady=5
@@ -830,8 +835,7 @@ class RaceLoggerGUI:
         def load():
             tree.delete(*tree.get_children())
             try:
-                with csv_path.open("r", newline="", encoding="utf-8", errors="replace") as f:
-                    rows = list(csv.DictReader(f))
+                _, rows = read_csv_file(csv_path)
                 rows = filter_rows(rows)
                 # determine order of classes based on their best overall position
                 class_leaders = {}
@@ -899,20 +903,15 @@ class RaceLoggerGUI:
         def load() -> None:
             tree.delete(*tree.get_children())
             try:
-                with csv_path.open("r", newline="", encoding="utf-8", errors="replace") as f:
-                    reader = csv.DictReader(f)
-                    if not reader.fieldnames:
-                        return
-                    tree["columns"] = reader.fieldnames
-                    for c in reader.fieldnames:
-                        tree.heading(c, text=c)
-                        tree.column(c, anchor="center")
-                    for row in reader:
-                        tree.insert(
-                            "",
-                            "end",
-                            values=[row.get(c, "") for c in reader.fieldnames],
-                        )
+                fields, rows = read_csv_file(csv_path)
+                if not fields:
+                    return
+                tree["columns"] = fields
+                for c in fields:
+                    tree.heading(c, text=c)
+                    tree.column(c, anchor="center")
+                for row in rows:
+                    tree.insert("", "end", values=[row.get(c, "") for c in fields])
             except Exception as e:
                 messagebox.showerror(
                     "Series Standings", f"Error reading {csv_path}: {e}"
@@ -985,8 +984,7 @@ class RaceLoggerGUI:
         def load() -> None:
             nonlocal rows_cache
             try:
-                with csv_path.open("r", newline="", encoding="utf-8", errors="replace") as f:
-                    rows_cache = list(csv.DictReader(f))
+                _, rows_cache = read_csv_file(csv_path)
                 teams = sorted({r.get("TeamName", r.get("Team", "")) for r in rows_cache})
                 team_combo["values"] = ["All"] + teams
                 if team_var.get() not in teams:
@@ -1080,25 +1078,24 @@ class RaceLoggerGUI:
             if not csv_path.exists():
                 return
             try:
-                with csv_path.open(newline="", encoding="utf-8", errors="replace") as f:
-                    reader = csv.DictReader(f)
-                    if not reader.fieldnames:
-                        return
-                    cols = [c for c in display_cols if c in reader.fieldnames]
-                    tree["columns"] = cols
+                fields, rows = read_csv_file(csv_path)
+                if not fields:
+                    return
+                cols = [c for c in display_cols if c in fields]
+                tree["columns"] = cols
+                for c in cols:
+                    tree.heading(c, text=col_map[c])
+                    tree.column(c, anchor="center", width=widths.get(c, 100), stretch=True)
+                for row in rows:
+                    vals = []
                     for c in cols:
-                        tree.heading(c, text=col_map[c])
-                        tree.column(c, anchor="center", width=widths.get(c, 100), stretch=True)
-                    for row in reader:
-                        vals = []
-                        for c in cols:
-                            v = row.get(c, "")
-                            if c in {"Stint Start Timestamp", "Stint End Timestamp"}:
-                                v = fmt_iso(v)
-                            elif c in {"Stint Start SessionTime", "Stint End SessionTime", "Stint Duration (sec)"}:
-                                v = fmt_num(v)
-                            vals.append(v)
-                        tree.insert("", "end", values=vals)
+                        v = row.get(c, "")
+                        if c in {"Stint Start Timestamp", "Stint End Timestamp"}:
+                            v = fmt_iso(v)
+                        elif c in {"Stint Start SessionTime", "Stint End SessionTime", "Stint Duration (sec)"}:
+                            v = fmt_num(v)
+                        vals.append(v)
+                    tree.insert("", "end", values=vals)
             except Exception as e:
                 messagebox.showerror("Pit Stops", f"Error reading {csv_path}: {e}")
 
@@ -1162,13 +1159,11 @@ class RaceLoggerGUI:
 
         pit_rows = []
         if pit_path.exists():
-            with open(pit_path, newline="", encoding="utf-8", errors="replace") as f:
-                pit_rows = list(csv.DictReader(f))
+            _, pit_rows = read_csv_file(pit_path)
 
         stand_rows = []
         if stand_path.exists():
-            with open(stand_path, newline="", encoding="utf-8", errors="replace") as f:
-                stand_rows = list(csv.DictReader(f))
+            _, stand_rows = read_csv_file(stand_path)
 
         latest_stand: dict[str, dict[str, str]] = {}
         for r in stand_rows:
