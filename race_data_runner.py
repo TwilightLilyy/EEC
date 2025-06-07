@@ -6,9 +6,7 @@ import sys
 import time
 import os
 import threading
-import shutil
 import csv
-import itertools
 from pathlib import Path
 from datetime import datetime
 from typing import Any
@@ -129,13 +127,13 @@ def build_scripts(db_path: Path) -> list[tuple[str, list[str]]]:
     return [
         (
             "AI Logger",
-            ["python", str(BASE_DIR / "ai_standings_logger.py"), "--db", str(db_path)],
+            [sys.executable, str(BASE_DIR / "ai_standings_logger.py"), "--db", str(db_path)],
         ),
         (
             "Pit Logger",
-            ["python", str(BASE_DIR / "pitstop_logger_enhanced.py"), "--db", str(db_path)],
+            [sys.executable, str(BASE_DIR / "pitstop_logger_enhanced.py"), "--db", str(db_path)],
         ),
-        ("Standings Sorter", ["python", str(BASE_DIR / "standings_sorter.py")]),
+        ("Standings Sorter", [sys.executable, str(BASE_DIR / "standings_sorter.py")]),
         # add more here as needed
     ]
 

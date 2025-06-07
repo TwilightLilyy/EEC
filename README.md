@@ -10,6 +10,7 @@ A collection of utilities for logging and displaying data from iRacing AI races.
 - **pitstop_logger_enhanced.py** – tracks stints and pit stops, writing results to `pitstop_log.csv` and updating `live_standings_overlay.html`.
 - **standings_sorter.py** – produces `sorted_standings.csv` so the overlay can show the latest order per class.
 - **race_data_runner.py** – helper script that launches all of the above and restarts them if they stop.
+- **roster_ui.py** – displays team rosters in a scrollable window. Use `--refresh-ms` to set the auto-refresh interval.
 
 ## Requirements
 
@@ -29,6 +30,7 @@ dependencies from `requirements.txt`:
 ./setup.sh
 ```
 
+
 The optional `openai` package can be installed afterwards if you plan to
 use the ChatGPT export feature in the GUI.
 
@@ -40,6 +42,21 @@ pip install -e .
 ```
 
 This provides the `race-data-runner` and `race-gui` commands used below.
+
+## Testing
+
+Install the dependencies and `pytest` first:
+
+```bash
+pip install -r requirements.txt
+pip install pytest
+```
+
+Then run the test suite from the project root:
+
+```bash
+pytest
+```
 
 ## Usage
 

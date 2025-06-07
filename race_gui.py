@@ -419,7 +419,7 @@ class RaceLoggerGUI:
         if not runner.exists():
             runner = Path(sys.argv[0]).resolve().parent.parent / "race_data_runner.py"
         self.proc = subprocess.Popen(
-            ["python", str(runner), "--db", str(self.db_path)],
+            [sys.executable, str(runner), "--db", str(self.db_path)],
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,
@@ -1701,19 +1701,6 @@ def check_dependencies(logger: logging.Logger) -> None:
         logger.warning("module 'sv_ttk' not installed – falling back to default theme")
     if irsdk is None:
         logger.warning("module 'irsdk' not installed")
-
-
-def open_log_file(path: Path) -> None:
-    """Open the given log file with the default application."""
-    try:
-        if sys.platform == "win32":
-            os.startfile(path)  # type: ignore[attr-defined]
-        elif sys.platform == "darwin":
-            subprocess.run(["open", str(path)], check=False)
-        else:
-            subprocess.run(["xdg-open", str(path)], check=False)
-    except Exception:
-        pass
 
 
 def start_heartbeat(start_event: threading.Event) -> None:
