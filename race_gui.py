@@ -147,6 +147,27 @@ def read_csv_file(path: Path) -> tuple[list[str], list[dict[str, str]]]:
     return reader.fieldnames, list(reader)
 
 
+def _parse_time(val: str) -> float:
+    """Return seconds represented by ``val`` which may be ``H:M:S`` or ``M:S``."""
+    parts = val.split(":")
+    try:
+        nums = [float(p) for p in parts]
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(f"invalid time: {val}") from exc
+    if len(nums) == 3:
+        h, m, s = nums
+    elif len(nums) == 2:
+        h = 0.0
+        m, s = nums
+    elif len(nums) == 1:
+        h = 0.0
+        m = 0.0
+        s = nums[0]
+    else:
+        raise argparse.ArgumentTypeError(f"invalid time: {val}")
+    return h * 3600 + m * 60 + s
+
+
 def estimate_remaining_pits(
     race_end: datetime,
     now: datetime,
@@ -206,7 +227,7 @@ def _find_python() -> str:
 
 
 class RaceLoggerGUI:
-    def __init__(self, root: tk.Tk, *, classic_theme: bool = False):
+    def __init__(self, root: tk.Tk, *, classic_theme: bool = False, time_left: float | None = None):
         self.root = root
         self.root.title("EEC Logger")
         # Ensure the window is large enough when it first appears
@@ -219,6 +240,11 @@ class RaceLoggerGUI:
                 self.root.iconphoto(True, tk.PhotoImage(file=icon_path))
             except Exception:
                 pass
+        self.race_end_override = (
+            datetime.now() + timedelta(seconds=time_left)
+            if time_left is not None
+            else None
+        )
         self.proc = None
         self.log_queue: Queue[str] = Queue()
         self.output_thread = None
@@ -241,6 +267,10 @@ class RaceLoggerGUI:
             label="Wrap Log Text",
             variable=self.wrap_logs,
             command=self.update_wrap,
+        )
+        options_menu.add_command(
+            label="Set Time Left…",
+            command=self.ask_time_left,
         )
         menubar.add_cascade(label="Options", menu=options_menu)
         root.config(menu=menubar)
@@ -1295,7 +1325,10 @@ class RaceLoggerGUI:
 
         if race_start is None:
             race_start = datetime.now()
-        race_end = race_start + timedelta(hours=24)
+        if getattr(self, "race_end_override", None) is not None:
+            race_end = self.race_end_override  # type: ignore[assignment]
+        else:
+            race_end = race_start + timedelta(hours=24)
 
         avg_dur: dict[str, float] = {}
         counts: dict[str, int] = {}
@@ -1363,6 +1396,21 @@ class RaceLoggerGUI:
                 t.insert("", "end", values=vals)
 
         self.root.after(3000, self.update_stint_table)
+
+    def ask_time_left(self) -> None:
+        """Prompt for the remaining race time and update estimates."""
+        val = simpledialog.askstring(
+            "Time Left", "Remaining race time (H:M:S)", parent=self.root
+        )
+        if not val:
+            return
+        try:
+            secs = _parse_time(val)
+        except Exception:
+            messagebox.showerror("Time Left", "Invalid time format")
+            return
+        self.race_end_override = datetime.now() + timedelta(seconds=secs)
+        self.update_stint_table()
 
     # ── Team editor helpers ─────────────────────────────────────
     def load_team_drivers(self) -> dict[str, list[str]]:
@@ -1693,6 +1741,12 @@ def parse_cli(argv: list[str] | None = None) -> argparse.Namespace:
         default="eec_log.db",
         help="SQLite database file",
     )
+    parser.add_argument(
+        "--time-left",
+        metavar="TIME",
+        type=_parse_time,
+        help="remaining race time (H:M:S or seconds)",
+    )
 
     args, unknown = parser.parse_known_args(argv)
     global _UNKNOWN_ARGS
@@ -1849,7 +1903,9 @@ def main(argv: list[str] | None = None) -> int:
         theme = "default"
     else:
         try:
-            gui = RaceLoggerGUI(root, classic_theme=args.classic_theme)
+            gui = RaceLoggerGUI(
+                root, classic_theme=args.classic_theme, time_left=args.time_left
+            )
         except TypeError:  # tests may monkeypatch RaceLoggerGUI
             gui = RaceLoggerGUI(root)  # type: ignore[arg-type]
         theme = getattr(gui, "theme", "default") if gui else "default"
