@@ -564,64 +564,71 @@ class RaceLoggerGUI:
         return theme
 
     # ── logging subprocess management ────────────────────────────
-    def start_logging(self):
-        if self.proc:
-            messagebox.showinfo("Logger", "Already running")
-            return
+def start_logging(self):
+    if self.proc:
+        messagebox.showinfo("Logger", "Already running")
+        return
 
-        logger = logging.getLogger("race_gui")
-        runner: Path
+    logger = logging.getLogger("race_gui")
+    runner = None
 
-        try:
-            if getattr(sys, "frozen", False):
-                base = Path(sys._MEIPASS)
-                runner = base / "race_data_runner.py"
-                if not runner.exists():
-                    base = Path(__file__).resolve().parent
-                    runner = base / "race_data_runner.py"
-                    if not runner.exists():
-                        runner = base.parent / "race_data_runner.py"
+    try:
+        if getattr(sys, "frozen", False):
+            base = Path(getattr(sys, "_MEIPASS", Path(sys.executable).parent))
+            candidate = base / "race_data_runner.py"
+            if candidate.exists():
+                runner = candidate
             else:
-                import race_data_runner as _runner_mod
-                runner = Path(_runner_mod.__file__).resolve()
-        except Exception:
-            logger.exception("Failed to locate race_data_runner.py")
-            base = Path(__file__).resolve().parent
-            runner = base / "race_data_runner.py"
-            if not runner.exists():
-                runner = base.parent / "race_data_runner.py"
+                # Try additional fallback locations
+                fallback1 = Path(__file__).resolve().parent / "race_data_runner.py"
+                fallback2 = fallback1.parent / "race_data_runner.py"
+                if fallback1.exists():
+                    runner = fallback1
+                elif fallback2.exists():
+                    runner = fallback2
+        else: 
+            import race_data_runner as _runner_mod
+            runner = Path(_runner_mod.__file__).resolve()
+    except Exception:
+        logger.exception("Failed to locate race_data_runner.py")
+        base = Path(__file__).resolve().parent
+        fallback = base / "race_data_runner.py"
+        if fallback.exists():
+            runner = fallback
+        else:
+            runner = base.parent / "race_data_runner.py"
 
-        if not runner.exists():
-            msg = f"race_data_runner.py not found: {runner}"
-            logger.error(msg)
-            messagebox.showerror("Logger", msg)
-            self.proc = None
-            return
+    if not runner or not runner.exists():
+        msg = "Could not locate race_data_runner.py.\nPlease reinstall or run from source."
+        logger.error(msg)
+        messagebox.showerror("Logger", msg)
+        return
 
-        python = _find_python()
-        cmd = [python, str(runner), "--db", str(self.db_path), "--auto-install"]
-        print(f"[INFO] Launching {runner.name} --db {self.db_path}")
+    python = _find_python()
+    cmd = [python, str(runner), "--db", str(self.db_path), "--auto-install"]
+    print(f"[INFO] Launching {runner.name} --db {self.db_path}")
 
-        try:
-            self.proc = subprocess.Popen(
-                cmd,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT,
-                text=True,
-                bufsize=1,
-                encoding="utf-8",
-                errors="replace",
-            )
-        except Exception as exc:
-            logger.exception("Failed to launch race_data_runner")
-            messagebox.showerror("Logger", f"Failed to launch runner: {exc}")
-            self.proc = None
-            return
+    try:
+        self.proc = subprocess.Popen(
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            bufsize=1,
+            encoding="utf-8",
+            errors="replace",
+        )
+    except Exception as exc:
+        logger.exception("Failed to launch race_data_runner")
+        messagebox.showerror("Logger", f"Failed to launch runner: {exc}")
+        self.proc = None
+        return
 
-        self.output_thread = threading.Thread(target=self.read_output, daemon=True)
-        self.output_thread.start()
-        self.start_btn.config(state="disabled")
-        self.stop_btn.config(state="normal")
+    self.output_thread = threading.Thread(target=self.read_output, daemon=True)
+    self.output_thread.start()
+    self.start_btn.config(state="disabled")
+    self.stop_btn.config(state="normal")
+
 
     def stop_logging(self):
         if not self.proc:
