@@ -509,12 +509,21 @@ class RaceLoggerGUI:
             import race_data_runner as _runner_mod
             runner = Path(_runner_mod.__file__).resolve()
         except Exception:
-            runner = Path(__file__).resolve().parent / "race_data_runner.py"
+            base = Path(__file__).resolve().parent
+            runner = base / "race_data_runner.py"
             if not runner.exists():
-                runner = Path(__file__).resolve().parent.parent / "race_data_runner.py"
+                runner = base.parent / "race_data_runner.py"
+            if getattr(sys, "frozen", False) and not runner.exists():
+                runner = Path(sys._MEIPASS) / "race_data_runner.py"
+        if not runner.exists():
+            messagebox.showerror(
+                "Logger",
+                f"race_data_runner.py not found: {runner}",
+            )
+            return
 
         python = _find_python()
-        cmd = [python, str(runner), "--db", str(self.db_path)]
+        cmd = [python, str(runner), "--db", str(self.db_path), "--auto-install"]
         print(f"[INFO] Launching {runner.name} --db {self.db_path}")
         self.proc = subprocess.Popen(
             cmd,
