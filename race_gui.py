@@ -18,6 +18,7 @@ from datetime import datetime, timedelta
 from typing import Any
 import argparse
 import logging
+import atexit
 
 import eec_teams
 
@@ -1572,6 +1573,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     """Return command line arguments for the GUI."""
     parser = argparse.ArgumentParser(description="EEC Race Logger GUI")
     parser.add_argument("--debug", action="store_true", help="enable debug logging")
+    parser.add_argument(
+        "--debug-shell",
+        action="store_true",
+        help="open interactive shell before starting the GUI",
+    )
     return parser.parse_args(argv)
 
 
@@ -1588,6 +1594,16 @@ def setup_logging(debug: bool) -> logging.Logger:
     if debug:
         logger.addHandler(logging.StreamHandler())
     return logger
+
+
+def setup_excepthook(logger: logging.Logger) -> None:
+    """Redirect uncaught exceptions to the logger."""
+
+    def handle(exc_type, exc, tb) -> None:
+        logger.error("Uncaught exception", exc_info=(exc_type, exc, tb))
+        sys.__excepthook__(exc_type, exc, tb)
+
+    sys.excepthook = handle
 
 
 def check_environment(logger: logging.Logger) -> None:
@@ -1622,27 +1638,89 @@ def open_log_file(path: Path) -> None:
         pass
 
 
+def start_heartbeat(start_event: threading.Event) -> None:
+    """Print periodic heartbeat while the GUI event loop runs."""
+
+    def beat() -> None:
+        start_event.wait()
+        while start_event.is_set():
+            print("GUI_HEARTBEAT", flush=True)
+            time.sleep(2)
+
+    threading.Thread(target=beat, daemon=True).start()
+
+
 def main(argv: list[str] | None = None) -> int:
     """Application entry point."""
+    start_time = time.monotonic()
     args = parse_args(argv)
-    os.chdir(Path(__file__).resolve().parent)
     logger = setup_logging(args.debug)
+    setup_excepthook(logger)
+
+    atexit.register(
+        lambda: logger.info(
+            "Exited normally in %.2fs", time.monotonic() - start_time
+        )
+    )
+
+    logger.debug("argv: %s", sys.argv)
+    logger.debug("PID: %d", os.getpid())
+
+    os.chdir(Path(__file__).resolve().parent)
+    logger.debug("Checking environment")
     check_environment(logger)
+    logger.debug("Checking dependencies")
     check_dependencies(logger)
-    try:
+
+    if os.environ.get("FORCE_GUI_IMPORT_ERROR"):
+        raise RuntimeError("GUI never reached event loop")
+
+    logger.debug("Creating GUI root")
+    if os.environ.get("EEC_DUMMY_TK"):
+        class DummyRoot:
+            def after(self, _delay: int, func: Any) -> None:  # type: ignore[override]
+                func()
+
+            def mainloop(self) -> None:
+                pass
+
+        root = DummyRoot()
+    else:
+        prev_root = getattr(tk, "_default_root", None)
         root = tk.Tk()
-        RaceLoggerGUI(root)
-        print("Race GUI started successfully")
-        root.mainloop()
-        return 0
-    except Exception as exc:  # pragma: no cover - runtime errors
-        logger.exception("Failed to start GUI: %s", exc)
-        print("Race GUI failed to start – see race_gui.log", file=sys.stderr)
-        if args.debug:
-            open_log_file(LOG_PATH)
-        return 1
+        if prev_root is not None or tk._default_root is None:
+            raise RuntimeError("Unexpected number of Tk root instances")
+    logger.debug("QApplication created")
+
+    if os.environ.get("EEC_DUMMY_TK"):
+        gui = None
+    else:
+        gui = RaceLoggerGUI(root)
+        logger.debug("Window created")
+
+    start_event = threading.Event()
+    start_heartbeat(start_event)
+    root.after(0, start_event.set)
+
+    if args.debug_shell:
+        import code
+
+        code.interact(local={"root": root, "gui": gui})
+
+    logger.debug("Starting event loop")
+    print(f"Race GUI started successfully (PID {os.getpid()})")
+    root.mainloop()
+    if not start_event.is_set():
+        raise RuntimeError("GUI never reached event loop")
+    start_event.clear()
+    return 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    except RuntimeError as exc:  # pragma: no cover - early failures
+        print("Race GUI failed – see race_gui.log", file=sys.stderr)
+        print(exc)
+        sys.exit(1)
 
