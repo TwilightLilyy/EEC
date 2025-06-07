@@ -29,8 +29,24 @@ dependencies from `requirements.txt`:
 ./setup.sh
 ```
 
+
 The optional `openai` package can be installed afterwards if you plan to
 use the ChatGPT export feature in the GUI.
+
+## Testing
+
+Install the dependencies and `pytest` first:
+
+```bash
+pip install -r requirements.txt
+pip install pytest
+```
+
+Then run the test suite from the project root:
+
+```bash
+pytest
+```
 
 ## Usage
 
