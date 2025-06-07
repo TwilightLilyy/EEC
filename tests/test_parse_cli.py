@@ -16,12 +16,12 @@ def _ns(**kwargs) -> argparse.Namespace:
 
 
 def test_parse_cli_defaults():
-    assert parse_cli([]) == _ns(debug=False, debug_shell=False, classic_theme=False, no_openai=False, db="eec_log.db")
+    assert parse_cli([]) == _ns(debug=False, debug_shell=False, classic_theme=False, no_openai=False, db="eec_log.db", time_left=None)
 
 
 def test_parse_cli_all_flags():
-    args = ["--debug", "--debug-shell", "--classic-theme", "--no-openai", "--db", "foo.db"]
-    assert parse_cli(args) == _ns(debug=True, debug_shell=True, classic_theme=True, no_openai=True, db="foo.db")
+    args = ["--debug", "--debug-shell", "--classic-theme", "--no-openai", "--db", "foo.db", "--time-left", "1:00:00"]
+    assert parse_cli(args) == _ns(debug=True, debug_shell=True, classic_theme=True, no_openai=True, db="foo.db", time_left=3600)
 
 
 def test_parse_cli_bug_repro():
@@ -30,4 +30,4 @@ def test_parse_cli_bug_repro():
 
 def test_parse_cli_mixed_unknown():
     ns = parse_cli(["--debug", "--foo", "extra.txt", "--db", "bar.db"])
-    assert ns == _ns(debug=True, debug_shell=False, classic_theme=False, no_openai=False, db="bar.db")
+    assert ns == _ns(debug=True, debug_shell=False, classic_theme=False, no_openai=False, db="bar.db", time_left=None)
