@@ -184,9 +184,18 @@ def _find_python() -> str:
     """Return the preferred Python executable for launching child scripts."""
     exe = sys.executable
     if getattr(sys, "frozen", False):
-        candidate = Path(exe).with_name("python.exe" if os.name == "nt" else "python")
+        candidate = Path(exe).with_name(
+            "python.exe" if os.name == "nt" else "python"
+        )
         if candidate.exists():
             return str(candidate)
+        # Fall back to a Python interpreter on PATH. When running a PyInstaller
+        # build without an embedded interpreter ``sys.executable`` points back
+        # to the GUI executable which would simply relaunch itself.
+        for name in ("python", "python3"):
+            found = shutil.which(name)
+            if found:
+                return found
     return exe
 
 
