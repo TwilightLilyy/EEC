@@ -5,13 +5,30 @@ CSV file.  The output path and polling interval can be configured via
 command line arguments.
 """
 
+from datetime import datetime
+__version__     = "2025.06.07.0"
+__build_time__  = "2025-06-07T15:42:00Z"
+__commit_hash__ = "abc1234"
+
+import sys
+
+if getattr(sys, "frozen", False):
+    try:
+        setattr(sys, "_MEIPASS_VERSION", __version__)
+        setattr(sys, "_MEIPASS_BUILD", __build_time__)
+        setattr(sys, "_MEIPASS_COMMIT", __commit_hash__)
+        if __spec__ is not None:
+            __spec__.origin = f"{__spec__.origin}|{__version__}"
+    except Exception:
+        pass
+
 import argparse
 import csv
 import time
-from datetime import datetime
 from pathlib import Path
 from typing import Optional
 import shutil
+from codebase_cleaner import check_latest_version
 
 import eec_db
 
@@ -178,6 +195,11 @@ def parse_args() -> argparse.Namespace:
         "--db",
         help="SQLite database path",
     )
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=f"EEC Logger v{__version__} (build {__build_time__}, git {__commit_hash__})",
+    )
     args, _ = parser.parse_known_args()
     return args
 
@@ -188,4 +210,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+    import threading
+    threading.Thread(target=check_latest_version, args=(__version__,), daemon=True).start()
     main()

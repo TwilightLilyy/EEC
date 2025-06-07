@@ -7,10 +7,121 @@ import hashlib
 import json
 import subprocess
 import sys
+import urllib.request
+import urllib.error
+try:
+    from packaging.version import Version
+except Exception:  # pragma: no cover - fallback when packaging missing
+    class Version:
+        def __init__(self, v: str) -> None:
+            self.v = tuple(int(p) for p in v.split(".") if p.isdigit())
+        def __lt__(self, other: "Version") -> bool:
+            return self.v < other.v
+        def __ge__(self, other: "Version") -> bool:
+            return self.v >= other.v
+    print("warning: using naive Version fallback", file=sys.stderr)
+import tkinter.messagebox as messagebox
+import os
+try:
+    import portalocker
+except Exception:
+    portalocker = None
+
 import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Set, Tuple
+
+
+def check_latest_version(
+    current: str,
+    repo_url: str = "https://raw.githubusercontent.com/TwilightLilyy/EEC-Logger/main/RELEASE.json",
+    *, timeout: float = 2.5
+) -> bool:
+    """Return ``True`` if ``current`` is >= remote semver."""
+    try:
+        with urllib.request.urlopen(repo_url, timeout=timeout) as resp:
+            data = json.loads(resp.read().decode())
+    except Exception as exc:
+        print(f"Version check failed: {exc}", file=sys.stderr)
+        return True
+
+    latest = Version(data.get("latest", "0"))
+    min_supported = Version(data.get("min_supported", "0"))
+    cur = Version(current)
+    if cur < min_supported:
+        try:
+            messagebox.showerror(
+                "EEC Logger",
+                "This build is no longer supported. Please download the latest version.",
+            )
+        finally:
+            sys.exit(20)
+    if cur < latest:
+        try:
+            messagebox.showinfo(
+                "EEC Logger",
+                "A newer version is available. Please download the latest build.",
+            )
+        except Exception:
+            pass
+        return False
+    return True
+
+
+_LOCK_HANDLE = None
+
+
+def acquire_single_instance_lock() -> object | None:
+    """Try to acquire a file lock, return handle or ``None``."""
+    global _LOCK_HANDLE
+    base = Path(os.getenv("LOCALAPPDATA") or Path.home()) / "EEC_Logger"
+    base.mkdir(parents=True, exist_ok=True)
+    lock_path = base / "lockfile"
+    fh = open(lock_path, "w")
+    try:
+        if portalocker is not None:
+            portalocker.lock(fh, portalocker.LOCK_EX | portalocker.LOCK_NB)
+        elif os.name == "nt":
+            import msvcrt
+
+            msvcrt.locking(fh.fileno(), msvcrt.LK_NBLCK, 1)
+        else:
+            import fcntl
+
+            fcntl.flock(fh.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except Exception:
+        fh.close()
+        return None
+    _LOCK_HANDLE = fh
+    return fh
+
+
+def focus_running_window() -> None:
+    """Attempt to focus an already running GUI window."""
+    if sys.platform == "win32":
+        try:
+            import win32gui
+            import win32con
+
+            def _cb(hwnd, _):
+                title = win32gui.GetWindowText(hwnd)
+                if "EEC Logger" in title:
+                    win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
+                    win32gui.SetForegroundWindow(hwnd)
+            win32gui.EnumWindows(_cb, None)
+            return
+        except Exception:
+            pass
+    try:
+        import tkinter as tk
+
+        r = tk.Tk()
+        r.wm_attributes("-topmost", 1)
+        r.after(100, r.destroy)
+        r.mainloop()
+    except Exception:
+        pass
 
 
 @dataclass

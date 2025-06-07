@@ -8,12 +8,30 @@ the leader's time for the same lap.
 """
 
 from __future__ import annotations
+from datetime import datetime
+__version__     = "2025.06.07.0"
+__build_time__  = "2025-06-07T15:42:00Z"
+__commit_hash__ = "abc1234"
+
+import sys
+import argparse
+
+if getattr(sys, "frozen", False):
+    try:
+        setattr(sys, "_MEIPASS_VERSION", __version__)
+        setattr(sys, "_MEIPASS_BUILD", __build_time__)
+        setattr(sys, "_MEIPASS_COMMIT", __commit_hash__)
+        if __spec__ is not None:
+            __spec__.origin = f"{__spec__.origin}|{__version__}"
+    except Exception:
+        pass
 
 import csv
 import time
-from datetime import datetime
 from pathlib import Path
 from typing import Optional
+
+from codebase_cleaner import check_latest_version
 
 import irsdk
 
@@ -105,11 +123,26 @@ def log_deltas(csv_path: str) -> None:
             pass
 
 
-def main(path: Optional[str] = None) -> None:
-    csv_path = path or CSV_PATH
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Lap delta logger")
+    parser.add_argument("--output", default=CSV_PATH, help="CSV output file")
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=f"EEC Logger v{__version__} (build {__build_time__}, git {__commit_hash__})",
+    )
+    args, _ = parser.parse_known_args(argv)
+    return args
+
+
+def main(argv: list[str] | None = None) -> None:
+    args = parse_args(argv)
+    csv_path = args.output
     log_deltas(csv_path)
 
 
 if __name__ == "__main__":
+    import threading
+    threading.Thread(target=check_latest_version, args=(__version__,), daemon=True).start()
     main()
 

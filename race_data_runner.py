@@ -1,4 +1,9 @@
 # race_data_runner.py
+from datetime import datetime
+__version__     = "2025.06.07.0"
+__build_time__  = "2025-06-07T15:42:00Z"
+__commit_hash__ = "abc1234"
+
 import argparse
 import subprocess
 import signal
@@ -8,8 +13,18 @@ import os
 import threading
 import csv
 from pathlib import Path
-from datetime import datetime
 from typing import Any
+from codebase_cleaner import check_latest_version
+
+if getattr(sys, "frozen", False):
+    try:
+        setattr(sys, "_MEIPASS_VERSION", __version__)
+        setattr(sys, "_MEIPASS_BUILD", __build_time__)
+        setattr(sys, "_MEIPASS_COMMIT", __commit_hash__)
+        if __spec__ is not None:
+            __spec__.origin = f"{__spec__.origin}|{__version__}"
+    except Exception:
+        pass
 
 # Ensure all relative paths resolve to the project directory
 if getattr(sys, "frozen", False):
@@ -27,6 +42,11 @@ def parse_args() -> argparse.Namespace:
         "--auto-install",
         action="store_true",
         help="Automatically install missing dependencies",
+    )
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=f"EEC Logger v{__version__} (build {__build_time__}, git {__commit_hash__})",
     )
     args, _ = parser.parse_known_args()
     return args
@@ -326,4 +346,6 @@ def main() -> int:
 
 
 if __name__ == "__main__":
+    import threading
+    threading.Thread(target=check_latest_version, args=(__version__,), daemon=True).start()
     sys.exit(main())

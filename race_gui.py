@@ -1,3 +1,20 @@
+from datetime import datetime
+__version__     = "2025.06.07.0"         # auto-bump in CI
+__build_time__  = "2025-06-07T15:42:00Z" # auto-fill in CI
+__commit_hash__ = "abc1234"              # git rev-parse --short HEAD
+
+import sys
+
+if getattr(sys, "frozen", False):
+    try:
+        setattr(sys, "_MEIPASS_VERSION", __version__)
+        setattr(sys, "_MEIPASS_BUILD", __build_time__)
+        setattr(sys, "_MEIPASS_COMMIT", __commit_hash__)
+        if __spec__ is not None:
+            __spec__.origin = f"{__spec__.origin}|{__version__}"
+    except Exception:
+        pass
+
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog, simpledialog
 from tkinter.scrolledtext import ScrolledText
@@ -8,10 +25,17 @@ import time
 import select
 import os
 import shutil
-import sys
 from pathlib import Path
 from queue import Queue, Empty
 from collections import deque
+
+VERSION_DONE = threading.Event()
+VERSION_OK = False
+
+def _run_version_check() -> None:
+    global VERSION_OK
+    VERSION_OK = check_latest_version(__version__)
+    VERSION_DONE.set()
 import csv
 import re
 import json
@@ -22,6 +46,11 @@ import logging
 import atexit
 import platform
 import traceback
+from codebase_cleaner import (
+    check_latest_version,
+    acquire_single_instance_lock,
+    focus_running_window,
+)
 
 import eec_teams
 import importlib
@@ -253,7 +282,7 @@ def _find_python() -> str:
 class RaceLoggerGUI:
     def __init__(self, root: tk.Tk, *, classic_theme: bool = False, time_left: float | None = None):
         self.root = root
-        self.root.title("EEC Logger")
+        self.root.title(f"EEC Logger • v{__version__} • {__commit_hash__}")
         # Ensure the window is large enough when it first appears
         self.root.minsize(800, 600)
         if hasattr(self.root, "geometry"):
@@ -321,6 +350,9 @@ class RaceLoggerGUI:
             frm, text="Start Logging", command=self.start_logging
         )
         self.start_btn.grid(column=0, row=1, pady=5, sticky="ew")
+        if not VERSION_DONE.is_set() or not VERSION_OK:
+            self.start_btn.config(state="disabled")
+            self.root.after(200, self._check_version_ready)
         self.stop_btn = ttk.Button(
             frm, text="Stop Logging", command=self.stop_logging, state="disabled"
         )
@@ -663,6 +695,13 @@ class RaceLoggerGUI:
             if os.path.exists(f):
                 shutil.copy(f, target)
         messagebox.showinfo("Saved", f"Logs copied to {target}")
+
+    def _check_version_ready(self) -> None:
+        if VERSION_DONE.is_set():
+            if VERSION_OK:
+                self.start_btn.config(state="normal")
+            return
+        self.root.after(200, self._check_version_ready)
 
     def update_wrap(self) -> None:
         wrap = tk.WORD if self.wrap_logs.get() else tk.NONE
@@ -1861,6 +1900,11 @@ def parse_cli(argv: list[str] | None = None) -> argparse.Namespace:
         type=_parse_time,
         help="remaining race time (H:M:S or seconds)",
     )
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=f"EEC Logger v{__version__} (build {__build_time__}, git {__commit_hash__})",
+    )
 
     args, unknown = parser.parse_known_args(argv)
     global _UNKNOWN_ARGS
@@ -2060,6 +2104,12 @@ def main(argv: list[str] | None = None) -> int:
 
 
 if __name__ == "__main__":
+    import threading
+    threading.Thread(target=_run_version_check, daemon=True).start()
+    lock = acquire_single_instance_lock()
+    if lock is None:
+        focus_running_window()
+        sys.exit(0)
     try:
         sys.exit(main())
     except RuntimeError as exc:  # pragma: no cover - early failures
