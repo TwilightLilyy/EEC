@@ -180,6 +180,16 @@ def estimate_remaining_pits(
     return max(0, int(secs_left / expected))
 
 
+def _find_python() -> str:
+    """Return the preferred Python executable for launching child scripts."""
+    exe = sys.executable
+    if getattr(sys, "frozen", False):
+        candidate = Path(exe).with_name("python.exe" if os.name == "nt" else "python")
+        if candidate.exists():
+            return str(candidate)
+    return exe
+
+
 class RaceLoggerGUI:
     def __init__(self, root: tk.Tk, *, classic_theme: bool = False):
         self.root = root
@@ -418,8 +428,12 @@ class RaceLoggerGUI:
         runner = Path(sys.argv[0]).resolve().parent / "race_data_runner.py"
         if not runner.exists():
             runner = Path(sys.argv[0]).resolve().parent.parent / "race_data_runner.py"
+
+        python = _find_python()
+        cmd = [python, str(runner), "--db", str(self.db_path)]
+        print(f"[INFO] Launching {runner.name} --db {self.db_path}")
         self.proc = subprocess.Popen(
-            [sys.executable, str(runner), "--db", str(self.db_path)],
+            cmd,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,
@@ -1626,26 +1640,43 @@ class RaceLoggerGUI:
         self.root.destroy()
 
 
-def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    """Return command line arguments for the GUI."""
+_UNKNOWN_ARGS: list[str] = []
+
+
+def parse_cli(argv: list[str] | None = None) -> argparse.Namespace:
+    """Parse command line arguments for the GUI.
+
+    Unknown or extra arguments are ignored and logged later.
+    """
+
     parser = argparse.ArgumentParser(description="EEC Race Logger GUI")
-    parser.add_argument("--debug", action="store_true", help="enable debug logging")
+    parser.add_argument("--debug", action="store_true", help="enable verbose logging")
     parser.add_argument(
         "--debug-shell",
         action="store_true",
-        help="open interactive shell before starting the GUI",
+        help="open an interactive shell before starting the GUI",
     )
     parser.add_argument(
         "--classic-theme",
         action="store_true",
-        help="force default theme even when sv_ttk is installed",
+        help="force the classic Tk theme even when sv_ttk is installed",
     )
     parser.add_argument(
         "--no-openai",
         action="store_true",
-        help="disable OpenAI features",
+        help="disable all OpenAI features",
     )
-    return parser.parse_args(argv)
+    parser.add_argument(
+        "--db",
+        metavar="PATH",
+        default="eec_log.db",
+        help="SQLite database file",
+    )
+
+    args, unknown = parser.parse_known_args(argv)
+    global _UNKNOWN_ARGS
+    _UNKNOWN_ARGS = unknown
+    return args
 
 
 def setup_logging(debug: bool) -> logging.Logger:
@@ -1724,9 +1755,12 @@ def start_heartbeat(start_event: threading.Event) -> None:
 def main(argv: list[str] | None = None) -> int:
     """Application entry point."""
     start_time = time.monotonic()
-    args = parse_args(argv)
+    args = parse_cli(argv)
     logger = setup_logging(args.debug)
     setup_excepthook(logger)
+
+    for arg in _UNKNOWN_ARGS:
+        logger.warning("Ignoring unknown argument: %s", arg)
 
     atexit.register(
         lambda: logger.info(
