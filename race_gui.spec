@@ -13,7 +13,7 @@ a = Analysis(
     ['race_gui.py'],
     pathex=[],
     binaries=[(PYTHON_EXE, PYTHON_NAME)],
-    datas=collect_data_files("sv_ttk"),
+    datas=collect_data_files("sv_ttk") + [("race_data_runner.py", ".")],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

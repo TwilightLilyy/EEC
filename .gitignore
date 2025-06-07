@@ -25,3 +25,4 @@ Install-RaceGUI.bat
 logs/ai_logger.txt
 logs/pit_logger.txt
 logs/standings_sorter.txt
+race_gui.log
