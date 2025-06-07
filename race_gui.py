@@ -180,6 +180,16 @@ def estimate_remaining_pits(
     return max(0, int(secs_left / expected))
 
 
+def _find_python() -> str:
+    """Return the preferred Python executable for launching child scripts."""
+    exe = sys.executable
+    if getattr(sys, "frozen", False):
+        candidate = Path(exe).with_name("python.exe" if os.name == "nt" else "python")
+        if candidate.exists():
+            return str(candidate)
+    return exe
+
+
 class RaceLoggerGUI:
     def __init__(self, root: tk.Tk, *, classic_theme: bool = False):
         self.root = root
@@ -418,8 +428,12 @@ class RaceLoggerGUI:
         runner = Path(sys.argv[0]).resolve().parent / "race_data_runner.py"
         if not runner.exists():
             runner = Path(sys.argv[0]).resolve().parent.parent / "race_data_runner.py"
+
+        python = _find_python()
+        cmd = [python, str(runner), "--db", str(self.db_path)]
+        print(f"[INFO] Launching {runner.name} --db {self.db_path}")
         self.proc = subprocess.Popen(
-            [sys.executable, str(runner), "--db", str(self.db_path)],
+            cmd,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,

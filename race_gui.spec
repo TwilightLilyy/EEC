@@ -1,10 +1,17 @@
 # -*- mode: python ; coding: utf-8 -*-
 
 
+import os
+import sys
+
+
+PYTHON_EXE = sys._base_executable
+PYTHON_NAME = 'python.exe' if os.name == 'nt' else 'python'
+
 a = Analysis(
     ['race_gui.py'],
     pathex=[],
-    binaries=[],
+    binaries=[(PYTHON_EXE, PYTHON_NAME)],
     datas=[],
     hiddenimports=[],
     hookspath=[],
