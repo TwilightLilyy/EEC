@@ -26,6 +26,8 @@ def test_ai_standings_logger_writes_csv(tmp_path, monkeypatch):
                         }
                     ]
                 }
+            if key == "SessionNum":
+                return 0
             data = {
                 "CarIdxLap": [1],
                 "CarIdxPosition": [2],
@@ -72,6 +74,7 @@ def test_pitstop_logger_writes_stint(tmp_path, monkeypatch):
             self.data = [
                 {
                     "SessionTime": 0,
+                    "SessionNum": 0,
                     "CarIdxOnPitRoad": [False],
                     "CarIdxLap": [1],
                     "CarIdxBestLapTime": [1.1],
@@ -79,6 +82,7 @@ def test_pitstop_logger_writes_stint(tmp_path, monkeypatch):
                 },
                 {
                     "SessionTime": 60,
+                    "SessionNum": 0,
                     "CarIdxOnPitRoad": [True],
                     "CarIdxLap": [2],
                     "CarIdxBestLapTime": [1.1],
