@@ -279,6 +279,7 @@ class RaceLoggerGUI:
 
         self.notebook = ttk.Notebook(root)
         self.notebook.pack(fill="both", expand=True)
+        root.update_idletasks()
 
         frm = ttk.Frame(self.notebook, padding=10)
         self.notebook.add(frm, text="Logger")
@@ -341,16 +342,40 @@ class RaceLoggerGUI:
         self.update_wrap()
 
         # Additional tabs for CSV logs
-        self.create_csv_tab("driver_swaps.csv", "Driver Swaps")
+        try:
+            self.create_csv_tab("driver_swaps.csv", "Driver Swaps")
+            print("[TAB-OK] driver_swaps")
+        except Exception as exc:
+            print(f"[TAB-ERROR] driver_swaps_tab \u2192 {exc}", file=sys.stderr)
+
         # Auto-refresh the standings log viewer so it stays in sync with the
         # running logger.
-        self.create_standings_log_tab(
-            "standings_log.csv", "Standings Log", auto_refresh=True
-        )
+        try:
+            self.create_standings_log_tab(
+                "standings_log.csv", "Standings Log", auto_refresh=True
+            )
+            print("[TAB-OK] standings_log")
+        except Exception as exc:
+            print(f"[TAB-ERROR] standings_log_tab \u2192 {exc}", file=sys.stderr)
+
         # New tabs for pit stop log and stint tracker
-        self.create_pitstop_tab("pitstop_log.csv", "Pit Stops", auto_refresh=True)
-        self.create_stint_tab()
-        self.create_team_editor_tab()
+        try:
+            self.create_pitstop_tab("pitstop_log.csv", "Pit Stops", auto_refresh=True)
+            print("[TAB-OK] pitstop")
+        except Exception as exc:
+            print(f"[TAB-ERROR] pitstop_tab \u2192 {exc}", file=sys.stderr)
+
+        try:
+            self.create_stint_tab()
+            print("[TAB-OK] stint")
+        except Exception as exc:
+            print(f"[TAB-ERROR] stint_tab \u2192 {exc}", file=sys.stderr)
+
+        try:
+            self.create_team_editor_tab()
+            print("[TAB-OK] team_editor")
+        except Exception as exc:
+            print(f"[TAB-ERROR] team_editor_tab \u2192 {exc}", file=sys.stderr)
 
         # Start stint tracker update loop
         self.update_stint_table()
@@ -1889,6 +1914,14 @@ def main(argv: list[str] | None = None) -> int:
     else:
         prev_root = getattr(tk, "_default_root", None)
         root = tk.Tk()
+        if hasattr(root, "geometry"):
+            root.geometry("1100x800")
+        if hasattr(root, "minsize"):
+            root.minsize(800, 600)
+        if hasattr(root, "rowconfigure"):
+            root.rowconfigure(0, weight=1)
+        if hasattr(root, "columnconfigure"):
+            root.columnconfigure(0, weight=1)
         if prev_root is not None or tk._default_root is None:
             raise RuntimeError("Unexpected number of Tk root instances")
         if hasattr(root, "deiconify"):
