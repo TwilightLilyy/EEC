@@ -16,6 +16,8 @@ import re
 import json
 from datetime import datetime, timedelta
 from typing import Any
+import argparse
+import logging
 
 import eec_teams
 
@@ -32,6 +34,8 @@ try:
     import sv_ttk
 except Exception:
     sv_ttk = None
+
+LOG_PATH = Path(__file__).with_name("race_gui.log")
 
 LOG_FILES = [
     "pitstop_log.csv",
@@ -1564,12 +1568,81 @@ class RaceLoggerGUI:
         self.root.destroy()
 
 
-def main():
-    root = tk.Tk()
-    RaceLoggerGUI(root)
-    root.mainloop()
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    """Return command line arguments for the GUI."""
+    parser = argparse.ArgumentParser(description="EEC Race Logger GUI")
+    parser.add_argument("--debug", action="store_true", help="enable debug logging")
+    return parser.parse_args(argv)
+
+
+def setup_logging(debug: bool) -> logging.Logger:
+    """Configure and return the logger used by the GUI."""
+    logger = logging.getLogger("race_gui")
+    logger.setLevel(logging.DEBUG if debug else logging.INFO)
+    if not logger.handlers:
+        handler = logging.FileHandler(LOG_PATH, encoding="utf-8")
+        handler.setFormatter(
+            logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
+        )
+        logger.addHandler(handler)
+    if debug:
+        logger.addHandler(logging.StreamHandler())
+    return logger
+
+
+def check_environment(logger: logging.Logger) -> None:
+    """Log warnings for missing environment variables."""
+    if sys.platform.startswith("linux") and not (
+        os.environ.get("DISPLAY") or os.environ.get("WAYLAND_DISPLAY")
+    ):
+        logger.warning("DISPLAY environment variable is not set")
+    if not os.environ.get("QT_QPA_PLATFORM"):
+        logger.debug("QT_QPA_PLATFORM not set")
+    if not os.environ.get("PYTHONPATH"):
+        logger.debug("PYTHONPATH not set")
+
+
+def check_dependencies(logger: logging.Logger) -> None:
+    """Warn about missing optional dependencies."""
+    for name, mod in {"irsdk": irsdk, "openai": openai, "sv_ttk": sv_ttk}.items():
+        if mod is None:
+            logger.warning("Module '%s' not installed. Try: pip install %s", name, name)
+
+
+def open_log_file(path: Path) -> None:
+    """Open the given log file with the default application."""
+    try:
+        if sys.platform == "win32":
+            os.startfile(path)  # type: ignore[attr-defined]
+        elif sys.platform == "darwin":
+            subprocess.run(["open", str(path)], check=False)
+        else:
+            subprocess.run(["xdg-open", str(path)], check=False)
+    except Exception:
+        pass
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Application entry point."""
+    args = parse_args(argv)
+    os.chdir(Path(__file__).resolve().parent)
+    logger = setup_logging(args.debug)
+    check_environment(logger)
+    check_dependencies(logger)
+    try:
+        root = tk.Tk()
+        RaceLoggerGUI(root)
+        print("Race GUI started successfully")
+        root.mainloop()
+        return 0
+    except Exception as exc:  # pragma: no cover - runtime errors
+        logger.exception("Failed to start GUI: %s", exc)
+        print("Race GUI failed to start – see race_gui.log", file=sys.stderr)
+        if args.debug:
+            open_log_file(LOG_PATH)
+        return 1
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
 
