@@ -210,19 +210,33 @@ def estimate_remaining_pits(
 def _find_python() -> str:
     """Return the preferred Python executable for launching child scripts."""
     exe = sys.executable
-    if getattr(sys, "frozen", False):
-        candidate = Path(exe).with_name(
-            "python.exe" if os.name == "nt" else "python"
-        )
+
+    # In development mode ``sys.executable`` is already the right interpreter
+    if not getattr(sys, "frozen", False):
+        return exe
+
+    name = "python.exe" if os.name == "nt" else "python"
+
+    # PyInstaller distributions may bundle an interpreter next to the GUI
+    candidate = Path(exe).with_name(name)
+    if candidate.exists():
+        return str(candidate)
+
+    # Some builds unpack the interpreter inside ``sys._MEIPASS``
+    meipass = getattr(sys, "_MEIPASS", None)
+    if meipass:
+        candidate = Path(meipass) / name
         if candidate.exists():
             return str(candidate)
-        # Fall back to a Python interpreter on PATH. When running a PyInstaller
-        # build without an embedded interpreter ``sys.executable`` points back
-        # to the GUI executable which would simply relaunch itself.
-        for name in ("python", "python3"):
-            found = shutil.which(name)
-            if found:
-                return found
+
+    # Fall back to an interpreter from the PATH
+    for alt in ("python", "python3"):
+        found = shutil.which(alt)
+        if found:
+            return found
+
+    # As a last resort return ``sys.executable`` even though it may point back
+    # to the frozen executable itself
     return exe
 
 
