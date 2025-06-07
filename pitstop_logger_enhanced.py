@@ -1,14 +1,31 @@
+from datetime import datetime
+__version__     = "2025.06.07.0"
+__build_time__  = "2025-06-07T15:42:00Z"
+__commit_hash__ = "abc1234"
+
+import sys
+
+if getattr(sys, "frozen", False):
+    try:
+        setattr(sys, "_MEIPASS_VERSION", __version__)
+        setattr(sys, "_MEIPASS_BUILD", __build_time__)
+        setattr(sys, "_MEIPASS_COMMIT", __commit_hash__)
+        if __spec__ is not None:
+            __spec__.origin = f"{__spec__.origin}|{__version__}"
+    except Exception:
+        pass
+
 import argparse
 import irsdk, csv, time
 import shutil
 from pathlib import Path
+from codebase_cleaner import check_latest_version
 
 import eec_db
 try:
     import pandas as pd
 except Exception:
     pd = None
-from datetime import datetime
 
 CSV_FILE     = "pitstop_log.csv"
 OVERLAY_FILE = "live_standings_overlay.html"
@@ -101,11 +118,18 @@ def parse_args() -> argparse.Namespace:
         "--driver-total", default=DRIVER_TOTAL_FILE, help="Driver totals CSV"
     )
     parser.add_argument("--db", help="SQLite database path")
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=f"EEC Logger v{__version__} (build {__build_time__}, git {__commit_hash__})",
+    )
     args, _ = parser.parse_known_args()
     return args
 
 
 args = parse_args()
+import threading
+threading.Thread(target=check_latest_version, args=(__version__,), daemon=True).start()
 CSV_FILE = args.output
 DRIVER_TOTAL_FILE = args.driver_total
 DB_PATH = args.db
@@ -309,3 +333,7 @@ while True:
         break
 if conn:
     conn.close()
+
+if __name__ == "__main__":
+    import threading
+    threading.Thread(target=check_latest_version, args=(__version__,), daemon=True).start()
