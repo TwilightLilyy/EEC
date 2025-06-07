@@ -133,6 +133,45 @@ def read_csv_file(path: Path) -> tuple[list[str], list[dict[str, str]]]:
     return reader.fieldnames, list(reader)
 
 
+def estimate_remaining_pits(
+    race_end: datetime,
+    now: datetime,
+    expected: float | int,
+    *,
+    fallback: float = 1800,
+) -> int:
+    """Estimate remaining pit stops using historical stint duration.
+
+    Parameters
+    ----------
+    race_end : datetime
+        Timestamp when the race ends.
+    now : datetime
+        Current timestamp.
+    expected : float | int
+        Expected stint duration in seconds. Values ``<= 0`` trigger ``fallback``.
+    fallback : float, optional
+        Duration to use when ``expected`` is invalid, by default ``1800``.
+
+    Returns
+    -------
+    int
+        Estimated number of pit stops left.
+    """
+
+    if expected is None or expected <= 0:
+        logging.warning(
+            "expected pit-window duration missing; using default %d s",
+            int(fallback),
+        )
+        expected = fallback
+
+    secs_left = max(0.0, (race_end - now).total_seconds())
+    if expected == float("inf"):
+        return 0
+    return max(0, int(secs_left / expected))
+
+
 class RaceLoggerGUI:
     def __init__(self, root: tk.Tk):
         self.root = root
@@ -1245,9 +1284,14 @@ class RaceLoggerGUI:
             stint_laps = max(0, cur_lap - last_lap)
             since_sec = (now - last_end).total_seconds()
 
-            expected = avg_dur.get(car, 3600.0)
-            until_sec = max(0, expected - since_sec)
-            pits_left = max(0, int((race_end - now).total_seconds() / expected))
+            expected_raw = avg_dur.get(car, 3600.0)
+            sanitized = (
+                expected_raw if expected_raw is not None and expected_raw > 0 else 1800
+            )
+            until_sec = max(0.0, sanitized - since_sec)
+            pits_left = estimate_remaining_pits(
+                race_end, now, expected_raw, fallback=1800
+            )
 
             def fmt(sec: float) -> str:
                 h = int(sec // 3600)
