@@ -55,13 +55,14 @@ def _format_driver_list(drivers: List[str]) -> str:
 class RosterView(tk.Tk):
     """Main application window for roster display."""
 
-    def __init__(self, roster: List[Dict[str, str]]):
+    def __init__(self, roster: List[Dict[str, str]], refresh_ms: int = 5000):
         super().__init__()
         self.title("EEC Team Rosters")
         self._roster = roster
+        self._refresh_ms = refresh_ms
         self._setup_ui()
         self.refresh()
-        self.after(5000, self._auto_refresh)
+        self.after(self._refresh_ms, self._auto_refresh)
 
     def _setup_ui(self) -> None:
         container = ttk.Frame(self)
@@ -83,7 +84,7 @@ class RosterView(tk.Tk):
 
     def _auto_refresh(self) -> None:
         self.refresh()
-        self.after(5000, self._auto_refresh)
+        self.after(self._refresh_ms, self._auto_refresh)
 
     def update_roster(self, roster: List[Dict[str, str]]) -> None:
         self._roster = roster
@@ -110,7 +111,13 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="View EEC team rosters")
     parser.add_argument("file", help="Roster CSV or JSON file")
+    parser.add_argument(
+        "--refresh-ms",
+        type=int,
+        default=5000,
+        help="Auto-refresh interval in milliseconds",
+    )
     args = parser.parse_args()
 
     roster_data = load_roster(args.file)
-    RosterView(roster_data).mainloop()
+    RosterView(roster_data, refresh_ms=args.refresh_ms).mainloop()
