@@ -184,9 +184,18 @@ def _find_python() -> str:
     """Return the preferred Python executable for launching child scripts."""
     exe = sys.executable
     if getattr(sys, "frozen", False):
-        candidate = Path(exe).with_name("python.exe" if os.name == "nt" else "python")
+        candidate = Path(exe).with_name(
+            "python.exe" if os.name == "nt" else "python"
+        )
         if candidate.exists():
             return str(candidate)
+        # Fall back to a Python interpreter on PATH. When running a PyInstaller
+        # build without an embedded interpreter ``sys.executable`` points back
+        # to the GUI executable which would simply relaunch itself.
+        for name in ("python", "python3"):
+            found = shutil.which(name)
+            if found:
+                return found
     return exe
 
 
@@ -425,9 +434,13 @@ class RaceLoggerGUI:
         if self.proc:
             messagebox.showinfo("Logger", "Already running")
             return
-        runner = Path(sys.argv[0]).resolve().parent / "race_data_runner.py"
-        if not runner.exists():
-            runner = Path(sys.argv[0]).resolve().parent.parent / "race_data_runner.py"
+        try:
+            import race_data_runner as _runner_mod
+            runner = Path(_runner_mod.__file__).resolve()
+        except Exception:
+            runner = Path(__file__).resolve().parent / "race_data_runner.py"
+            if not runner.exists():
+                runner = Path(__file__).resolve().parent.parent / "race_data_runner.py"
 
         python = _find_python()
         cmd = [python, str(runner), "--db", str(self.db_path)]
