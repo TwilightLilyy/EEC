@@ -423,17 +423,11 @@ class RaceLoggerGUI:
             self.log_box.tag_config(f"fg-{name}", foreground=colour)
         self.log_box.tag_config("bold", font=("TkDefaultFont", 9, "bold"))
 
-        self.update_thread = threading.Thread(
-            target=self.update_status_loop, daemon=True
-        )
-        self.update_thread.start()
+        self.update_status_once()
         self.root.after(100, self.update_log_box)
         self.root.after(3000, self.update_feed)
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
-        self.monitor_thread = threading.Thread(
-            target=self.monitor_logging, daemon=True
-        )
-        self.monitor_thread.start()
+        self.monitor_logging_once()
 
     def open_feed_window(self) -> None:
         if self.feed_window is not None and self.feed_window.winfo_exists():
@@ -597,49 +591,47 @@ class RaceLoggerGUI:
         self.start_btn.config(state="normal")
         self.stop_btn.config(state="disabled")
 
-    def monitor_logging(self):
+    def monitor_logging_once(self):
         logger = logging.getLogger("race_gui")
-        while True:
-            if self.proc:
-                ret = self.proc.poll()
-                if ret is not None:
-                    logger.warning(
-                        "Logger process exited with code %s, restarting", ret
-                    )
-                    self.proc = None
-                    self.output_thread = None
-                    self.start_logging()
-            time.sleep(10)
+        if self.proc:
+            ret = self.proc.poll()
+            if ret is not None:
+                logger.warning(
+                    "Logger process exited with code %s, restarting", ret
+                )
+                self.proc = None
+                self.output_thread = None
+                self.start_logging()
+        self.root.after(10000, self.monitor_logging_once)
 
     # ── connection status loop ──────────────────────────────────
-    def update_status_loop(self):
-        while True:
-            status = "N/A"
-            if irsdk:
-                ir = irsdk.IRSDK()
+    def update_status_once(self):
+        status = "N/A"
+        if irsdk:
+            ir = irsdk.IRSDK()
+            try:
+                ir.startup()
+                connected = ir.is_initialized and ir.is_connected
+                status = "Connected" if connected else "Waiting"
+            except Exception:
+                status = "Error"
+            finally:
                 try:
-                    ir.startup()
-                    connected = ir.is_initialized and ir.is_connected
-                    status = "Connected" if connected else "Waiting"
+                    ir.shutdown()
                 except Exception:
-                    status = "Error"
-                finally:
-                    try:
-                        ir.shutdown()
-                    except Exception:
-                        pass
-            self.status_lbl.config(text=f"iRacing: {status}")
-            now = time.time()
-            for name, lbl in self.log_status_lbls.items():
-                path = find_log_file(name)
-                if path.exists():
-                    age = now - path.stat().st_mtime
-                    running = self.proc is not None and age < 10
-                    state = "active" if running else "stale"
-                    lbl.config(text=f"{path.name}: {int(age)}s ({state})")
-                else:
-                    lbl.config(text=f"{name}: missing")
-            time.sleep(2)
+                    pass
+        self.status_lbl.config(text=f"iRacing: {status}")
+        now = time.time()
+        for name, lbl in self.log_status_lbls.items():
+            path = find_log_file(name)
+            if path.exists():
+                age = now - path.stat().st_mtime
+                running = self.proc is not None and age < 10
+                state = "active" if running else "stale"
+                lbl.config(text=f"{path.name}: {int(age)}s ({state})")
+            else:
+                lbl.config(text=f"{name}: missing")
+        self.root.after(2000, self.update_status_once)
 
     # ── log management helpers ──────────────────────────────────
     def reset_logs(self):
