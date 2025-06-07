@@ -53,6 +53,11 @@ OPENAI_ENABLED = True
 
 LOG_PATH = Path(__file__).with_name("race_gui.log")
 
+# Timestamp of the last "pit-window duration" warning. Used to throttle
+# repeated messages when the expected stint duration is missing.
+LAST_PIT_WARNING: datetime | None = None
+PIT_WARNING_INTERVAL = timedelta(minutes=10)
+
 LOG_FILES = [
     "pitstop_log.csv",
     "standings_log.csv",
@@ -195,11 +200,15 @@ def estimate_remaining_pits(
         Estimated number of pit stops left.
     """
 
+    global LAST_PIT_WARNING
+
     if expected is None or expected <= 0:
-        logging.warning(
-            "expected pit-window duration missing; using default %d s",
-            int(fallback),
-        )
+        if LAST_PIT_WARNING is None or now - LAST_PIT_WARNING >= PIT_WARNING_INTERVAL:
+            logging.warning(
+                "expected pit-window duration missing; using default %d s",
+                int(fallback),
+            )
+            LAST_PIT_WARNING = now
         expected = fallback
 
     secs_left = max(0.0, (race_end - now).total_seconds())
