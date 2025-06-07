@@ -23,6 +23,12 @@ import platform
 import traceback
 
 import eec_teams
+import importlib
+
+try:
+    from ensure_dependencies import ensure_package
+except Exception:
+    ensure_package = None
 
 try:
     import irsdk
@@ -1740,10 +1746,18 @@ def check_environment(logger: logging.Logger) -> None:
 
 
 def check_dependencies(logger: logging.Logger) -> None:
-    """Warn about missing optional dependencies."""
+    """Ensure optional dependencies are available and log warnings."""
     if OPENAI_IMPORT_ERROR is not None:
         logger.warning("module 'openai' not installed – OpenAI features disabled")
-    if SVTTK_IMPORT_ERROR is not None:
+    if SVTTK_IMPORT_ERROR is not None and ensure_package is not None:
+        logger.warning("module 'sv_ttk' not installed – attempting automatic installation")
+        try:
+            ensure_package("sv_ttk")
+            globals()["sv_ttk"] = importlib.import_module("sv_ttk")
+            logger.info("Installed 'sv_ttk' for modern theme")
+        except Exception as exc:
+            logger.error("Failed to install 'sv_ttk': %s", exc)
+    elif SVTTK_IMPORT_ERROR is not None:
         logger.warning("module 'sv_ttk' not installed – falling back to default theme")
     if irsdk is None:
         logger.warning("module 'irsdk' not installed")
