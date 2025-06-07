@@ -91,6 +91,19 @@ pip install pyinstaller
 pyinstaller --onefile race_gui.py
 ```
 
+Include the `race_data_runner.py` helper by passing the `--add-data` option.
+On Windows use a semicolon to separate the destination:
+
+```bash
+pyinstaller --onefile --add-data "race_data_runner.py;." race_gui.py
+```
+
+For Linux/macOS replace the semicolon with a colon:
+
+```bash
+pyinstaller --onefile --add-data "race_data_runner.py:." race_gui.py
+```
+
 The resulting `dist/race_gui.exe` can be distributed by itself.  When launched from
 inside the `dist` folder it looks for `race_data_runner.py` in the parent directory
 (the project root), so keep the default folder structure or adjust the path in
