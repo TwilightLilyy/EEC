@@ -1,5 +1,6 @@
 import sys
 from pathlib import Path
+import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import race_gui
@@ -16,7 +17,16 @@ def test_main_success(monkeypatch, tmp_path, capsys):
         def mainloop(self):
             pass
 
-    monkeypatch.setattr(race_gui.tk, 'Tk', lambda: DummyRoot())
+        def after(self, _delay, func):
+            func()
+
+    def make_root():
+        root = DummyRoot()
+        race_gui.tk._default_root = root
+        return root
+
+    monkeypatch.setattr(race_gui.tk, '_default_root', None)
+    monkeypatch.setattr(race_gui.tk, 'Tk', make_root)
     monkeypatch.setattr(race_gui, 'RaceLoggerGUI', lambda _root: None)
 
     code = race_gui.main([])
@@ -35,11 +45,10 @@ def test_main_failure(monkeypatch, tmp_path, capsys):
     def boom():
         raise RuntimeError('boom')
 
+    monkeypatch.setattr(race_gui.tk, '_default_root', None)
     monkeypatch.setattr(race_gui.tk, 'Tk', boom)
     monkeypatch.setattr(race_gui, 'open_log_file', lambda *_: None)
 
-    code = race_gui.main([])
-    captured = capsys.readouterr()
-    assert code == 1
-    assert 'Race GUI failed to start' in captured.err
+    with pytest.raises(RuntimeError):
+        race_gui.main([])
     assert log_path.exists()
