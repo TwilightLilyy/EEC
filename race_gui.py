@@ -434,9 +434,13 @@ class RaceLoggerGUI:
         if self.proc:
             messagebox.showinfo("Logger", "Already running")
             return
-        runner = Path(sys.argv[0]).resolve().parent / "race_data_runner.py"
-        if not runner.exists():
-            runner = Path(sys.argv[0]).resolve().parent.parent / "race_data_runner.py"
+        try:
+            import race_data_runner as _runner_mod
+            runner = Path(_runner_mod.__file__).resolve()
+        except Exception:
+            runner = Path(__file__).resolve().parent / "race_data_runner.py"
+            if not runner.exists():
+                runner = Path(__file__).resolve().parent.parent / "race_data_runner.py"
 
         python = _find_python()
         cmd = [python, str(runner), "--db", str(self.db_path)]
