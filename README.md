@@ -10,6 +10,7 @@ A collection of utilities for logging and displaying data from iRacing AI races.
 - **pitstop_logger_enhanced.py** – tracks stints and pit stops, writing results to `pitstop_log.csv` and updating `live_standings_overlay.html`.
 - **standings_sorter.py** – produces `sorted_standings.csv` so the overlay can show the latest order per class.
 - **race_data_runner.py** – helper script that launches all of the above and restarts them if they stop.
+- **roster_ui.py** – displays team rosters in a scrollable window. Use `--refresh-ms` to set the auto-refresh interval.
 
 ## Requirements
 
