@@ -505,35 +505,56 @@ class RaceLoggerGUI:
         if self.proc:
             messagebox.showinfo("Logger", "Already running")
             return
+
+        logger = logging.getLogger("race_gui")
+        runner: Path
+
         try:
-            import race_data_runner as _runner_mod
-            runner = Path(_runner_mod.__file__).resolve()
+            if getattr(sys, "frozen", False):
+                base = Path(sys._MEIPASS)
+                runner = base / "race_data_runner.py"
+                if not runner.exists():
+                    base = Path(__file__).resolve().parent
+                    runner = base / "race_data_runner.py"
+                    if not runner.exists():
+                        runner = base.parent / "race_data_runner.py"
+            else:
+                import race_data_runner as _runner_mod
+                runner = Path(_runner_mod.__file__).resolve()
         except Exception:
+            logger.exception("Failed to locate race_data_runner.py")
             base = Path(__file__).resolve().parent
             runner = base / "race_data_runner.py"
             if not runner.exists():
                 runner = base.parent / "race_data_runner.py"
-            if getattr(sys, "frozen", False) and not runner.exists():
-                runner = Path(sys._MEIPASS) / "race_data_runner.py"
+
         if not runner.exists():
-            messagebox.showerror(
-                "Logger",
-                f"race_data_runner.py not found: {runner}",
-            )
+            msg = f"race_data_runner.py not found: {runner}"
+            logger.error(msg)
+            messagebox.showerror("Logger", msg)
+            self.proc = None
             return
 
         python = _find_python()
         cmd = [python, str(runner), "--db", str(self.db_path), "--auto-install"]
         print(f"[INFO] Launching {runner.name} --db {self.db_path}")
-        self.proc = subprocess.Popen(
-            cmd,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            text=True,
-            bufsize=1,
-            encoding="utf-8",
-            errors="replace",
-        )
+
+        try:
+            self.proc = subprocess.Popen(
+                cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                bufsize=1,
+                encoding="utf-8",
+                errors="replace",
+            )
+        except Exception as exc:
+            logger.exception("Failed to launch race_data_runner")
+            messagebox.showerror("Logger", f"Failed to launch runner: {exc}")
+            self.proc = None
+            return
+
         self.output_thread = threading.Thread(target=self.read_output, daemon=True)
         self.output_thread.start()
         self.start_btn.config(state="disabled")
