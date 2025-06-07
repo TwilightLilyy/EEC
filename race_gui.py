@@ -203,6 +203,8 @@ class RaceLoggerGUI:
     def __init__(self, root: tk.Tk, *, classic_theme: bool = False):
         self.root = root
         self.root.title("EEC Logger")
+        # Ensure the window is large enough when it first appears
+        self.root.minsize(800, 600)
 
         self.theme = self.setup_style(classic_theme)
         icon_path = Path(__file__).resolve().parent / "Logos" / "App" / "EECApp.png"
